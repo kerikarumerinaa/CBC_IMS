@@ -4,7 +4,7 @@
 <aside>
     <div class="top">
         <div class="logo">
-            <img src="../assets/cbc-logo.png" alt="CBC Logo"> <!-- Adjust path if needed -->
+            <img src="../assets/cbc-logo.png" alt="CBC Logo000"> <!-- Adjust path if needed -->
         </div>
     </div>
     <div class="sidebar">
