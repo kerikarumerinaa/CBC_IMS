@@ -1,6 +1,7 @@
 <!-- /includes/sidebar.php -->
 <link rel="stylesheet" href="../assets/sidebar.css"> <!-- Adjust path as needed -->
 
+
 <aside>
     <div class="top">
         <div class="logo">
@@ -8,12 +9,12 @@
         </div>
     </div>
     <div class="sidebar">
-        <a href="dashboard.php" class="active">
+        <a href="dashboard.php" class="">
             <span class="material-symbols-outlined">dashboard</span>
             <h2>Dashboard</h2>
         </a>
         <div class="dropdown">
-            <a href="javascript:void(0);" class="membership" onclick="toggleDropdown()">
+            <a class="membership" onclick="showDropDown()">
                 <span class="material-symbols-outlined">groups</span>
                 <h2>Membership</h2>
             </a>
@@ -24,7 +25,7 @@
             </div>
         </div>
         <div class="dropdown">
-            <a href="javascript:void(0);" class="finance" onclick="toggleFinanceDropdown()">
+            <a class="finance" >
                 <span class="material-symbols-outlined">payments</span>
                 <h2>Finance</h2>
             </a>
@@ -44,4 +45,22 @@
     </div>
 </aside>
 
-<script src="../script.js"></script> <!-- Include your JavaScript file -->
+    
+<script>
+    function showDropDown(){
+        const membershipDropdown = document.querySelector('.dropdown-content');
+        if(membershipDropdown.style.display !== "flex"){
+            console.log(membershipDropdown.style.display)
+            membershipDropdown.style.display = "flex";
+        }
+        else{
+            console.log(membershipDropdown.style.display)
+            membershipDropdown.style.display = "none";
+            
+        }
+    }
+
+</script> <!-- Include your JavaScript file -->
+
+
+
