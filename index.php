@@ -10,6 +10,9 @@
 
   <?php
   // Start the session
+  
+  // HALLOO KLENGGG
+
   session_start();
 
   // Database connection
