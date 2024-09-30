@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap');
+
+aside{
+    width: 15vw;
+    height: 100vh;
+    background-color: #ffffff;
+}
+
+    .top{
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1.4rem;
+    }
+
+    .logo{
+    display: flex;
+    gap: 0.8rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    }
+
+    .logo img{
+    width: 4rem;
+    height: 4rem;
+    }
+
+    .sidebar{
+        background-color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        height: 86vh;
+        position: relative;
+        top: 3rem;
+    }
+    
+    .sidebar a{
+        display: flex;
+        color: dimgray;
+        margin-left: 2rem;
+        gap: 1rem;
+        align-items: center;
+        position: relative;
+        height: 3.8rem;
+        transition: all 300ms ease;
+    }
+
+    .sidebar a span{
+        font-size: 1.7rem;
+        transition: all 300ms ease;
+    }
+
+    .sidebar a:last-child{
+        position: absolute;
+        bottom: 2rem;
+        width: 100%;
+    }
+
+    .sidebar a.active{
+        background-color: #c2d0ea95;
+        color: #1554c9;
+        margin-left: 0;
+    }
+
+    .sidebar a.active:before{
+        content: "";
+        width: 6px;
+        height: 100%;
+        background-color: #1554c9;
+    }
+
+    .sidebar a.hover{
+        color: #1554c9;
+    }
+
+    .sidebar a:hover span{
+        margin-left: 1rem;
+    }
+
+/* Dropdown styles */
+.dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.dropdown-content {
+    display: none;
+    flex-direction: column;
+    padding-left: 2rem; /* Align with the main links */
+}
+
+.dropdown-content a {
+    font-size: 1rem;
+    padding: 0.5rem 0; /* Adjusted vertical padding for dropdown items */
+    color: dimgray;
+    transition: background-color 300ms ease; /* Added transition for hover */
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1; /* Highlight on hover */
+}
+
+/* Show dropdown when toggled */
+.dropdown.show .dropdown-content {
+    display: flex; /* Use flex to adjust layout */
+}
+
+/* Add space between each dropdown item */
+.dropdown-content a {
+    margin-bottom: 0.5rem; /* Space between dropdown items */
+}
+
+/* Ensure last dropdown item does not have extra margin */
+.dropdown-content a:last-child {
+    margin-bottom: 0; /* No extra space below the last item */
+}
+
+/* Additional margin for the first dropdown item */
+.dropdown-content a:first-child {
+    margin-top: 0.5rem; /* Add space above the first item */
+}
