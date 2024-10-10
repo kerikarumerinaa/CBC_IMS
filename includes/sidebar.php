@@ -10,26 +10,26 @@
     </div>
     <div class="sidebar">
         <a href="dashboard.php" class="">
-            <span class="material-symbols-outlined">dashboard</span>
+            <span class="material-symbols6-outlined">dashboard</span>
             <h2>Dashboard</h2>
         </a>
         <div class="dropdown">
-            <a class="membership" onclick="showDropDown()">
+            <a class="membership" onclick="showMembershipDropDown()">
                 <span class="material-symbols-outlined">groups</span>
                 <h2>Membership</h2>
             </a>
-            <div class="dropdown-content">
-                <a href="membership_dashboard.php">Dashboard</a>
+            <div class="dropdown-content membershipDropdown">
+                <a>Dashboard</a>
                 <a href="membership_attendance.php">Attendance</a>
                 <a href="membership_members.php">Members</a>
             </div>
         </div>
         <div class="dropdown">
-            <a class="finance" >
+            <a class="finance" onclick="showFinanceDropDown()">
                 <span class="material-symbols-outlined">payments</span>
                 <h2>Finance</h2>
             </a>
-            <div class="dropdown-content">
+            <div class="dropdown-content financeDropdown">
                 <a href="transactions.php">Transactions</a>
                 <a href="finance_dashboard.php">Dashboard</a>
             </div>
@@ -45,10 +45,23 @@
     </div>
 </aside>
 
+
     
 <script>
-    function showDropDown(){
-        const membershipDropdown = document.querySelector('.dropdown-content');
+    function showMembershipDropDown(){
+        const membershipDropdown = document.querySelector('.membershipDropdown');
+        if(membershipDropdown.style.display !== "flex"){
+            console.log(membershipDropdown.style.display)
+            membershipDropdown.style.display = "flex";
+        }
+        else{
+            console.log(membershipDropdown.style.display)
+            membershipDropdown.style.display = "none";
+            
+        }
+    }
+    function showFinanceDropDown(){
+        const membershipDropdown = document.querySelector('.financeDropdown');
         if(membershipDropdown.style.display !== "flex"){
             console.log(membershipDropdown.style.display)
             membershipDropdown.style.display = "flex";
