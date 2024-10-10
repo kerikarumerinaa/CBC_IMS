@@ -16,7 +16,7 @@ if (!isset($_SESSION['username'])) {
   <title>Finance</title>
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-  <link rel="stylesheet" href="finance.css"> <!-- Adjust the path to your CSS file -->
+  <link rel="stylesheet" href="finance_dashboard.css"> <!-- Adjust the path to your CSS file -->
 </head>
 <body>
   <div class="container">
@@ -26,7 +26,7 @@ if (!isset($_SESSION['username'])) {
 
     <!-- MAIN CONTENT -->
     <main>
-        <h2>Collections Summary</h2>
+        <h1>Collections Summary</h1>
         
         <!-- MONTHLY COLLECTIONS -->
         <div class="offering">

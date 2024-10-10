@@ -5,12 +5,12 @@
 <aside>
     <div class="top">
         <div class="logo">
-            <img src="../assets/cbc-logo.png" alt="CBC Logo000"> <!-- Adjust path if needed -->
+            <img src="../assets/cbc-logo.png" alt="CBC Logo"> <!-- Adjust path if needed -->
         </div>
     </div>
     <div class="sidebar">
         <a href="dashboard.php" class="">
-            <span class="material-symbols6-outlined">dashboard</span>
+            <span class="material-symbols-outlined">dashboard</span>
             <h2>Dashboard</h2>
         </a>
         <div class="dropdown">
@@ -30,7 +30,7 @@
                 <h2>Finance</h2>
             </a>
             <div class="dropdown-content financeDropdown">
-                <a href="transactions.php">Transactions</a>
+                <a href="finance_transactions.php">Transactions</a>
                 <a href="finance_dashboard.php">Dashboard</a>
             </div>
         </div>

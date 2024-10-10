@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    appearance: none;
+    border: 0;
+    text-decoration: none;
+    list-style: none;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 14px;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    font-family: Poppins, sans-serif;
+    font-size: 0.88rem;
+    background-color: #f2f2f2;
+    user-select: none;
+    overflow-x: hidden;
+}
+
+.container {
+    display: grid;
+    width: 100%;
+    margin: 0 auto;
+    gap: 1.8rem;
+    grid-template-columns: 20rem auto 23rem;
+}
+
+/*----------------------------MAIN-------------------------------------*/
+
+main {
+    margin-top: 1.4rem;
+}
+
+/*----------------------------ATTENDANCE-------------------------------------*/
+
+.attendance-tracker {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header h2 {
+    margin: 0;
+}
+
+.top-right-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.total {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.add-visitor-button {
+    background-color: #154668;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.add-visitor-button:hover {
+    background-color: #103a58;
+}
+
+.attendee-lists {
+    display: flex;
+    justify-content: space-between;
+}
+
+.attendee-list {
+    width: 48%;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.list-title {
+    font-weight: bold;
+}
+
+.count {
+    color: #333;
+    margin-left: 5px;
+}
+
+.search-bar {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px 10px;
+    width: 100%;
+}
+
+.attendee-items {
+    padding: 10px;
+}
+
+.attendee-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.attendee-item span {
+    flex-grow: 1;
+}
+
+.muted {
+    color: #999;
+}

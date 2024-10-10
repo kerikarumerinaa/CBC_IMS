@@ -30,6 +30,7 @@
             <th>Birthdate</th>
             <th>Contact No.</th>
             <th>Status</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -51,14 +52,19 @@
               while ($row = $result->fetch_assoc()) {
                   echo "<tr>
                           <td>{$row['id']}</td>
-                          <td>{$row['name']}</td>
+                          <td>{$row['full_name']}</td>
                           <td>{$row['age']}</td>
                           <td>{$row['address']}</td>
                           <td>{$row['email']}</td>
                           <td>{$row['sex']}</td>
                           <td>{$row['birthdate']}</td>  
-                          <td>{$row['phone']}</td>
+                          <td>{$row['contact_number']}</td>
                           <td>{$row['status']}</td>
+                          <td>
+                          <button class='view-btn'>View</button>
+                          <button class='edit-btn'>Edit</button>
+                          <button class='delete-btn'>Delete</button>
+                          </td>
                         </tr>";
               }
           } else {
@@ -73,35 +79,45 @@
 
          <!-- Modal form -->
          <div id="modal-form" class="modal">
-        <div class="modal-content">
-          <h2>Add Member</h2>
-          <form method="POST" action="">
-            <label for="full-name">Full Name:</label>
-            <input type="text" id="full-name" name="full-name" required><br><br>
-            <label for="age">Age:</label>
-            <input type="number" id="age" name="age" required><br><br>
-            <label for="address">Address:</label>
-            <input type="text" id="address" name="address" required><br><br>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required><br><br>
-            <label for="sex">Sex:</label>
-            <select id="sex" name="sex">
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select><br><br>
-            <label for="birthdate">Birthdate:</label>
-            <input type="date" id="birthdate" name="birthdate" required><br><br>
-            <label for="contact-number">Contact Number:</label>
-            <input type="tel" id="contact-number" name="contact-number" required><br><br>
-            <label for="status">Status:</label>
-            <select id="status" name="status">
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </select><br><br>
-            <input type="submit" value="Add Member">
-          </form>
+          <div class="modal-content">
+            <span id="closeModal" class="close">&times;</span>
+            <h2>Add Member</h2>
+            <form method="POST" action="">
+              <label for="full_name">Full Name:</label>
+              <input type="text" id="full_name" name="full_name" required>
+
+              <label for="age">Age:</label>
+              <input type="number" id="age" name="age" required>
+
+              <label for="address">Address:</label>
+              <input type="text" id="address" name="address" required>
+
+              <label for="email">Email:</label>
+              <input type="email" id="email" name="email" required>
+
+              <label for="sex">Sex:</label>
+              <select id="sex" name="sex">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+              </select>
+
+              <label for="birthdate">Birthdate:</label>
+              <input type="date" id="birthdate" name="birthdate" required>
+
+              <label for="contact_number">Contact Number:</label>
+              <input type="tel" id="contact_number" name="contact_number" required>
+
+              <label for="status">Status:</label>
+              <select id="status" name="status">
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+
+              <input type="submit" value="Add Member">
+            </form>
+          </div>
         </div>
-      </div>
+
 
 
       <?php
@@ -122,18 +138,18 @@ if ($conn->connect_error) {
 // Check if form data has been submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Sanitize and retrieve form data
-    $name = $conn->real_escape_string($_POST['name']);
+    $full_name = $conn->real_escape_string($_POST['full_name']);
     $age = (int)$_POST['age'];
     $address = $conn->real_escape_string($_POST['address']);
     $email = $conn->real_escape_string($_POST['email']);
     $sex = $conn->real_escape_string($_POST['sex']);
     $birthdate = $conn->real_escape_string($_POST['birthdate']);
-    $phone = $conn->real_escape_string($_POST['phone']);
+    $contact_number = $conn->real_escape_string($_POST['contact_number']);
     $status = $conn->real_escape_string($_POST['status']);
 
     // SQL query to insert data into the members table
-    $sql = "INSERT INTO members (name, age, address, email, sex, birthdate, phone, status)
-            VALUES ('$name', $age, '$address', '$email', '$sex', '$birthdate', '$phone', '$status')";
+    $sql = "INSERT INTO members (full_name, age, address, email, sex, birthdate, contact_number, status)
+            VALUES ('$full_name', $age, '$address', '$email', '$sex', '$birthdate', '$contact_number', '$status')";
 
     // Execute the query
     if ($conn->query($sql) === TRUE) {
@@ -150,9 +166,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $conn->close();
 ?>
 
-
-
-
       <script>
         document.getElementById("add-member-btn").addEventListener("click", function() {
           document.getElementById("modal-form").style.display = "block";
@@ -163,6 +176,11 @@ $conn->close();
             document.getElementById("modal-form").style.display = "none";
           }
         });
+
+         // Close modal
+        closeModalBtn.onclick = function() {
+          modal.style.display = "none";
+    }
       </script>
     </main>
   </div>
