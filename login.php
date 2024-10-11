@@ -85,7 +85,7 @@ $conn->close();
           </form>
         </div>
         <div class="login-logo">
-          <img src="cbc-logo.png" alt="CBC Logo">
+          <img src="assets/cbc-logo.png" alt="CBC Logo">
         </div>
       </div>
     </div>

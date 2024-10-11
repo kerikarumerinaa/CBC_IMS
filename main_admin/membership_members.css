@@ -127,7 +127,6 @@ h2 {
 }
 
 /* Modal Form*/
-/* Modal Styles */
 .modal {
     display: none;
     position: fixed;
@@ -182,7 +181,7 @@ h2 {
 }
 
 .modal-content input[type="submit"] {
-    background-color: #4CAF50;
+    background-color: #154668;
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -191,7 +190,7 @@ h2 {
 }
 
 .modal-content input[type="submit"]:hover {
-    background-color: #3e8e41;
+    background-color: #103a58;
 }
 
 .close {

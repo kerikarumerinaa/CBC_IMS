@@ -19,7 +19,7 @@
                 <h2>Membership</h2>
             </a>
             <div class="dropdown-content membershipDropdown">
-                <a>Dashboard</a>
+                <a href="membership_dashboard.php">Dashboard</a>
                 <a href="membership_attendance.php">Attendance</a>
                 <a href="membership_members.php">Members</a>
             </div>
@@ -38,7 +38,7 @@
             <span class="material-symbols-outlined">event</span>
             <h2>Events</h2>
         </a>
-        <a href="logout.php">
+        <a href="../logout.php">
             <span class="material-symbols-outlined">logout</span>
             <h2>Logout</h2>
         </a>
