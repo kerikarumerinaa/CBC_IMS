@@ -75,6 +75,7 @@ main {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 20px;
     position: relative;
+    width: 125%;
     
 }
 
@@ -91,7 +92,7 @@ main {
 }
 
 button.btn {
-    background-color: #007bff;
+    background-color: #154668;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -100,7 +101,7 @@ button.btn {
 }
 
 button.btn:hover {
-    background-color: #0056b3;
+    background-color: #103a58;
 }
 
 /* Modal Styles */

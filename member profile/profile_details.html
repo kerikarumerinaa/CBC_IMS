@@ -1,0 +1,73 @@
+<!-- <?php
+// Simulating fetched user data from a database
+$user = [
+    'name' => 'Arlene McCoy',
+    'role' => 'Expert',
+    'work_email' => 'amccoy@virtuslab.com',
+    'private_email' => '',
+    'phone' => '',
+    'profile_completion' => '12%',
+    'status' => 'Recruitment stage',
+    'created_at' => 'February 24, 2023',
+    'updated_at' => 'February 24, 2023',
+];
+
+// Check if user is logged in (optional)
+session_start();
+if (!isset($_SESSION['logged_in'])) {
+    header('Location: login.php'); // Redirect to login if not authenticated
+    exit;
+}
+?> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Details</title>
+    <link rel="stylesheet" href="profile_details.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+
+<div class="profile-page">
+    <aside class="profile-sidebar">
+        <img src="" alt="User Avatar" class="profile-avatar">
+        <h2>Kleyr Carmelina</h2>
+        <p>Member</p>
+        
+    </aside>
+
+    <main class="profile-content">
+        <div class="profile-header">
+            <h3>Welcome, [name]!</h3>
+            <button class="edit-btn">Edit Profile</button>
+        </div>
+
+        <div class="profile-stats">
+            <div class="stat-box">
+                <h4></h4>
+                <p></p>
+            </div>
+            <div class="stat-box">
+                <h4>5,000</h4>
+                <p>Total Donation</p>
+            </div>
+        </div>
+
+        <div class="important-info">
+            <h4>One important thing...</h4>
+            <p><?php echo $user['name']; ?> is waiting for the draft contract</p>
+            <button class="create-contract-btn">Create contract</button>
+        </div>
+
+        <div class="status-info">
+            <p>Status: <?php echo $user['status']; ?></p>
+            <p>Created: <?php echo $user['created_at']; ?></p>
+            <p>Last updated: <?php echo $user['updated_at']; ?></p>
+        </div>
+    </main>
+</div>
+
+</body>
+</html>

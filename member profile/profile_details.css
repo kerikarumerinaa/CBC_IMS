@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+}
+
+.profile-page {
+    display: flex;
+    height: 100vh;
+}
+
+.profile-sidebar {
+    width: 300px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
+
+.profile-sidebar h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.profile-sidebar p {
+    color: #666;
+    margin: 5px 0;
+}
+
+.view-fields-btn, .back-btn {
+    background-color: #f1f1f1;
+    border: none;
+    padding: 10px 15px;
+    margin-top: 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.view-fields-btn:hover, .back-btn:hover {
+    background-color: #ddd;
+}
+
+.profile-content {
+    flex-grow: 1;
+    background-color: #f9f9fc;
+    padding: 40px;
+}
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.edit-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.profile-stats {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.stat-box {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    flex-grow: 1;
+}
+
+.stat-box h4 {
+    font-size: 24px;
+    color: #333;
+}
+
+.stat-box p {
+    color: #666;
+}
+
+.important-info {
+    background-color: #e9f7ef;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.create-contract-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.status-info {
+    font-size: 14px;
+    color: #777;
+}

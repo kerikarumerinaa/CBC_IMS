@@ -79,20 +79,6 @@ tbody tr:hover td {
     background-color: #ececec; 
 }
 
-/*--------------------------------- Typography Styles ------------------------------------*/
-
-h1 {
-    font-weight: 800;
-    font-size: 2.5rem;
-}
-
-h2 {
-    font-weight: 550;
-    font-size: 1.3rem;
-    text-align: center;
-    margin-top: 20px;
-    color: #333;
-}
 
 /*--------------------------------- Responsive Adjustments ----------------------------------*/
 
