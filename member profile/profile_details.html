@@ -1,25 +1,3 @@
-<!-- <?php
-// Simulating fetched user data from a database
-$user = [
-    'name' => 'Arlene McCoy',
-    'role' => 'Expert',
-    'work_email' => 'amccoy@virtuslab.com',
-    'private_email' => '',
-    'phone' => '',
-    'profile_completion' => '12%',
-    'status' => 'Recruitment stage',
-    'created_at' => 'February 24, 2023',
-    'updated_at' => 'February 24, 2023',
-];
-
-// Check if user is logged in (optional)
-session_start();
-if (!isset($_SESSION['logged_in'])) {
-    header('Location: login.php'); // Redirect to login if not authenticated
-    exit;
-}
-?> -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,41 +9,89 @@ if (!isset($_SESSION['logged_in'])) {
 <body>
 
 <div class="profile-page">
-    <aside class="profile-sidebar">
-        <img src="" alt="User Avatar" class="profile-avatar">
-        <h2>Kleyr Carmelina</h2>
-        <p>Member</p>
-        
+    <aside class="account-sidebar">
+        <div class="account">
+            <img src="" alt="Member Avatar" class="member-avatar">
+            <h2>Kleyr Carmelina</h2>
+            <p>team.hello@com</p>
+        </div>
+
+        <nav class="menu">
+            <ul>
+                <li><a href="#">My Profile</a></li>
+                <li><a href="#">Security</a></li>
+                <li><a href="#">Donations</a></li>
+                <li><a href="#">Delete Account</a></li>
+            </ul>
+        </nav>
+
+       
     </aside>
 
     <main class="profile-content">
-        <div class="profile-header">
-            <h3>Welcome, [name]!</h3>
-            <button class="edit-btn">Edit Profile</button>
-        </div>
 
-        <div class="profile-stats">
-            <div class="stat-box">
-                <h4></h4>
-                <p></p>
+        <section class="profile-section">
+            <h4>My Profile</h4>
+            <div class="profile-details">
+                <div class="profile-card">
+                    <div class="profile-info">
+                        <img src="" alt="User Avatar" class="user-avatar">
+                        <div class="user-info">
+                            <h2>Kleyr Carmelina</h2>
+                            <p>Member</p>
+                            <p>Alabang, Muntinlupa</p>
+                        </div>
+                    </div>
+                    <button class="edit-btn">Edit</button>
+                </div>
+
+                <div class="personal-info">
+                    <h5>Personal Information</h5>
+                    <div class="info-item">
+                        <p>First Name:</p>
+                        <p><?php echo $user['first_name']; ?></p>
+                    </div>
+                    <div class="info-item">
+                        <p>Last Name:</p>
+                        <p><?php echo $user['last_name']; ?></p>
+                    </div>
+                    <div class="info-item">
+                        <p>Email Address:</p>
+                        <p><?php echo $user['email']; ?></p>
+                    </div>
+                    <div class="info-item">
+                        <p>Phone:</p>
+                        <p><?php echo $user['phone']; ?></p>
+                    </div>
+                    <div class="info-item">
+                        <p>Bio:</p>
+                        <p><?php echo $user['bio']; ?></p>
+                    </div>
+                    <button class="edit-btn">Edit</button>
+                </div>
+
+                <div class="address-info">
+                    <h5>Address</h5>
+                    <div class="info-item">
+                        <p>Country:</p>
+                        <p><?php echo $user['country']; ?></p>
+                    </div>
+                    <div class="info-item">
+                        <p>City/State:</p>
+                        <p><?php echo $user['city_state']; ?></p>
+                    </div>
+                    <div class="info-item">
+                        <p>Postal Code:</p>
+                        <p><?php echo $user['postal_code']; ?></p>
+                    </div>
+                    <div class="info-item">
+                        <p>TAX ID:</p>
+                        <p><?php echo $user['tax_id']; ?></p>
+                    </div>
+                    <button class="edit-btn">Edit</button>
+                </div>
             </div>
-            <div class="stat-box">
-                <h4>5,000</h4>
-                <p>Total Donation</p>
-            </div>
-        </div>
-
-        <div class="important-info">
-            <h4>One important thing...</h4>
-            <p><?php echo $user['name']; ?> is waiting for the draft contract</p>
-            <button class="create-contract-btn">Create contract</button>
-        </div>
-
-        <div class="status-info">
-            <p>Status: <?php echo $user['status']; ?></p>
-            <p>Created: <?php echo $user['created_at']; ?></p>
-            <p>Last updated: <?php echo $user['updated_at']; ?></p>
-        </div>
+        </section>
     </main>
 </div>
 
