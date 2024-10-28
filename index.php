@@ -10,9 +10,6 @@
 
   <?php
   // Start the session
-  
-  // HALLOO KLENGGG
-
   session_start();
 
   // Database connection
@@ -72,6 +69,7 @@
             <button type="submit">Sign in</button>
             <p style="color: red;"><?php echo $error; ?></p>
           </form>
+          <a href="signup.php" class="signup-link">Sign up</a>
         </div>
         <div class="login-logo">
           <img src="assets/cbc-logo.png" alt="CBC Logo">

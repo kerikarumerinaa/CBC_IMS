@@ -18,8 +18,9 @@
 
         <nav class="menu">
             <ul>
-                <li><a href="#">My Profile</a></li>
+                <li><a href="profile_details.html">My Profile</a></li>
                 <li><a href="donation.php">My Donations</a></li>
+                <li><a href="security.html">My Security</a></li>
                 <li><a href="#">Logout</a></li>
             </ul>
         </nav>
@@ -100,16 +101,16 @@
         <h2>Edit Personal Information</h2>
         <form>
             <label for="firstName">First Name</label>
-            <input type="text" id="firstName" value="<?php echo $user['first_name']; ?>">
+            <input type="text" id="firstName">
 
             <label for="lastName">Last Name</label>
-            <input type="text" id="lastName" value="<?php echo $user['last_name']; ?>">
+            <input type="text" id="lastName">
 
             <label for="email">Email</label>
-            <input type="email" id="email" value="<?php echo $user['email']; ?>">
+            <input type="email" id="email">
 
             <label for="phone">Phone</label>
-            <input type="text" id="phone" value="<?php echo $user['phone']; ?>">
+            <input type="text" id="phone">
 
             <input type="submit" value="Save">
         </form>
@@ -123,10 +124,10 @@
         <h2>Edit Address</h2>
         <form>
             <label for="country">Country</label>
-            <input type="text" id="country" value="<?php echo $user['country']; ?>">
+            <input type="text" id="country">
 
             <label for="cityState">City/State</label>
-            <input type="text" id="cityState" value="<?php echo $user['city_state']; ?>">
+            <input type="text" id="cityState">
 
             <input type="submit" value="Save">
         </form>
@@ -159,16 +160,7 @@
                 modal.style.display = 'none';
             }
         });
-    });
-
-    // Close modal when clicking outside of the modal content
-    window.onclick = function(event) {
-        modals.forEach(modal => {
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
-        });
-    };
+    });  
 });
 
 </script>

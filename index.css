@@ -122,3 +122,27 @@ button:hover {
   border: none;
   background: #e6eaec;
 }
+.signup-link {
+  display: block;
+  font-size: 14px;
+  color: #3498db;
+  text-decoration: underline;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.signup-link:hover {
+  color: #2980b9;
+}
+.signin-link {
+  display: block;
+  font-size: 14px;
+  color: #3498db;
+  text-decoration: underline;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.signin-link:hover {
+  color: #2980b9;
+}
