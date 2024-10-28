@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Details</title>
+    <link rel="stylesheet" href="profile_details.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+
+<div class="profile-page">
+    <aside class="account-sidebar">
+        <div class="account">
+            <img src="../assets/cbc-logo.png" alt="Member Avatar" class="member-avatar">
+            <h2>Kleyr Carmelina</h2>
+            <p>team.hello@com</p>
+        </div>
+
+        <nav class="menu">
+            <ul>
+                <li><a href="#">My Profile</a></li>
+                <li><a href="donation.php">My Donations</a></li>
+                <li><a href="#">Logout</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="profile-content">
+        <section class="profile-section">
+            <h4>My Profile</h4>
+            <div class="profile-details">
+                <div class="profile-card">
+                    <div class="profile-info">
+                        <img src="../assets/cbc-logo.png" alt="User Avatar" class="user-avatar">
+                        <div class="user-info">
+                            <h2>Kleyr Carmelina</h2>
+                            <p>Member</p>
+                        </div>
+                    </div>
+                    <button class="edit-btn" data-modal="editProfileModal">Edit Photo</button> <!-- Edit Profile Avatar -->
+                </div>
+
+                <div class="personal-info">
+                    <h5>Personal Information</h5>
+                    <div class="info-item">
+                        <p>First Name:</p>
+                        <p><?php echo $user['first_name']; ?></p>
+                    </div>
+                    <div class="info-item">
+                        <p>Last Name:</p>
+                        <p><?php echo $user['last_name']; ?></p>
+                    </div>
+                    <div class="info-item">
+                        <p>Email Address:</p>
+                        <p><?php echo $user['email']; ?></p>
+                    </div>
+                    <div class="info-item">
+                        <p>Phone:</p>
+                        <p><?php echo $user['phone']; ?></p>
+                    </div>
+                    <button class="edit-btn" data-modal="editPersonalInfoModal">Edit</button> <!-- Edit Personal Info -->
+                </div>
+
+                <div class="address-info">
+                    <h5>Address</h5>
+                    <div class="info-item">
+                        <p>Country:</p>
+                        <p><?php echo $user['country']; ?></p>
+                    </div>
+                    <div class="info-item">
+                        <p>City/State:</p>
+                        <p><?php echo $user['city_state']; ?></p>
+                    </div>
+                    <button class="edit-btn" data-modal="editAddressModal">Edit</button> <!-- Edit Address -->
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- Modals -->
+<!-- Modal 1: Edit Profile Avatar -->
+<div id="editProfileModal" class="modal">
+    <div class="modal-content">
+        <span class="close" data-close="editProfileModal">&times;</span>
+        <h2>Edit Profile Avatar</h2>
+        <form enctype="multipart/form-data">
+            <label for="avatar">Upload New Avatar</label>
+            <input type="file" id="avatar" name="avatar">
+
+            <input type="submit" value="Save">
+        </form>
+    </div>
+</div>
+
+<!-- Modal 2: Edit Personal Information -->
+<div id="editPersonalInfoModal" class="modal">
+    <div class="modal-content">
+        <span class="close" data-close="editPersonalInfoModal">&times;</span>
+        <h2>Edit Personal Information</h2>
+        <form>
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" value="<?php echo $user['first_name']; ?>">
+
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" value="<?php echo $user['last_name']; ?>">
+
+            <label for="email">Email</label>
+            <input type="email" id="email" value="<?php echo $user['email']; ?>">
+
+            <label for="phone">Phone</label>
+            <input type="text" id="phone" value="<?php echo $user['phone']; ?>">
+
+            <input type="submit" value="Save">
+        </form>
+    </div>
+</div>
+
+<!-- Modal 3: Edit Address -->
+<div id="editAddressModal" class="modal">
+    <div class="modal-content">
+        <span class="close" data-close="editAddressModal">&times;</span>
+        <h2>Edit Address</h2>
+        <form>
+            <label for="country">Country</label>
+            <input type="text" id="country" value="<?php echo $user['country']; ?>">
+
+            <label for="cityState">City/State</label>
+            <input type="text" id="cityState" value="<?php echo $user['city_state']; ?>">
+
+            <input type="submit" value="Save">
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const editButtons = document.querySelectorAll('.edit-btn');
+    const modals = document.querySelectorAll('.modal');
+    const closeButtons = document.querySelectorAll('.close');
+
+    // Open modal when clicking edit button
+    editButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const modalId = button.getAttribute('data-modal');
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'block';
+            }
+        });
+    });
+
+    // Close modal when clicking the close button
+    closeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const modalId = button.getAttribute('data-close');
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        });
+    });
+
+    // Close modal when clicking outside of the modal content
+    window.onclick = function(event) {
+        modals.forEach(modal => {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        });
+    };
+});
+
+</script>
+</body>
+</html>
