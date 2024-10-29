@@ -50,13 +50,13 @@ body {
     font-size: 16px;
 }
 
-.profile-content {
+.security-content {
     flex-grow: 1;
     padding: 30px;
     background-color: #f9f9f9;
 }
 
-.profile-header {
+.security-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -67,7 +67,7 @@ body {
     margin: 0;
 }
 
-.profile-section {
+.security-section {
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
