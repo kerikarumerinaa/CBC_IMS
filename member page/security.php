@@ -8,24 +8,7 @@
 </head>
 <body>
 
-<div class="security-page">
-    <aside class="account-sidebar">
-        <div class="account">
-            <img src="../assets/cbc-logo.png" alt="Member Avatar" class="member-avatar">
-            <h2>Kleyr Carmelina</h2>
-            <p>team.hello@com</p>
-        </div>
-
-        <nav class="menu">
-            <ul>
-                <li><a href="profile_details.html">My Profile</a></li>
-                <li><a href="donation.php">My Donations</a></li>
-                <li><a href="security.html">My Security</a></li>
-                <li><a href="#">Logout</a></li>
-            </ul>
-        </nav>
-    </aside>
-
+    <?php include 'navbar.php'; ?>
 
     <main class="security-content">
         <section class="security-section">
@@ -63,7 +46,7 @@
             <label for="confirmPassword">Confirm New Password</label>
             <input type="password" id="confirmPassword" name="confirm_password" required>
 
-            <input type="submit" value="Save">
+         <input type="submit" value="Save">
         </form>
     </div>
 </div>

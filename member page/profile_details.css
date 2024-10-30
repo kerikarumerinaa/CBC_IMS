@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap');
 
 body {
-    font-family: 'poppins', sans-serif;
+    font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -10,44 +10,9 @@ body {
 
 .profile-page {
     display: flex;
-    height: 100vh;
-}
-
-.account-sidebar {
-    width: 300px;
-    background-color: #fff;
-    padding: 20px;
-    border-right: 1px solid #ddd;
-    display: flex;
     flex-direction: column;
-    justify-content: space-between;
-}
-
-.account {
-    text-align: center;
-    padding-bottom: 20px;
-}
-
-.member-avatar {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    margin-bottom: 10px;
-}
-
-.menu ul {
-    list-style: none;
-    padding: 0;
-}
-
-.menu li {
-    margin-bottom: 20px;
-}
-
-.menu a {
-    text-decoration: none;
-    color: #333;
-    font-size: 16px;
+    height: 100vh;
+    padding-top: 20px;
 }
 
 .profile-content {
@@ -142,7 +107,7 @@ body {
 }
 
 .edit-btn:hover {
-    background-color: #103a58;;
+    background-color: #103a58;
 }
 
 /***** Modal Styles *****/
@@ -213,4 +178,3 @@ body {
 .modal-content input[type="submit"]:hover {
     background-color: #103a58;
 }
-

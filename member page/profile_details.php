@@ -4,44 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile Details</title>
-    <link rel="stylesheet" href="profile_details.css"> <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="profile_details.css">
 </head>
 <body>
 
+    <?php include 'navbar.php'; ?>
+
 <div class="profile-page">
-    <aside class="account-sidebar">
-        <div class="account">
-            <img src="../assets/cbc-logo.png" alt="Member Avatar" class="member-avatar">
-            <h2>Kleyr Carmelina</h2>
-            <p>team.hello@com</p>
-        </div>
-
-        <nav class="menu">
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="profile_details.html">My Profile</a></li>
-                <li><a href="donation.php">My Donations</a></li>
-                <li><a href="security.html">My Security</a></li>
-                <li><a href="#">Logout</a></li>
-            </ul>
-        </nav>
-    </aside>
-
     <main class="profile-content">
         <section class="profile-section">
             <h4>My Profile</h4>
             <div class="profile-details">
+                <!-- Profile Card -->
                 <div class="profile-card">
                     <div class="profile-info">
                         <img src="../assets/cbc-logo.png" alt="User Avatar" class="user-avatar">
                         <div class="user-info">
-                            <h2>Kleyr Carmelina</h2>
+                            <h2><?php echo $user['first_name'] . ' ' . $user['last_name']; ?></h2>
                             <p>Member</p>
                         </div>
                     </div>
-                    <button class="edit-btn" data-modal="editProfileModal">Edit Photo</button> <!-- Edit Profile Avatar -->
+                    <button class="edit-btn" data-modal="editProfileModal">Edit Photo</button>
                 </div>
 
+                <!-- Personal Information Section -->
                 <div class="personal-info">
                     <h5>Personal Information</h5>
                     <div class="info-item">
@@ -60,9 +46,10 @@
                         <p>Phone:</p>
                         <p><?php echo $user['phone']; ?></p>
                     </div>
-                    <button class="edit-btn" data-modal="editPersonalInfoModal">Edit</button> <!-- Edit Personal Info -->
+                    <button class="edit-btn" data-modal="editPersonalInfoModal">Edit</button>
                 </div>
 
+                <!-- Address Section -->
                 <div class="address-info">
                     <h5>Address</h5>
                     <div class="info-item">
@@ -73,7 +60,7 @@
                         <p>City/State:</p>
                         <p><?php echo $user['city_state']; ?></p>
                     </div>
-                    <button class="edit-btn" data-modal="editAddressModal">Edit</button> <!-- Edit Address -->
+                    <button class="edit-btn" data-modal="editAddressModal">Edit</button>
                 </div>
             </div>
         </section>
@@ -86,10 +73,9 @@
     <div class="modal-content">
         <span class="close" data-close="editProfileModal">&times;</span>
         <h2>Edit Profile Avatar</h2>
-        <form enctype="multipart/form-data">
+        <form enctype="multipart/form-data" action="update_avatar.php" method="POST">
             <label for="avatar">Upload New Avatar</label>
-            <input type="file" id="avatar" name="avatar">
-
+            <input type="file" id="avatar" name="avatar" required>
             <input type="submit" value="Save">
         </form>
     </div>
@@ -100,19 +86,19 @@
     <div class="modal-content">
         <span class="close" data-close="editPersonalInfoModal">&times;</span>
         <h2>Edit Personal Information</h2>
-        <form>
+        <form action="update_personal_info.php" method="POST">
             <label for="firstName">First Name</label>
-            <input type="text" id="firstName">
-
+            <input type="text" id="firstName" name="first_name" value="<?php echo $user['first_name']; ?>" required>
+            
             <label for="lastName">Last Name</label>
-            <input type="text" id="lastName">
-
+            <input type="text" id="lastName" name="last_name" value="<?php echo $user['last_name']; ?>" required>
+            
             <label for="email">Email</label>
-            <input type="email" id="email">
-
+            <input type="email" id="email" name="email" value="<?php echo $user['email']; ?>" required>
+            
             <label for="phone">Phone</label>
-            <input type="text" id="phone">
-
+            <input type="text" id="phone" name="phone" value="<?php echo $user['phone']; ?>" required>
+            
             <input type="submit" value="Save">
         </form>
     </div>
@@ -123,20 +109,20 @@
     <div class="modal-content">
         <span class="close" data-close="editAddressModal">&times;</span>
         <h2>Edit Address</h2>
-        <form>
+        <form action="update_address.php" method="POST">
             <label for="country">Country</label>
-            <input type="text" id="country">
-
+            <input type="text" id="country" name="country" value="<?php echo $user['country']; ?>" required>
+            
             <label for="cityState">City/State</label>
-            <input type="text" id="cityState">
-
+            <input type="text" id="cityState" name="city_state" value="<?php echo $user['city_state']; ?>" required>
+            
             <input type="submit" value="Save">
         </form>
     </div>
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     const editButtons = document.querySelectorAll('.edit-btn');
     const modals = document.querySelectorAll('.modal');
     const closeButtons = document.querySelectorAll('.close');
@@ -161,9 +147,18 @@
                 modal.style.display = 'none';
             }
         });
-    });  
+    });
+    
+    // Close modal on outside click
+    window.onclick = function(event) {
+        modals.forEach(modal => {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        });
+    };
 });
-
 </script>
+
 </body>
 </html>
