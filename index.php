@@ -10,6 +10,8 @@
 
   <?php
   // Start the session
+
+  // test commit
   session_start();
 
   // Database connection
