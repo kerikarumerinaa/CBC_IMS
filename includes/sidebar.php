@@ -13,6 +13,7 @@
             <span class="material-symbols-outlined">dashboard</span>
             <h2>Dashboard</h2>
         </a>
+
         <div class="dropdown">
             <a class="membership" onclick="showMembershipDropDown()">
                 <span class="material-symbols-outlined">groups</span>
@@ -24,20 +25,36 @@
                 <a href="membership_members.php">Members</a>
             </div>
         </div>
+
+        <div class="dropdown">
+            <a class="assimilation" onclick="showAssimilationDropDown()">
+                <span class="material-symbols-outlined">communication</span>
+                <h2>Assimilation</h2>
+            </a>
+            <div class="dropdown-content assimilationDropdown">
+                <a href="assimilation_dashboard.php">Dashboard</a>
+                <a href="assimilation_attendance.php">Attendance</a>
+                <a href="assimilation_visitors.php">Visitors</a>
+            </div>
+        </div>
+
         <div class="dropdown">
             <a class="finance" onclick="showFinanceDropDown()">
                 <span class="material-symbols-outlined">payments</span>
                 <h2>Finance</h2>
             </a>
             <div class="dropdown-content financeDropdown">
-                <a href="finance_transactions.php">Transactions</a>
                 <a href="finance_dashboard.php">Dashboard</a>
+                <a href="finance_transactions.php">Online Donations</a>
+                <a href="finance_collections.php">Collections & Expenses</a>
             </div>
         </div>
+
         <a href="events.php">
             <span class="material-symbols-outlined">event</span>
             <h2>Events</h2>
         </a>
+
         <a href="../logout.php">
             <span class="material-symbols-outlined">logout</span>
             <h2>Logout</h2>
@@ -62,6 +79,18 @@
     }
     function showFinanceDropDown(){
         const membershipDropdown = document.querySelector('.financeDropdown');
+        if(membershipDropdown.style.display !== "flex"){
+            console.log(membershipDropdown.style.display)
+            membershipDropdown.style.display = "flex";
+        }
+        else{
+            console.log(membershipDropdown.style.display)
+            membershipDropdown.style.display = "none";
+            
+        }
+    }
+    function showAssimilationDropDown(){
+        const membershipDropdown = document.querySelector('.assimilationDropdown');
         if(membershipDropdown.style.display !== "flex"){
             console.log(membershipDropdown.style.display)
             membershipDropdown.style.display = "flex";

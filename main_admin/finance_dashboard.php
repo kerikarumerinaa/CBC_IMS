@@ -26,7 +26,7 @@ if (!isset($_SESSION['username'])) {
 
     <!-- MAIN CONTENT -->
     <main>
-        <h1>Collections Summary</h1>
+        <h1>Finance Summary</h1>
         
         <!-- MONTHLY COLLECTIONS -->
         <div class="offering">
@@ -56,7 +56,7 @@ if (!isset($_SESSION['username'])) {
 
             <!-- QUARTERLY COLLECTIONS -->
             <div class="quarterly-offering">
-                <h2>Quarterly Offering</h2>
+                <h2>Monthly Expenses</h2>
                 <div class="middle">
                     <div class="left">
                         <!-- Add content or logic here for quarterly offering -->

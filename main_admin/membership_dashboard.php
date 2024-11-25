@@ -37,7 +37,7 @@
           <div class="middle">
             <div class="left">
               <h1>2</h1>
-              <h3>Visitors</h3>
+              <h3>New Members</h3>
             </div>
           </div>
         </div>

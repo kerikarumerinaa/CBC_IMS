@@ -20,7 +20,7 @@
                     <div class="profile-info">
                         <img src="../assets/cbc-logo.png" alt="User Avatar" class="user-avatar">
                         <div class="user-info">
-                            <h2><?php echo $user['first_name'] . ' ' . $user['last_name']; ?></h2>
+                            
                             <p>Member</p>
                         </div>
                     </div>
@@ -32,19 +32,19 @@
                     <h5>Personal Information</h5>
                     <div class="info-item">
                         <p>First Name:</p>
-                        <p><?php echo $user['first_name']; ?></p>
+                        
                     </div>
                     <div class="info-item">
                         <p>Last Name:</p>
-                        <p><?php echo $user['last_name']; ?></p>
+                        
                     </div>
                     <div class="info-item">
                         <p>Email Address:</p>
-                        <p><?php echo $user['email']; ?></p>
+                        
                     </div>
                     <div class="info-item">
                         <p>Phone:</p>
-                        <p><?php echo $user['phone']; ?></p>
+                        
                     </div>
                     <button class="edit-btn" data-modal="editPersonalInfoModal">Edit</button>
                 </div>
@@ -54,11 +54,11 @@
                     <h5>Address</h5>
                     <div class="info-item">
                         <p>Country:</p>
-                        <p><?php echo $user['country']; ?></p>
+                        
                     </div>
                     <div class="info-item">
                         <p>City/State:</p>
-                        <p><?php echo $user['city_state']; ?></p>
+                        
                     </div>
                     <button class="edit-btn" data-modal="editAddressModal">Edit</button>
                 </div>

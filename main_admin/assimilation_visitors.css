@@ -34,7 +34,7 @@ body {
 }
 
 /* Member List Header */
-.members-header {
+.assimilation-header {
     display: flex;
     align-items: center; /* Center items vertically */
     justify-content: space-between; /* Separate heading and button */
@@ -49,7 +49,7 @@ body {
     margin: 0;
 }
 
-#add-member-btn {
+#add-visitor-btn {
     background-color: #154668;
     color: #e4dede;
     padding: 10px 20px;
@@ -59,7 +59,7 @@ body {
     transition: background-color 0.3s ease;
 }
 
-#add-member-btn:hover {
+#add-visitor-btn:hover {
     background-color: #103a58;
 }
 

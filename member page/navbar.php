@@ -10,7 +10,6 @@
     </div>
     <div class="menu">
         <ul>
-            <li><a href="#">Home</a></li>
             <li><a href="profile_details.php">My Profile</a></li>
             <li><a href="donation.php">My Donations</a></li>
             <li><a href="security.php">My Security</a></li>
