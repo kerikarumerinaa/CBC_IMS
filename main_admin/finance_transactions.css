@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap');
 
+/* General Resets and Body */
 * {
     margin: 0;
     padding: 0;
@@ -32,13 +33,14 @@ body {
     gap: 1.8rem;
     grid-template-columns: 20rem auto 23rem;
 }
-/* Transactions Header */
+
+/* Transaction List Header */
 .transactions-header {
     display: flex;
-    align-items: center; /* Center items vertically */
-    justify-content: space-between; /* Separate heading and button */
-    margin-bottom: 20px; /* Spacing below the header */
-    padding: 0 20px; /* Padding to align with table-container */
+    justify-content: space-between; /* Aligns the items (heading and buttons) to opposite sides */
+    align-items: center; /* Vertically center the items */
+    margin-bottom: 20px;
+    padding: 0 20px;
 }
 
 .transactions-header h2 {
@@ -48,6 +50,26 @@ body {
     margin: 0;
 }
 
+/* Button Group - positioned to the right */
+.button-group {
+    display: flex;
+    gap: 10px; /* Adds space between the buttons */
+}
+
+.button-group button {
+    background-color: #154668;
+    color: #e4dede;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 0.88rem;
+}
+
+.button-group button:hover {
+    background-color: #103a58;
+}
 
 /*--------------------------------- Table Container Styles ---------------------------------*/
 
@@ -95,7 +117,6 @@ tbody tr:hover td {
     background-color: #ececec; 
 }
 
-
 /*--------------------------------- Responsive Adjustments ----------------------------------*/
 
 @media (max-width: 768px) {
@@ -111,4 +132,95 @@ tbody tr:hover td {
         font-size: 20px;
     }
 }
-
+/*---------------------------------- modal styles -------------------------------------------*/
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  
+  .modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  /* Form Styles */
+  form label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  form input, form select, form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  form input[type="submit"] {
+    background-color: #154668;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  form input[type="submit"]:hover {
+    background-color: #103a58;
+  }
+  
+  /* Hide Advanced Fields */
+  .hidden {
+    display: none;
+  }
+  
+  /* Show Advanced Fields when toggled */
+  #advanced-fields {
+    display: block;
+  }
+  
+  /* Button Styling */
+  #add-collection-btn {
+    background-color: #154668;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  #add-collection-btn:hover {
+    background-color: #103a58;
+  }
+  

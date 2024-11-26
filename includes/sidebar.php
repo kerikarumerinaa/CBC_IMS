@@ -45,8 +45,8 @@
             </a>
             <div class="dropdown-content financeDropdown">
                 <a href="finance_dashboard.php">Dashboard</a>
-                <a href="finance_transactions.php">Online Donations</a>
-                <a href="finance_collections.php">Collections & Expenses</a>
+                <a href="finance_donations.php">Online Donations</a>
+                <a href="finance_transactions.php">Collections & Expenses</a>
             </div>
         </div>
 
@@ -102,7 +102,7 @@
         }
     }
 
-</script> <!-- Include your JavaScript file -->
+</script> 
 
 
 

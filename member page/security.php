@@ -18,7 +18,7 @@
                 <!-- Email Section -->
                 <div class="info-item">
                     <label for="email">Email</label>
-                    <input type="email" id="email" value="<?php echo $user['email']; ?>" readonly>
+                    <input type="email" id="email" value="" readonly>
                 </div>
 
                 <!-- Password Change Section -->

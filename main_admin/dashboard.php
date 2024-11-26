@@ -43,7 +43,7 @@ if (!isset($_SESSION['username'])) {
                     <div class="middle">
                         <div class="left">
                             <h1>20</h1>
-                            <h3>Inactive members</h3>
+                            <h3>New members</h3>
                         </div>
                     </div>
                 </div>
