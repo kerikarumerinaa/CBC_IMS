@@ -27,21 +27,22 @@ CREATE TABLE members (
     join_date DATE NOT NULL
 );
 
-CREATE TABLE attendance (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    member_id INT NOT NULL,
-    attendance_date DATE NOT NULL,
-    FOREIGN KEY (member_id) REFERENCES members(id)
-);
 
-CREATE TABLE visitors (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    age INT NOT NULL,
-    address VARCHAR(255) NOT NULL,
-    sex ENUM('Male', 'Female') NOT NULL,
-    invited_by VARCHAR(100) NOT NULL,
-    visit_date DATE NOT NULL DEFAULT CURRENT_DATE
-);
+
+CREATE TABLE IF NOT EXISTS `visitors` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `full_name` VARCHAR(255) NOT NULL,
+    `age` INT NOT NULL,
+    `address` TEXT NOT NULL,
+    `email` VARCHAR(255),
+    `sex` ENUM('male', 'female') NOT NULL,
+    `birthdate` DATE NOT NULL,
+    `contact_number` VARCHAR(15) NOT NULL,
+    `network` VARCHAR(255) NOT NULL,
+    `date_of_visit` DATE NOT NULL,
+    `invited_by` VARCHAR(255),
+    `assimilated_by` VARCHAR(255)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 
