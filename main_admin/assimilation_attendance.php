@@ -16,6 +16,7 @@
     <?php include '../includes/db_connection.php'; ?>
 
     <!-- Main Content -->
+     
     <main>
       <div class="attendance-tracker">
         <div class="header">
@@ -24,6 +25,13 @@
             <div class="total">TOTAL: <span id="total-count">0</span></div>
           </div>
         </div>
+        
+        <div class="description">
+          <label for="description">Description:</label>
+          <input type="text"  id="description">
+        </div>
+
+        <button id="save-attendance-btn">Save Attendance</button>
 
         <div class="attendee-lists">
           <!-- Active Visitors List -->

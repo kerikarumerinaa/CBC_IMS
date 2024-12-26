@@ -23,6 +23,19 @@
           </div>
         </div>
 
+        <div class="description">
+          <label for="description">Description:</label>
+          <input type="text"  id="description">
+        </div>
+
+        <button id="save-attendance-btn">Save Attendance</button>
+        <form id="attendance-form" action="attendance_history.php" method="POST" style="display:none;">
+            <input type="hidden" name="date" />
+            <input type="hidden" name="description" />
+            <input type="hidden" name="attendees" />
+          </form>
+
+
         <div class="attendee-lists">
           <!-- Active Attenders List -->
           <div class="attendee-list">
@@ -62,8 +75,10 @@
           </div>
         </div>
       </div>
-    </main>
+    </main>                    
   </div>
+  
+
 
   <script>
     $(document).ready(function() {
@@ -124,6 +139,40 @@
 
       updateCounts();
     });
+
+
+
+    $(document).ready(function () {
+  $("#save-attendance-btn").on("click", function () {
+    const attendees = [];
+    $("#current-attenders .attendee-item").each(function () {
+      attendees.push($(this).data("id")); // Collect attendee IDs
+    });
+
+    const description = $("#description").val().trim();
+    if (!description) {
+      alert("Please enter a description for the event.");
+      return;
+    }
+
+    if (attendees.length === 0) {
+      alert("No attendees to save.");
+      return;
+    }
+
+    const date = new Date().toISOString().split("T")[0]; // Format: YYYY-MM-DD
+
+    // Set the form values to be submitted
+    $("#attendance-form input[name='date']").val(date);
+    $("#attendance-form input[name='description']").val(description);
+    $("#attendance-form input[name='attendees']").val(attendees.join(",")); // Join IDs with commas
+
+    // Submit the form
+    $("#attendance-form").submit();
+  });
+});
+
+
   </script>
 </body>
 </html>

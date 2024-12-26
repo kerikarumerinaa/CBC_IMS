@@ -22,6 +22,7 @@
             <div class="dropdown-content membershipDropdown">
                 <a href="membership_dashboard.php">Dashboard</a>
                 <a href="membership_attendance.php">Attendance</a>
+                <a href="attendance_history.php">Attendance History</a>
                 <a href="membership_members.php">Members</a>
             </div>
         </div>
@@ -34,6 +35,7 @@
             <div class="dropdown-content assimilationDropdown">
                 <a href="assimilation_dashboard.php">Dashboard</a>
                 <a href="assimilation_attendance.php">Attendance</a>
+                <a href="assimilation_history.php">Attendance History</a>
                 <a href="assimilation_visitors.php">Visitors</a>
             </div>
         </div>

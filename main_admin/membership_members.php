@@ -184,7 +184,7 @@
             <label for="birthdate">Birthdate:</label>
             <input type="date" id="birthdate" name="birthdate" required>
             <label for="contact_number">Contact Number:</label>
-            <input type="tel" id="contact_number" name="contact_number" required>
+            <input type="number" id="contact_number" name="contact_number" required>
             <input type="submit" value="Add Member">
           </form>
         </div>

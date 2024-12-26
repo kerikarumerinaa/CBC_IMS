@@ -40,7 +40,17 @@ main {
 }
 
 /*----------------------------ATTENDANCE-------------------------------------*/
-
+.description {
+    color: #404040;
+    margin-bottom: 1rem;
+}
+.description input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
 .attendance-tracker {
     width: 125%;
     flex-direction: column;
@@ -239,4 +249,20 @@ main {
 
 .modal-content input[type="submit"]:hover {
     background-color: #103a58;
+}
+
+#save-attendance-btn {
+    background-color: #154668; 
+    color: #e4dede; 
+    padding: 15px 20px; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
+    font-size: 0.88rem; 
+    font-weight: 600; 
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    margin-top: 1.5rem;
 }

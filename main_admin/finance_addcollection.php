@@ -1,3 +1,34 @@
+<?php
+session_start();
+
+// Check if the main admin is logged in
+if (!isset($_SESSION['username'])) {
+    header("Location: ../index.php");
+    exit;
+}
+
+include '../includes/db_connection.php'; // Include database connection
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $description = $_POST['description'];
+    $amount = $_POST['amount'];
+    $date = $_POST['date'];
+    $type = 'Collection'; // Set type as Collection
+
+    $query = "INSERT INTO transactions (description, amount, date, type) VALUES (?, ?, ?, ?)";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('sdss', $description, $amount, $date, $type);
+
+    if ($stmt->execute()) {
+        echo "<script>alert('Collection added successfully!'); window.location.href='finance_transactions.php';</script>";
+    } else {
+        echo "<script>alert('Error adding collection: " . $conn->error . "');</script>";
+    }
+    $stmt->close();
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,42 +42,15 @@
   <div class="container">
     <?php include '../includes/sidebar.php'; ?>
 
-    <?php
-        // Include database connection
-        include '../includes/db_connection.php'; // Ensure this is at the top of the file
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-          $date = $_POST['date'];
-          $description = $_POST['description'];
-          $totalAmount = $_POST['total_amount'];
-          $type = 'Collection'; // Automatically set the type to "Collection"
-  
-           // Insert into the transactions table
-          $query = "INSERT INTO transactions (date, description, type, amount) VALUES (?, ?, ?, ?)";
-          $stmt = $conn->prepare($query);
-          $stmt->bind_param('sssi', $date, $description, $type, $totalAmount);
-
-          if ($stmt->execute()) {
-              // Redirect to transactions page after successful save
-              header("Location: finance_transactions.php");
-              exit();
-          } else {
-              echo "<script>alert('Error saving collection: {$conn->error}');</script>";
-          }
-          $stmt->close();
-      }
-      ?>
-
-
     <main>
     <h2>City Bible Church of Muntinlupa</h2>
-  <h3>Weekly Collections Summary</h3>
+  <h3>Weekly Collections Summary</h3><br>
   <form method="POST" action="" id="collectionsForm">
     <label for="date">Date:</label>
-    <input type="date" id="date" name="date"><br><br>
+    <input type="date" id="date" name="date">
 
     <label for="description">Description:</label>
-    <input type="text" id="description" name="description"><br><br>
+    <input type="text" id="description" name="description"><br>
 
 
     <h4>Cash Count</h4>
@@ -89,45 +93,26 @@
           <td><input type="number" id="cashTotal" readonly></td>
         </tr>
 </tbody>
-    </table>
-
-    <h4>Others (Foreign Currency)</h4>
+    
     <table>
       <thead>
+      <h4>Checks</h4>
         <tr>
-          <th>Currency</th>
-          <th>Denomination</th>
-          <th>FX Rate</th>
+          <th>Bank</th>
+          <th>Check #</th>
+          <th>Corporate Supporters & Others</th>
           <th>Amount</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><input type="text"></td>
-          <td><input type="number"></td>
-          <td><input type="number" step="0.01"></td>
-          <td><input type="number" readonly></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <h4>Checks</h4>
-    <table>
-      <thead>
-        <tr>
-          <th>Bank</th>
-          <th>Check #</th>
-          <th>Corporate Supporters & Others</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
           <td><input type="text"></td>
           <td><input type="text"></td>
-          <td><input type="number"></td>
+          <td><input type="number" oninput="updateCheckTotal()"></td>
         </tr>
         <tr>
-          <td colspan="2"><strong>Total Checks</strong></td>
+          <td colspan="3"><strong>Total Checks</strong></td>
           <td><input type="number" id="checkTotal" readonly></td>
         </tr>
       </tbody>
@@ -149,10 +134,6 @@
           <td><input type="number" id="missionFund" readonly></td>
         </tr>
         <tr>
-          <td>Building Fund</td>
-          <td><input type="number" id="buildingFund" readonly></td>
-        </tr>
-        <tr>
           <td><strong>Total</strong></td>
           <td><input type="number" id="totalCollections" readonly></td>
         </tr>
@@ -160,9 +141,10 @@
     </table>
 
     <label for="countedBy">Counted By:</label>
-    <input type="text" id="countedBy" name="countedBy"><br><br>
+    <input type="text" id="countedBy" name="countedBy">
+    <input type="text" id="countedBy" name="countedBy">
     <label for="receivedBy">Received By:</label>
-    <input type="text" id="receivedBy" name="receivedBy"><br><br>
+    <input type="text" id="receivedBy" name="receivedBy"><br>
 
 
 
@@ -193,6 +175,18 @@
         updateTotalCollections();
     }
 
+    function updateCheckTotal() {
+    const checkAmountInputs = document.querySelectorAll('#checkTotal tbody tr input[type="number"]');
+    let checkTotal = 0;
+
+    checkAmountInputs.forEach(check => {
+        checkTotal += parseFloat(check.value) || 0; 
+    });
+
+    document.getElementById('checkTotal').value = checkTotal; 
+    updateTotalCollections(); 
+    }
+
     function updateTotalCollections() {
         const cashTotal = parseInt(document.getElementById('cashTotal').value) || 0;
         const checkTotal = parseInt(document.getElementById('checkTotal').value) || 0;
@@ -201,13 +195,15 @@
         document.getElementById('totalCollections').value = totalCollections;
         document.getElementById('savings').value = (totalCollections * 0.2).toFixed(2);
         document.getElementById('missionFund').value = (totalCollections * 0.1).toFixed(2);
-        document.getElementById('generalFund').value
-    function calculateTotals() {
-        updateCashTotal(); // This will also update total collections
-    }
-
-    function calculateTotals() {
-        updateCashTotal(); // This will also update total collections
+        document.getElementById('generalFund').value = totalCollections.toFixed(2);
+    
+        document.querySelectorAll('#checkTotal tbody tr input[type="number"]').forEach(input => {
+          input.addEventListener('input', updateCheckTotal);
+        });
+    
+        function calculateTotals() {
+        updateCashTotal(); 
+        updateCashTotal(); 
     }
   }
 </script>

@@ -35,7 +35,7 @@
                     }
                     ?>
                 </div>
-                <!-- Modal -->
+                <!------------------------------ Modal --------------------------------->
                 <div id="eventModal" class="modal">
                     <div class="modal-content">
                         <span id="closeModal" class="close">&times;</span>

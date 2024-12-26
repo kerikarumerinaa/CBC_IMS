@@ -88,16 +88,16 @@
         <h2>Edit Personal Information</h2>
         <form action="update_personal_info.php" method="POST">
             <label for="firstName">First Name</label>
-            <input type="text" id="firstName" name="first_name" value="<?php echo $user['first_name']; ?>" required>
+            <input type="text" id="firstName" name="first_name" value="" required>
             
             <label for="lastName">Last Name</label>
-            <input type="text" id="lastName" name="last_name" value="<?php echo $user['last_name']; ?>" required>
+            <input type="text" id="lastName" name="last_name" value="" required>
             
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" value="<?php echo $user['email']; ?>" required>
+            <input type="email" id="email" name="email" value="" required>
             
             <label for="phone">Phone</label>
-            <input type="text" id="phone" name="phone" value="<?php echo $user['phone']; ?>" required>
+            <input type="text" id="phone" name="phone" value="" required>
             
             <input type="submit" value="Save">
         </form>
@@ -111,10 +111,10 @@
         <h2>Edit Address</h2>
         <form action="update_address.php" method="POST">
             <label for="country">Country</label>
-            <input type="text" id="country" name="country" value="<?php echo $user['country']; ?>" required>
+            <input type="text" id="country" name="country" value="" required>
             
             <label for="cityState">City/State</label>
-            <input type="text" id="cityState" name="city_state" value="<?php echo $user['city_state']; ?>" required>
+            <input type="text" id="cityState" name="city_state" value="" required>
             
             <input type="submit" value="Save">
         </form>
