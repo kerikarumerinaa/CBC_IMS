@@ -146,7 +146,7 @@
   $("#save-attendance-btn").on("click", function () {
     const attendees = [];
     $("#current-attenders .attendee-item").each(function () {
-      attendees.push($(this).data("id")); // Collect attendee IDs
+      attendees.push($(this).data("full-name")); // Collect attendee IDs
     });
 
     const description = $("#description").val().trim();

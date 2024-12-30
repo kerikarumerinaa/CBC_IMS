@@ -3,51 +3,27 @@
 include '../includes/db_connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $date = $_POST['date'];
-    $description = $_POST['description'];
-    $attendees = $_POST['attendees'];
+  include '../includes/db_connection.php';
 
-    // Convert attendees array to JSON
-    $attendees_json = json_encode($attendees);
+  $date = $_POST['date'];
+  $description = $_POST['description'];
+  $attendees = $_POST['attendees']; // Array of attendee names
 
-    $sql = "INSERT INTO attendance_history (date, description, attendees) VALUES (?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sss", $date, $description, $attendees_json);
+  // Insert attendance record
+  $sql = "INSERT INTO attendance_history (date, description, attendees) VALUES (?, ?, ?)";
+  $stmt = $conn->prepare($sql);
+  $stmt->bind_param("sss", $date, $description, $attendees);
 
-    if ($stmt->execute()) {
-        echo "Attendance saved successfully!";
-    } else {
-        echo "Error saving attendance: " . $stmt->error;
-    }
+  if ($stmt->execute()) {
+      echo '<script>alert("Attendance saved successfully!"); window.location.href = "attendance_history.php";</script>';
+  } else {
+      echo '<script>alert("Error saving attendance: ' . $stmt->error . '");</script>';
+  }
 
-    $stmt->close();
-    $conn->close();
-} 
-?>
-
-<!-- display attendance history -->
-
-<!-- <<?php
-$query = "SELECT * FROM attendance_history ORDER BY date DESC";
-$result = $conn->query($query);
-
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $attendees = $row["attendees"]; 
-        echo "<tr>";
-        echo "<td>" . date("F j, Y", strtotime($row["date"])) . "</td>";
-        echo "<td>" . htmlspecialchars($row["description"]) . "</td>";
-        echo "<td>";
-        echo "<button onclick='viewDetails(\"" . $attendees . "\")'>View Attendees</button>"; 
-        echo "</td>";
-        echo "</tr>";
-    }
-} else {
-    echo "<tr><td colspan='3'>No attendance history found</td></tr>";
+  $stmt->close();
+  $conn->close();
 }
-?> -->
-
-
+?>
 
 
 <!DOCTYPE html>
@@ -78,20 +54,42 @@ if ($result->num_rows > 0) {
           </tr>
         </thead>
         <tbody>
+          <!-- display attendance history -->
           <?php
-            $query = "SELECT * FROM attendance_history ORDER BY date DESC";
+            $query = "SELECT id, date, description, attendees FROM attendance_history ORDER BY date DESC";
             $result = $conn->query($query);
-
+            
             if ($result->num_rows > 0) {
-              while ($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>" . $row["date"] . "</td>";
-                echo "<td>" . $row["description"] . "</td>";
-                echo "</tr>";
-              }
+                while ($row = $result->fetch_assoc()) {
+                    echo "<tr>
+                            <td>" . date("F j, Y", strtotime($row['date'])) . "</td>
+                            <td>{$row['description']}</td>
+                            <td>
+                                <a href='membership_viewattendance.php?id={$row['id']}'><button>View</button></a>
+                                <button onclick='editAttendance({$row['id']})'>Edit</button>
+                                <button onclick='deleteAttendance({$row['id']})'>Delete</button>
+                            </td>
+                          </tr>";
+                }
             } else {
-              echo "<tr><td colspan='3'>No attendance history found</td></tr>";
-            }
-        //   ?>
+                echo "<tr><td colspan='4'>No attendance history found</td></tr>";
+            }  
+                  ?>
         </tbody>
       </table>
+
+      <!-- View member Modal -->
+       <div class="modal" id="view-modal">
+         <div class="modal-content">
+           <span class="close">&times;</span>
+           <h2>Attendees</h2>
+
+
+           
+           
+       </div>
+
+      <script>
+        
+
+      </script>

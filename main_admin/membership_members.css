@@ -166,6 +166,11 @@ tbody tr:hover td {
 
 .modal-content h2 {
     margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.modal-content p {
+    margin-bottom: 15px;
 }
 
 .modal-content label {

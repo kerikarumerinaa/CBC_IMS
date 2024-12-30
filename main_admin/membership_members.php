@@ -105,13 +105,13 @@
           <tr>
             <th>ID</th>
             <th>Full Name</th>
-            <th>Age</th>
             <th>Address</th>
             <th>Email</th>
             <th>Sex</th>
+            <th>Age</th>
             <th>Network</th>
             <th>Birthdate</th>
-            <th>Contact No.</th>
+            <th>Contact Number</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -126,15 +126,14 @@
 
           if ($result->num_rows > 0) {
               while ($row = $result->fetch_assoc()) {
-                  echo "<tr data-id='{$row['id']}' data-fullname='{$row['full_name']}' data-age='{$row['age']}'
-                          data-address='{$row['address']}' data-email='{$row['email']}' data-sex='{$row['sex']}' 
-                          data-network='{$row['network']}' data-birthdate='{$row['birthdate']}' data-contact='{$row['contact_number']}' >
+                  echo "<tr data-id='{$row['id']}' data-fullname='{$row['full_name']}' data-age='{$row['age']}' data-address='{$row['address']}' data-email='{$row['email']}'
+                          data-sex='{$row['sex']}' data-network='{$row['network']}' data-birthdate='{$row['birthdate']}' data-contact='{$row['contact_number']}' >
                           <td>{$row['id']}</td>
                           <td>{$row['full_name']}</td>
-                          <td>{$row['age']}</td>
                           <td>{$row['address']}</td>
                           <td>{$row['email']}</td>
                           <td>{$row['sex']}</td>
+                          <td>{$row['age']}</td>
                           <td>{$row['network']}</td>
                           <td>{$row['birthdate']}</td>
                           <td>{$row['contact_number']}</td>
