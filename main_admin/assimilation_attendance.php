@@ -32,6 +32,11 @@
         </div>
 
         <button id="save-attendance-btn">Save Attendance</button>
+        <form id="attendance-form" action="assimilation_history.php" method="POST" style="display:none;">
+            <input type="hidden" name="date" />
+            <input type="hidden" name="description" />
+            <input type="hidden" name="attendees" />
+        </form>
 
         <div class="attendee-lists">
           <!-- Active Visitors List -->
@@ -133,6 +138,42 @@
 
   updateCounts();
 });
+
+
+  document.getElementById('save-attendance-btn').addEventListener('click', function() {
+    const saveButton = document.getElementById('save-attendance-btn');
+    const descriptionInput = document.getElementById('description');
+    const currentVisitors = document.getElementById('current-visitors');
+  
+    saveButton.addEventListener('click', function() {
+      const attendees = [];
+      currentVisitors.querySelectorAll('.attendee-item').forEach((item) => {
+        attendees.push(item.dataset.id); // Collect attendee IDs
+      });
+  
+      const description = descriptionInput.value.trim();
+      if (!description) {
+        alert('Please enter a description for the event.');
+        return;
+      }
+  
+      if (attendees.length === 0) {
+        alert('No attendees to save.');
+        return;
+      }
+  
+      const date = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+  
+      // Set form values
+      const form = document.getElementById('attendance-form');
+      form.querySelector('input[name="date"]').value = date;
+      form.querySelector('input[name="description"]').value = description;
+      form.querySelector('input[name="attendees"]').value = attendees.join(',');
+  
+      // Submit the form
+      form.submit();    
+    });
+    })
   </script>
 </body>
 </html>

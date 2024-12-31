@@ -142,37 +142,40 @@
 
 
 
-    $(document).ready(function () {
-  $("#save-attendance-btn").on("click", function () {
-    const attendees = [];
-    $("#current-attenders .attendee-item").each(function () {
-      attendees.push($(this).data("full-name")); // Collect attendee IDs
+    document.addEventListener("DOMContentLoaded", function () {
+    const saveButton = document.getElementById("save-attendance-btn");
+    const descriptionInput = document.getElementById("description");
+    const currentAttenders = document.getElementById("current-attenders");
+
+    saveButton.addEventListener("click", function () {
+        const attendees = [];
+        currentAttenders.querySelectorAll(".attendee-item").forEach((item) => {
+            attendees.push(item.dataset.id); // Collect attendee IDs
+        });
+
+        const description = descriptionInput.value.trim();
+        if (!description) {
+            alert("Please enter a description for the event.");
+            return;
+        }
+
+        if (attendees.length === 0) {
+            alert("No attendees to save.");
+            return;
+        }
+
+        const date = new Date().toISOString().split("T")[0]; // Format: YYYY-MM-DD
+
+        // Set form values
+        const form = document.getElementById("attendance-form");
+        form.querySelector("input[name='date']").value = date;
+        form.querySelector("input[name='description']").value = description;
+        form.querySelector("input[name='attendees']").value = attendees.join(","); // Join IDs with commas
+
+        // Submit the form
+        form.submit();
     });
-
-    const description = $("#description").val().trim();
-    if (!description) {
-      alert("Please enter a description for the event.");
-      return;
-    }
-
-    if (attendees.length === 0) {
-      alert("No attendees to save.");
-      return;
-    }
-
-    const date = new Date().toISOString().split("T")[0]; // Format: YYYY-MM-DD
-
-    // Set the form values to be submitted
-    $("#attendance-form input[name='date']").val(date);
-    $("#attendance-form input[name='description']").val(description);
-    $("#attendance-form input[name='attendees']").val(attendees.join(",")); // Join IDs with commas
-
-    // Submit the form
-    $("#attendance-form").submit();
-  });
 });
-
-
-  </script>
+</script>
 </body>
 </html>

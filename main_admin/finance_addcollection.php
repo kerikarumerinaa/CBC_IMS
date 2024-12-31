@@ -176,7 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     function updateCheckTotal() {
-    const checkAmountInputs = document.querySelectorAll('#checkTotal tbody tr input[type="number"]');
+    const checkAmountInputs = document.querySelectorAll('.amount');
     let checkTotal = 0;
 
     checkAmountInputs.forEach(check => {

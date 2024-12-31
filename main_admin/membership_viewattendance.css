@@ -33,35 +33,17 @@ body {
     grid-template-columns: 20rem auto 23rem;
 }
 
-/*  Header */
-.Members-history-header {
-    display: flex;
-    align-items: center; /* Center items vertically */
-    justify-content: space-between; /* Separate heading and button */
-    margin-bottom: 20px; /* Adds spacing below the header */
-    padding: 0 20px; /* Padding to align with container */
+h1, h2 {
+    margin-bottom: 10px;
+    color: #000000;
 }
 
-.Members-history-header h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #333;
-    margin: 0;
+p {
+    margin-bottom: 20px;
+    font-size: 16px;
+    line-height: 1.6;
 }
 
-#add-member-btn {
-    background-color: #154668;
-    color: #e4dede;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-#add-member-btn:hover {
-    background-color: #103a58;
-}
 
 
 /*--------------------------------- Table Container Styles ---------------------------------*/
@@ -127,35 +109,33 @@ tbody tr:hover td {
     }
 }
 
- /* Modal Styling */
- .modal {
-    display: none; /* Hidden by default */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Transparent black background */
-    z-index: 1000; /* Ensure it is above other elements */
-}
-.modal-content {
-    background-color: #fff;
-    margin: 15% auto; /* Center vertically and horizontally */
-    padding: 20px;
+/* Button Styling */
+button {
+    background-color: #154668;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
     border-radius: 5px;
-    width: 25%;
-    height: 15%;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-.modal-content h3 {
-    color: #4CAF50;
-    margin-top: 40px; 
-    font-size: 20px;
-    
-}
-.close-btn {
-    float: right;
-    font-size: 1.5em;
+    font-size: 14px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #103a58;
+}
+
+button:active {
+    background-color: #103a58;
+}
+
+/* Back Button Styling */
+a button {
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 20px;
+}
+
+a button:hover {
+    text-decoration: none;
 }

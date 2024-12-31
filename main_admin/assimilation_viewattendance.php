@@ -5,7 +5,7 @@ include '../includes/db_connection.php';
 $attendanceId = $_GET['id'];
 
 // Fetch the attendance record
-$query = "SELECT date, description, attendees FROM attendance_history WHERE id = ?";
+$query = "SELECT date, description, attendees FROM assimilation_history WHERE id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $attendanceId);
 $stmt->execute();
@@ -20,7 +20,7 @@ if ($result->num_rows > 0) {
     die("Attendance record not found.");
 }
 
-// Fetch attendee details (names and timestamps) from the members table
+// Fetch attendee details (names and timestamps) from the visitors table
 $attendeeDetails = [];
 foreach ($attendeeNames as $name) {
     $query = "SELECT full_name, timestamp FROM members WHERE full_name = ?";
@@ -43,7 +43,7 @@ $conn->close();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Attendance Details</title>
-  <link rel="stylesheet" href="membership_viewattendance.css">
+  <link rel="stylesheet" href="assimilation_viewattendance.css">
 </head>
 <body>
   <div class="container">
@@ -70,7 +70,7 @@ $conn->close();
             <?php endforeach; ?>
         </tbody>
     </table>
-      <a href="attendance_history.php"><button>Back</button></a>
+      <a href="assimilation_history.php"><button>Back</button></a>
     </main>
   </div>
 </body>

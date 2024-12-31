@@ -3,27 +3,40 @@
 include '../includes/db_connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  include '../includes/db_connection.php';
+    $date = $_POST['date'];
+    $description = $_POST['description'];
+    $attendees = $_POST['attendees']; // Comma-separated list of attendee IDs
 
-  $date = $_POST['date'];
-  $description = $_POST['description'];
-  $attendees = $_POST['attendees']; // Array of attendee names
+    // Fetch attendee names from the database
+    $attendeeNames = array();
+    $attendeeIds = explode(',', $attendees);
+    foreach ($attendeeIds as $attendeeId) {
+        $query = "SELECT full_name FROM members WHERE id = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("i", $attendeeId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $attendeeNames[] = $row['full_name'];
+        }
+        $stmt->close();
+    }
 
-  // Insert attendance record
-  $sql = "INSERT INTO attendance_history (date, description, attendees) VALUES (?, ?, ?)";
-  $stmt = $conn->prepare($sql);
-  $stmt->bind_param("sss", $date, $description, $attendees);
-
-  if ($stmt->execute()) {
-      echo '<script>alert("Attendance saved successfully!"); window.location.href = "attendance_history.php";</script>';
-  } else {
-      echo '<script>alert("Error saving attendance: ' . $stmt->error . '");</script>';
-  }
-
-  $stmt->close();
-  $conn->close();
+    // Insert attendance data into the database
+    $query = "INSERT INTO attendance_history (date, description, attendees) VALUES (?, ?, ?)";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("sss", $date, $description, implode(', ', $attendeeNames));
+    if ($stmt->execute()) {
+        header("Location: attendance_history.php?status=success");
+        exit;
+    } else {
+        header("Location: attendance_history.php?status=error");
+        exit;
+    }
 }
 ?>
+
+
 
 
 <!DOCTYPE html>
@@ -72,24 +85,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                           </tr>";
                 }
             } else {
-                echo "<tr><td colspan='4'>No attendance history found</td></tr>";
+                echo "<tr><td colspan='3'>No attendance history found</td></tr>";
             }  
                   ?>
         </tbody>
       </table>
+    </main> 
+  </div>
 
-      <!-- View member Modal -->
-       <div class="modal" id="view-modal">
-         <div class="modal-content">
-           <span class="close">&times;</span>
-           <h2>Attendees</h2>
+  <!-- Success Modal -->
+  <?php if (isset($_GET['status']) && $_GET['status'] === 'success'): ?>
+    <div id="success-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h3>Attendance Added Successfully!</h3>
+        </div>
+    </div>
+    <?php endif; ?>
 
+    <script>
+        // Close modal functionality
+        function closeModal() {
+            document.getElementById('success-modal').style.display = 'none';
+        }
 
-           
-           
-       </div>
-
-      <script>
-        
-
-      </script>
+        // Automatically show modal if it exists
+        document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById('success-modal');
+            if (modal) {
+                modal.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
