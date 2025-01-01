@@ -32,12 +32,13 @@ aside{
         background-color: #ffffff;
         display: flex;
         flex-direction: column;
-        height: 86vh;
+        padding-top: 3rem;
+        height: 100%;
         position: relative;
-        top: 3rem;
     }
     .sidebar.custom-height {
-        height: 115vh; 
+        min-height: 100vh;
+        height: auto; 
       }
     
     .sidebar a{

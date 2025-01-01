@@ -1,43 +1,47 @@
 <?php
-include '../includes/db_connection.php'; 
+include '../includes/db_connection.php';
 
-// Handle form submission to add an event
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['eventName'])) {
-    $eventName = $conn->real_escape_string($_POST['eventName']);
-    $eventDate = $_POST['eventDate'];
-
-    $sql = "INSERT INTO events (event_name, event_date) VALUES ('$eventName', '$eventDate')";
-    if ($conn->query($sql) === TRUE) {
-        echo "success";
-    } else {
-        echo "error: " . $conn->error;
-    }
-    exit();
-}
-
-// Fetch events for the calendar
+// Fetch events for FullCalendar
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['fetchEvents'])) {
     $events = [];
     $sql = "SELECT id, event_name, event_date FROM events";
     $result = $conn->query($sql);
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            $events[] = [
-                'id' => $row['id'],
-                'title' => $row['event_name'],
-                'start' => $row['event_date'],
-                'end' => $row['event_date'],
-                'category' => 'allday',
-            ];
-        }
-    }
 
-    // Output events as JavaScript array format
-    echo "var events = " . json_encode($events) . ";";
+    if ($result) {
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $events[] = [
+                    'id' => $row['id'],
+                    'title' => $row['event_name'],
+                    'start' => $row['event_date'], // FullCalendar expects this format
+                    'end' => $row['event_date'],
+                ];
+            }
+        }
+        echo json_encode($events);
+    } else {
+        echo json_encode(['error' => 'Failed to fetch events: ' . $conn->error]);
+    }
+    exit();
+}
+
+// Add new event
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $eventName = $_POST['eventName'];
+    $eventDate = $_POST['eventDate'];
+
+    $sql = "INSERT INTO events (event_name, event_date) VALUES (?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ss", $eventName, $eventDate);
+
+    if ($stmt->execute()) {
+        echo "success";
+    } else {
+        echo "Error: " . $stmt->error;
+    }
     exit();
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -45,8 +49,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['fetchEvents'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Events</title>
-    <link rel="stylesheet" href="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.min.css">
-    <script src="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.min.js"></script>
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@3.2.0/dist/fullcalendar.min.css" rel="stylesheet">
     <link rel="stylesheet" href="events.css">
 </head>
 <body>
@@ -63,13 +67,11 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['fetchEvents'])) {
                     <!-- Button to trigger modal -->
                     <button id="openModal" class="btn">Add New Event</button>
                 </div>
-                <!-- TUI Calendar Container -->
-                <div id="calendar" style="height: 700px;"></div>
-                <button id="prevMonth">Previous Month</button>
-                <button id="nextMonth">Next Month</button>
+                <!-- FullCalendar Container -->
+                <div id="calendar"></div>
 
-                <!------------------------------ Modal --------------------------------->
-                <div id="eventModal" class="modal">
+                <!-- Modal for adding event -->
+                <div id="eventModal" class="modal" style="display: none;">
                     <div class="modal-content">
                         <span id="closeModal" class="close">&times;</span>
                         <h2>Add New Event</h2>
@@ -92,71 +94,56 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['fetchEvents'])) {
         </main>
     </div>
 
+    <!-- jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+
+    <!-- FullCalendar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@3.2.0/dist/fullcalendar.min.js"></script>
+
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Initialize TUI Calendar
-        var calendar = new tui.Calendar('#calendar', {
-            defaultView: 'month',
-            taskView: false,
-            scheduleView: true,
-            useCreationPopup: false,
-            useDetailPopup: true,
+        document.addEventListener("DOMContentLoaded", function () {
+            // Initialize FullCalendar
+            $('#calendar').fullCalendar({
+                defaultView: 'month', // Default view is month
+                events: 'events.php?fetchEvents=true', // Fetch events from this URL
+            });
+
+            // Add event listener for form submission
+            document.getElementById('eventForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+
+                fetch('events.php', {
+                    method: 'POST',
+                    body: formData,
+                })
+                    .then(response => response.text())
+                    .then(data => {
+                        console.log('Response:', data);
+                        if (data.trim() === 'success') {
+                            
+                        // Refresh the calendar to show the new event
+                        $('#calendar').fullCalendar('refetchEvents');
+                        // Close the modal
+                        document.getElementById('eventModal').style.display = 'none';
+                        } else {
+                            alert('Error adding event: ' + data);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            });
+
+            // Open modal
+            document.getElementById('openModal').addEventListener('click', function () {
+                document.getElementById('eventModal').style.display = 'block';
+            });
+
+            // Close modal
+            document.getElementById('closeModal').addEventListener('click', function () {
+                document.getElementById('eventModal').style.display = 'none';
+            });
         });
-
-        // Fetch events from the server
-        function loadEvents() {
-            const script = document.createElement('script');
-            script.src = 'events.php?fetchEvents=true';
-            script.onload = () => {
-                calendar.clear();
-                calendar.createSchedules(events); // `events` is populated by the PHP script
-            };
-            document.body.appendChild(script);
-        }
-
-        // Add event listener for adding new events
-        document.getElementById('eventForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-
-            fetch('events.php', {
-                method: 'POST',
-                body: formData,
-            })
-                .then(response => response.text())
-                .then(data => {
-                    if (data.trim() === 'success') {
-                        alert('Event added successfully');
-                        loadEvents(); // Reload events
-                        document.getElementById('eventModal').style.display = 'none'; // Close modal
-                    } else {
-                        alert('Error adding event: ' + data);
-                    }
-                });
-        });
-
-        // Navigation buttons
-        document.getElementById('prevMonth').addEventListener('click', function () {
-            calendar.prev();
-        });
-
-        document.getElementById('nextMonth').addEventListener('click', function () {
-            calendar.next();
-        });
-
-        // Modal controls
-        const modal = document.getElementById('eventModal');
-        document.getElementById('openModal').addEventListener('click', () => {
-            modal.style.display = 'block';
-        });
-        document.getElementById('closeModal').addEventListener('click', () => {
-            modal.style.display = 'none';
-        });
-
-        // Load events on page load
-        loadEvents();
-    });
-</script>
-
+    </script>
 </body>
 </html>

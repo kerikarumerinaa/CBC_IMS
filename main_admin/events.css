@@ -18,7 +18,7 @@ html {
 body {
     width: 100vw;
     height: 100vh;
-    font-family: poppins, sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 0.88rem;
     background-color: #f2f2f2;
     user-select: none;
@@ -58,7 +58,7 @@ h3 {
     font-size: 0.87rem;
 }
 
-h4 { 
+h4 {
     font-size: 0.8rem;
 }
 
@@ -76,12 +76,11 @@ main {
     padding: 20px;
     position: relative;
     width: 125%;
-    
 }
 
 .upcoming-events {
     grid-column: span 2;
-    margin-bottom: 20px; /* Added margin-bottom to create space */
+    margin-bottom: 20px;
     margin-top: 1rem;
 }
 
@@ -89,6 +88,7 @@ main {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 20px;
 }
 
 button.btn {
@@ -98,9 +98,53 @@ button.btn {
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
 }
 
 button.btn:hover {
+    background-color: #103a58;
+}
+
+/* FullCalendar Styles */
+#calendar {
+    width: 100%;
+    height: 1200px; /* Adjusted height for better visibility */
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.fc-header-toolbar {
+    margin-bottom: 10px;
+}
+
+.fc-button {
+    background-color: #154668;
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.fc-button:hover {
+    background-color: #103a58;
+}
+
+.fc-event {
+    background-color: #154668;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.fc-event:hover {
     background-color: #103a58;
 }
 
@@ -132,13 +176,14 @@ button.btn:hover {
     float: right;
     font-size: 28px;
     font-weight: bold;
+    cursor: pointer;
+
 }
 
 .close:hover,
 .close:focus {
     color: black;
     text-decoration: none;
-    cursor: pointer;
 }
 
 .form-group {

@@ -8,7 +8,7 @@
             <img src="../assets/cbc-logo.png" alt="CBC Logo"> <!-- Adjust path if needed -->
         </div>
     </div>
-    <div class="sidebar <?php echo isset($customClass) ? $customClass : ''; ?>">
+    <div class="sidebar <?php echo isset($customClass) && $customClass === 'custom-height' ?  'custom-height' : ''; ?>">
         <a href="dashboard.php" class="">
             <span class="material-symbols-outlined">dashboard</span>
             <h2>Dashboard</h2>
