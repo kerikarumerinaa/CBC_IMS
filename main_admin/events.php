@@ -1,10 +1,52 @@
+<?php
+include '../includes/db_connection.php'; 
+
+// Handle form submission to add an event
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['eventName'])) {
+    $eventName = $conn->real_escape_string($_POST['eventName']);
+    $eventDate = $_POST['eventDate'];
+
+    $sql = "INSERT INTO events (event_name, event_date) VALUES ('$eventName', '$eventDate')";
+    if ($conn->query($sql) === TRUE) {
+        echo "success";
+    } else {
+        echo "error: " . $conn->error;
+    }
+    exit();
+}
+
+// Fetch events for the calendar
+if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['fetchEvents'])) {
+    $events = [];
+    $sql = "SELECT id, event_name, event_date FROM events";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $events[] = [
+                'id' => $row['id'],
+                'title' => $row['event_name'],
+                'start' => $row['event_date'],
+                'end' => $row['event_date'],
+                'category' => 'allday',
+            ];
+        }
+    }
+
+    // Output events as JavaScript array format
+    echo "var events = " . json_encode($events) . ";";
+    exit();
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Events</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.min.css">
+    <script src="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.min.js"></script>
     <link rel="stylesheet" href="events.css">
 </head>
 <body>
@@ -17,30 +59,21 @@
             <h1>Events</h1>
             <div class="card upcoming-events">
                 <div class="header">
-                    <h2>Upcoming Events</h2>
+                    <h2>Calendar</h2>
                     <!-- Button to trigger modal -->
                     <button id="openModal" class="btn">Add New Event</button>
                 </div>
-                <!-- List of upcoming events -->
-                <div id="eventsList">
-                    <?php
-                    // Read events from a file and display them
-                    $eventsFile = 'events.txt';
-                    if (file_exists($eventsFile)) {
-                        $events = file($eventsFile, FILE_IGNORE_NEW_LINES);
-                        foreach ($events as $event) {
-                            list($name, $date) = explode('|', $event);
-                            echo "<div class='event-item'><h3>$name</h3><p>$date</p></div>";
-                        }
-                    }
-                    ?>
-                </div>
+                <!-- TUI Calendar Container -->
+                <div id="calendar" style="height: 700px;"></div>
+                <button id="prevMonth">Previous Month</button>
+                <button id="nextMonth">Next Month</button>
+
                 <!------------------------------ Modal --------------------------------->
                 <div id="eventModal" class="modal">
                     <div class="modal-content">
                         <span id="closeModal" class="close">&times;</span>
                         <h2>Add New Event</h2>
-                        <form id="eventForm" method="POST" action="">
+                        <form id="eventForm">
                             <div class="form-group">
                                 <label for="eventName">Event Name</label>
                                 <input type="text" id="eventName" name="eventName" placeholder="Enter event name" required>
@@ -56,49 +89,74 @@
                     </div>
                 </div>
             </div>
-
-            <div class="card birthday-celebrants">
-                <h2>Birthday Celebrants</h2>
-                <!-- Content for birthday celebrants -->
-            </div>
         </main>
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Get modal elements
-            var modal = document.getElementById("eventModal");
-            var openModalBtn = document.getElementById("openModal");
-            var closeModalBtn = document.getElementById("closeModal");
-
-            // Open modal
-            openModalBtn.onclick = function() {
-                modal.style.display = "block";
-            }
-
-            // Close modal
-            closeModalBtn.onclick = function() {
-                modal.style.display = "none";
-            }
-            
+    document.addEventListener("DOMContentLoaded", function () {
+        // Initialize TUI Calendar
+        var calendar = new tui.Calendar('#calendar', {
+            defaultView: 'month',
+            taskView: false,
+            scheduleView: true,
+            useCreationPopup: false,
+            useDetailPopup: true,
         });
-    </script>
+
+        // Fetch events from the server
+        function loadEvents() {
+            const script = document.createElement('script');
+            script.src = 'events.php?fetchEvents=true';
+            script.onload = () => {
+                calendar.clear();
+                calendar.createSchedules(events); // `events` is populated by the PHP script
+            };
+            document.body.appendChild(script);
+        }
+
+        // Add event listener for adding new events
+        document.getElementById('eventForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            fetch('events.php', {
+                method: 'POST',
+                body: formData,
+            })
+                .then(response => response.text())
+                .then(data => {
+                    if (data.trim() === 'success') {
+                        alert('Event added successfully');
+                        loadEvents(); // Reload events
+                        document.getElementById('eventModal').style.display = 'none'; // Close modal
+                    } else {
+                        alert('Error adding event: ' + data);
+                    }
+                });
+        });
+
+        // Navigation buttons
+        document.getElementById('prevMonth').addEventListener('click', function () {
+            calendar.prev();
+        });
+
+        document.getElementById('nextMonth').addEventListener('click', function () {
+            calendar.next();
+        });
+
+        // Modal controls
+        const modal = document.getElementById('eventModal');
+        document.getElementById('openModal').addEventListener('click', () => {
+            modal.style.display = 'block';
+        });
+        document.getElementById('closeModal').addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        // Load events on page load
+        loadEvents();
+    });
+</script>
+
 </body>
 </html>
-
-<?php
-// Handle form submission
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $eventName = $_POST['eventName'];
-    $eventDate = $_POST['eventDate'];
-
-    // Save event to a file
-    $eventsFile = 'events.txt';
-    $eventEntry = $eventName . '|' . $eventDate . PHP_EOL;
-    file_put_contents($eventsFile, $eventEntry, FILE_APPEND);
-
-    // Redirect to avoid resubmission
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit();
-}
-?>
