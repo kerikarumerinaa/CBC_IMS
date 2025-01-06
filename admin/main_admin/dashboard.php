@@ -1,12 +1,11 @@
 <?php
 session_start();
-
-// Check if the main admin is logged in
-if (!isset($_SESSION['username'])) {
-    header("Location: ../index.php");
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'main_admin') {
+    header("Location: ../login.php");
     exit;
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -22,13 +21,13 @@ if (!isset($_SESSION['username'])) {
     <div class="container">
 
         <!-- Include the sidebar -->
-        <?php include '../includes/sidebar.php'; ?>
+        <?php include '../../includes/sidebar.php'; ?>
 
         <main>
             <h1>Dashboard</h1>
 
             <div class="insights">
-                <!-- Active Members -->
+                <!-- ActiFILMembers -->
                 <div class="active-members">
                     <div class="middle">
                         <div class="left">
@@ -66,7 +65,7 @@ if (!isset($_SESSION['username'])) {
                 <!-- Expenses -->
                 <div class="expenses">
                     <h2>Expenses</h2>
-                </div>
+                </div> 
 
             </div>
         </main>

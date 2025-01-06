@@ -1,9 +1,4 @@
 <?php
-
-// Enable error reporting
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 // Start the session
 session_start();
 
@@ -34,21 +29,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
 
-        // Verify the password (use password_verify if passwords are hashed)
-        if ($user['password'] === $password) { // Change this to password_verify($password, $user['password']) if using hashing
+        // Directly compare the plain-text password
+        if ($password === $user['password']) {
             // Store user information in session
             $_SESSION['username'] = $user['username'];
+            $_SESSION['role'] = $user['role'];
 
-             // Debug output before redirect
-             echo "Redirecting to: main_admin/dashboard.php"; 
-
-            // Redirect to main admin dashboard
-            if ($user['username'] == 'main_admin') {
-                header("Location: main_admin/dashboard.php"); // Adjust path as needed
-                exit;
-            } else {
-                $error = "Access Denied. Only Main Admin can access this dashboard.";
+            // Redirect based on role
+            switch ($user['role']) {
+                case 'main_admin':
+                    header("Location: admin/main_admin/dashboard.php");
+                    break;
+                case 'membership_admin':
+                    header("Location: admin/membership_admin/dashboard.php");
+                    break;
+                case 'finance_admin':
+                    header("Location: admin/finance_admin/dashboard.php");
+                    break;
+                case 'assimilation_admin':
+                    header("Location: admin/assimilation_admin/dashboard.php");
+                    break;
+                default:
+                    $error = "Invalid role.";
             }
+            exit;
         } else {
             $error = "Invalid username or password.";
         }
@@ -60,6 +64,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 $conn->close();
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">

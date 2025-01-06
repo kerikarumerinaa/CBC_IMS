@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_SESSION['role'] !== 'main_admin')) {
+    header("Location: ../login.php");
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,14 +13,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Member Attendance</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-  <link rel="stylesheet" href="membership_attendance.css">
+  <link rel="stylesheet" href="attendance.css">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
   <div class="container">
     <!-- Include the sidebar -->
-    <?php include '../includes/sidebar.php'; ?>
-    <?php include '../includes/db_connection.php'; ?>
+    <?php include '../../includes/sidebar.php'; ?>
+    <?php include '../../includes/db_connection.php'; ?>
 
     <main>
       <div class="attendance-tracker">
@@ -25,8 +33,12 @@
 
         <div class="description">
           <label for="description">Description:</label>
-          <input type="text"  id="description">
+          <select id="description">
+            <option value="sunday_service">Sunday Service</option>
+            <option value="others">Others</option>
+          </select>
         </div>
+
 
         <button id="save-attendance-btn">Save Attendance</button>
         <form id="attendance-form" action="attendance_history.php" method="POST" style="display:none;">

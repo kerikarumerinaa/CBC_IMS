@@ -1,13 +1,14 @@
 <?php
 session_start();
-
-// Check if the main admin is logged in
-if (!isset($_SESSION['username'])) {
-    header("Location: ../index.php");
+if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'finance_admin' && $_SESSION['role'] !== 'main_admin')) {
+    header("Location: ../login.php");
     exit;
 }
+?>
 
-include '../includes/db_connection.php'; // Include database connection
+<?php
+
+include '../../includes/db_connection.php'; // Include database connection
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $voucher_number = $_POST['voucher_number'];
@@ -36,11 +37,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Expense</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap" />
-    <link rel="stylesheet" href="finance_addexpenses.css">
+    <link rel="stylesheet" href="addexpenses.css">
 </head>
 <body>
     <div class="container">
-        <?php include '../includes/sidebar.php'; ?>
+        <?php include '../../includes/sidebar.php'; ?>
 
         <main>
             <h2>Add Expense</h2>

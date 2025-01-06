@@ -1,44 +1,27 @@
+<?php
+session_start();
+if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'assimilation_admin' && $_SESSION['role'] !== 'main_admin')) {
+    header("Location: ../login.php");
+    exit;
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard</title>
+  <title>Assimilation Dashboard</title>
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-  <link rel="stylesheet" href="Mdashboard.css">
+  <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
   <div class="container">
-<!-------------------------------------------SIDEBAR----------------------------------->
-<aside>
-      <div class="top">
-        <div class="logo">
-          <img src="cbc-logo.png">
-        </div>
-
-      </div>
-      <div class="sidebar">
-        <a href="Mdashboard.html" class="active">
-          <span class="material-symbols-outlined">dashboard</span>
-          <h2>Dashboard</h2>
-        </a>
-        <a href="members.html">
-          <span class="material-symbols-outlined">groups</span>
-          <h2>Members</h2>
-        </a>
-
-        <a href="attendance.html">
-          <span class="material-symbols-outlined">payments</span>
-          <h2>Attendance</h2>
-        </a>
-
-        <a href="#">
-          <span class="material-symbols-outlined">logout</span>
-          <h2>Logout</h2>
-        </a>
-      </div>
-    </aside>
+    <!-- Include the sidebar -->
+    <?php include '../../includes/sidebar.php'; ?>
+    <?php include '../../includes/db_connection.php'; ?>
  <!-------------------------------------------MAIN--------------------------------------->
 <main>
 <!-------------------------------------------INSIGHTS------------------------------------->
@@ -47,8 +30,8 @@
         <div class="active-members">
           <div class="middle">
             <div class="left">
-              <h1>70</h1>
-              <h3>Active members</h3>
+              <h1>8</h1>
+              <h3>Total Visitors</h3>
             </div>
           </div>
         </div>
@@ -56,7 +39,7 @@
           <div class="middle">
             <div class="left">
               <h1>20</h1>
-              <h3>Inactive members</h3>
+              <h3>---</h3>
             </div>
           </div>
         </div>
@@ -64,7 +47,7 @@
           <div class="middle">
             <div class="left">
               <h1>2</h1>
-              <h3>Visitors</h3>
+              <h3>New Visitors</h3>
             </div>
           </div>
         </div>

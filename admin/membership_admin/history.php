@@ -1,6 +1,15 @@
+<?php
+session_start();
+if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_SESSION['role'] !== 'main_admin')) {
+    header("Location: ../login.php");
+    exit;
+}
+?>
+
+
 <!-- saving the attendace -->
 <?php
-include '../includes/db_connection.php';
+include '../../includes/db_connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $date = $_POST['date'];
@@ -39,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,12 +56,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Attendance History</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-  <link rel="stylesheet" href="attendance_history.css">
+  <link rel="stylesheet" href="history.css">
 </head>
 <body>
   <div class="container">
-    <?php include '../includes/sidebar.php'; ?>
-    <?php include '../includes/db_connection.php'; ?>
+    <?php include '../../includes/sidebar.php'; ?>
 
     <main>
       <div class="Members-history-header">

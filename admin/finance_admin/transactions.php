@@ -1,4 +1,10 @@
-
+<?php
+session_start();
+if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'finance_admin' && $_SESSION['role'] !== 'main_admin')) {
+    header("Location: ../login.php");
+    exit;
+}
+?>
 
 
 <!DOCTYPE html>
@@ -8,18 +14,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Collections & Expenses</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-  <link rel="stylesheet" href="finance_transactions.css">
+  <link rel="stylesheet" href="transactions.css">
 </head>
 <body>
   <div class="container">
-    <?php include '../includes/sidebar.php'; ?>
+    <?php include '../../includes/sidebar.php'; ?>
 
     <main>
       <div class="transactions-header">
         <h2>Transactions</h2>
         <div class="button-group">
-          <a href="finance_addcollection.php" class="btn add-collection-btn">Add Collection</a>
-          <a href="finance_addexpenses.php" class="btn add-expense-btn">Add Expense</a>
+          <a href="addcollection.php" class="btn add-collection-btn">Add Collection</a>
+          <a href="addexpenses.php" class="btn add-expense-btn">Add Expense</a>
         </div>
       </div>
 

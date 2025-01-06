@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'assimilation_admin' && $_SESSION['role'] !== 'main_admin')) {
+    header("Location: ../login.php");
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,13 +13,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visitors</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link rel="stylesheet" href="assimilation_visitors.css">
+    <link rel="stylesheet" href="visitors.css">
 </head>
 <body>
     <div class="container">
         <?php 
-        include '../includes/sidebar.php'; 
-        include '../includes/db_connection.php'; 
+        include '../../includes/sidebar.php'; 
+        include '../../includes/db_connection.php'; 
 
         // Add Visitor PHP logic
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {

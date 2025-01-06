@@ -1,12 +1,11 @@
 <?php
 session_start();
-
-// Check if the main admin is logged in
-if (!isset($_SESSION['username'])) {
-    header("Location: ../index.php");
+if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'finance_admin' && $_SESSION['role'] !== 'main_admin')) {
+    header("Location: ../login.php");
     exit;
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -16,13 +15,14 @@ if (!isset($_SESSION['username'])) {
   <title>Finance</title>
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-  <link rel="stylesheet" href="finance_dashboard.css"> <!-- Adjust the path to your CSS file -->
+  <link rel="stylesheet" href="dashboard.css"> <!-- Adjust the path to your CSS file -->
 </head>
 <body>
   <div class="container">
 
     <!-- Include the sidebar -->
-    <?php include '../includes/sidebar.php'; ?>
+    <?php include '../../includes/sidebar.php'; ?>
+    <?php include '../../includes/db_connection.php'; ?>
 
     <!-- MAIN CONTENT -->
     <main>

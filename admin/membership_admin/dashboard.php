@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_SESSION['role'] !== 'main_admin')) {
+    header("Location: ../login.php");
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,12 +14,12 @@
   <title>Membership Dashboard</title>
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-  <link rel="stylesheet" href="membership_dashboard.css">
+  <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
   <div class="container">
     <!-- Include the sidebar -->
-    <?php include '../includes/sidebar.php'; ?>
+    <?php include '../../includes/sidebar.php'; ?>
  <!-------------------------------------------MAIN--------------------------------------->
 <main>
 <!-------------------------------------------INSIGHTS------------------------------------->
