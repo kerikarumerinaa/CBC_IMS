@@ -12,7 +12,7 @@ include '../../includes/db_connection.php';
 // Fetch events for FullCalendar
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['fetchEvents'])) {
     $events = [];
-    $sql = "SELECT id, event_name, event_date FROM events";
+    $sql = "SELECT id, event_name, event_date, start_time, end_time, location, contact_person, other_details FROM events";
     $result = $conn->query($sql);
 
     if ($result) {
@@ -38,55 +38,16 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['fetchEvents'])) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $eventName = $_POST['eventName'];
     $eventDate = $_POST['eventDate'];
-    
-
-    $sql = "INSERT INTO events (event_name, event_date) VALUES (?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $eventName, $eventDate);
-
-    if ($stmt->execute()) {
-        echo "success";
-    } else {
-        echo "Error: " . $stmt->error;
-    }
-    exit();
-}
-
-
-// View a specific event
-if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['viewEvent'])) {
-    $eventId = $_GET['id'];
-    $sql = "SELECT * FROM events WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $eventId);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        echo json_encode($result->fetch_assoc());
-    } else {
-        echo json_encode(['error' => 'Event not found']);
-    }
-    exit();
-}
-
-
-
-// Edit an event
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editEvent'])) {
-    $id = $_POST['id'];
-    $eventName = $_POST['eventName'];
-    $eventDate = $_POST['eventDate'];
     $startTime = $_POST['startTime'];
     $endTime = $_POST['endTime'];
     $location = $_POST['location'];
     $contactPerson = $_POST['contactPerson'];
     $otherDetails = $_POST['otherDetails'];
+    
 
-    $sql = "UPDATE events SET event_name = ?, event_date = ?, start_time = ?, end_time = ?, 
-            location = ?, contact_person = ?, other_details = ? WHERE id = ?";
+    $sql = "INSERT INTO events (event_name, event_date, start_time, end_time, location, contact_person, other_details) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssssssi", $eventName, $eventDate, $startTime, $endTime, $location, $contactPerson, $otherDetails, $id);
+    $stmt->bind_param("sssssss", $eventName, $eventDate, $startTime, $endTime, $location, $contactPerson, $otherDetails);
 
     if ($stmt->execute()) {
         echo "success";
@@ -97,21 +58,65 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editEvent'])) {
 }
 
 
-// Delete an event
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['deleteEvent'])) {
-    $id = $_POST['id'];
+// // View a specific event
+// if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['viewEvent'])) {
+//     $eventId = $_GET['id'];
+//     $sql = "SELECT * FROM events WHERE id = ?";
+//     $stmt = $conn->prepare($sql);
+//     $stmt->bind_param("i", $eventId);
+//     $stmt->execute();
+//     $result = $stmt->get_result();
 
-    $sql = "DELETE FROM events WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $id);
+//     if ($result->num_rows > 0) {
+//         echo json_encode($result->fetch_assoc());
+//     } else {
+//         echo json_encode(['error' => 'Event not found']);
+//     }
+//     exit();
+// }
 
-    if ($stmt->execute()) {
-        echo "Event deleted successfully.";
-    } else {
-        echo "Error: " . $stmt->error;
-    }
-    exit();
-}
+
+
+// // Edit an event
+// if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editEvent'])) {
+//     $id = $_POST['id'];
+//     $eventName = $_POST['eventName'];
+//     $eventDate = $_POST['eventDate'];
+//     $startTime = $_POST['startTime'];
+//     $endTime = $_POST['endTime'];
+//     $location = $_POST['location'];
+//     $contactPerson = $_POST['contactPerson'];
+//     $otherDetails = $_POST['otherDetails'];
+
+//     $sql = "UPDATE events SET event_name = ?, event_date = ?, start_time = ?, end_time = ?, 
+//             location = ?, contact_person = ?, other_details = ? WHERE id = ?";
+//     $stmt = $conn->prepare($sql);
+//     $stmt->bind_param("sssssssi", $eventName, $eventDate, $startTime, $endTime, $location, $contactPerson, $otherDetails, $id);
+
+//     if ($stmt->execute()) {
+//         echo "success";
+//     } else {
+//         echo "Error: " . $stmt->error;
+//     }
+//     exit();
+// }
+
+
+// // Delete an event
+// if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['deleteEvent'])) {
+//     $id = $_POST['id'];
+
+//     $sql = "DELETE FROM events WHERE id = ?";
+//     $stmt = $conn->prepare($sql);
+//     $stmt->bind_param("i", $id);
+
+//     if ($stmt->execute()) {
+//         echo "Event deleted successfully.";
+//     } else {
+//         echo "Error: " . $stmt->error;
+//     }
+//     exit();
+// }
 
 
 ?>
@@ -356,7 +361,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['deleteEvent'])) {
 
         // CRUD operations
         document.addEventListener('DOMContentLoaded', function () {
-    // Attach event listeners for View buttons
     document.querySelectorAll('.view-event').forEach(button => {
         button.addEventListener('click', function () {
             const eventId = this.dataset.id;
@@ -366,7 +370,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['deleteEvent'])) {
                     if (event.error) {
                         alert(event.error);
                     } else {
-                        // Populate modal and display
                         document.getElementById('viewEventName').innerText = event.event_name;
                         document.getElementById('viewEventDate').innerText = event.event_date;
                         document.getElementById('viewStartTime').innerText = event.start_time;

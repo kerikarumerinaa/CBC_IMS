@@ -1,5 +1,13 @@
 <?php
-include '../includes/db_connection.php';
+session_start();
+if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_SESSION['role'] !== 'main_admin')) {
+    header("Location: ../login.php");
+    exit;
+}
+?>
+
+<?php
+include '../../includes/db_connection.php';
 
 // Get the attendance ID from the query parameter
 $attendanceId = $_GET['id'];
@@ -43,11 +51,11 @@ $conn->close();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Attendance Details</title>
-  <link rel="stylesheet" href="membership_viewattendance.css">
+  <link rel="stylesheet" href="viewattendance.css">
 </head>
 <body>
   <div class="container">
-    <?php include '../includes/sidebar.php'; ?>
+    <?php include '../../includes/sidebar.php'; ?>
 
     <main>
     <h1>Attendance for <?php echo $date; ?></h1>
@@ -70,7 +78,7 @@ $conn->close();
             <?php endforeach; ?>
         </tbody>
     </table>
-      <a href="attendance_history.php"><button>Back</button></a>
+      <a href="history.php"><button>Back</button></a>
     </main>
   </div>
 </body>

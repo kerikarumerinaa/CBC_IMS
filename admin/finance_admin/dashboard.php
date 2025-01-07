@@ -31,7 +31,7 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'finance_admin' && $_SES
         <!-- MONTHLY COLLECTIONS -->
         <div class="offering">
             <div class="monthly-offering">
-                <h2>Monthly Offering</h2>
+                <h2>Monthly Collection</h2>
                 <div class="selection-container">
                     <label for="month">Month:</label>
                     <select id="month">

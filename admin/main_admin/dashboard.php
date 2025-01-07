@@ -32,7 +32,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'main_admin') {
                     <div class="middle">
                         <div class="left">
                             <h1>70</h1>
-                            <h3>Active members</h3>
+                            <h3>Total members</h3>
                         </div>
                     </div>
                 </div>

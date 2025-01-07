@@ -68,73 +68,43 @@ main{
     margin-top: 1.4rem;
 }
     /*----------------------------INSIGHTS-------------------------------------*/
-    .insights{
-        display: grid;
-        grid-template-columns: repeat(3, 40%);
-        gap: 1.6rem;
+/* General container for charts */
+.chart-container {
+    background-color: #15456848;  /* Matches the background of the other elements */
+    padding: 1.8rem;  /* Same padding as other sections */
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+    box-shadow: 0 2rem 3rem rgba(132, 139, 200, 0.18); /* Same box shadow */
+}
+
+/* Title for each chart section */
+.chart-container h3 {
+    font-size: 1.4rem;  /* Consistent font size for headings */
+    font-weight: 550;  /* Slightly lighter weight for the chart titles */
+    color: #333;  /* Dark text for good contrast */
+    text-align: center;
+    margin-bottom: 1.6rem;  /* Space between title and the chart */
+}
+
+/* Style for each canvas (chart area) */
+canvas {
+    width: 50% !important; /* Make canvas responsive */
+    height: 100%;
+    display: block;  /* Ensures the canvas fills its container */
+    margin: 0 auto;  /* Centers the canvas */
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+    .chart-container {
+        padding: 1.5rem;  /* Slightly reduce padding on smaller screens */
     }
 
-    .insights > div{
-        background-color: white;
-        padding: 1.8rem;
-        border-radius: 0.5rem;
-        margin-top: 1rem;
-        box-shadow: 0 2rem 3rem color(132, 139, 200, 0.18);
+    .chart-container h3 {
+        font-size: 1.2rem;  /* Adjust font size for smaller screens */
     }
+}
 
-    .insights > div:hover{
-        box-shadow: none;
-    }
-
-    .insights > div .middle{
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .insights h1{
-        font-size: 2rem;
-    }
-
-    .insights h3{
-        margin: 1rem 0 0.6rem;
-        font-size: 1rem;
-    }
-    /*----------------------------MONTHLY WORSHIP ATTENDANCE-------------------------------------*/
-      .monthly-worship-attendance {
-        width: 124%; 
-        height: 35%;
-        background-color: white;
-        padding: 1.8rem;
-        border-radius: 0.5rem;
-        margin-top: 1rem;
-      }
-      
-      .monthly-worship-attendance h2 {
-        font-size: 1rem;
-        text-align: center;
-      }
-
-    /*----------------------------MONTHLY VISITOR WORSHIP ATTENDANCE-------------------------------------*/
-    .monthly-visitor-attendance {
-        width: 124%; 
-        height: 35%;
-        background-color: white;
-        padding: 1.8rem;
-        border-radius: 0.5rem;
-        margin-top: 1rem;
-      }
-      
-      .monthly-visitor-attendance .middle {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-      
-      .monthly-visitor-attendance h2 {
-        font-size: 1rem;
-        text-align: center;
-      }
       
 
     

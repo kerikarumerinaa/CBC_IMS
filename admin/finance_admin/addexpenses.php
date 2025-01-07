@@ -11,18 +11,17 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'finance_admin' && $_SES
 include '../../includes/db_connection.php'; // Include database connection
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $voucher_number = $_POST['voucher_number'];
-    $amount = $_POST['amount'];
-    $check_number = $_POST['check_number'];
-    $date = $_POST['date'];
     $description = $_POST['description'];
+    $amount = $_POST['amount'];
+    $date = $_POST['date'];
+    $type = 'Expense'; 
 
-    $query = "INSERT INTO expenses (voucher_number, amount, check_number, date, description) VALUES (?, ?, ?, ?, ?)";
+    $query = "INSERT INTO transactions (description, amount, date, type) VALUES (?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param('sdiss', $voucher_number, $amount, $check_number, $date, $description);
+    $stmt->bind_param('sdss', $description, $amount, $date, $type);
 
     if ($stmt->execute()) {
-        echo "<script>alert('Expense added successfully!'); window.location.href='finance_transactions.php';</script>";
+        echo "<script>alert('Expense added successfully!'); window.location.href='transactions.php';</script>";
     } else {
         echo "<script>alert('Error adding expense: " . $conn->error . "');</script>";
     }
@@ -61,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="description">Description:</label>
                 <textarea id="description" name="description" required></textarea>
 
-                <input type="submit" value="Add Expense">
+                <button type="submit" class="save-btn">Save Expenses</button>
             </form>
         </main>
     </div>

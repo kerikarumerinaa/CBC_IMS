@@ -1,5 +1,7 @@
 <?php
 session_start();
+
+// Check if the user is logged in and has the correct role
 if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_SESSION['role'] !== 'main_admin')) {
     header("Location: ../login.php");
     exit;
@@ -9,61 +11,111 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Membership Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Membership Dashboard</title>
 
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-  <link rel="stylesheet" href="dashboard.css">
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Importing Material Symbols for Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <!-- Link to dashboard-specific styles -->
+    <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
-  <div class="container">
-    <!-- Include the sidebar -->
-    <?php include '../../includes/sidebar.php'; ?>
- <!-------------------------------------------MAIN--------------------------------------->
-<main>
-<!-------------------------------------------INSIGHTS------------------------------------->
-      <div class="insights">
-
-        <div class="active-members">
-          <div class="middle">
-            <div class="left">
-              <h1>70</h1>
-              <h3>Active members</h3>
-            </div>
-          </div>
-        </div>
-        <div class="inactive-members">
-          <div class="middle">
-            <div class="left">
-              <h1>20</h1>
-              <h3>Inactive members</h3>
-            </div>
-          </div>
-        </div>
-        <div class="visitors">
-          <div class="middle">
-            <div class="left">
-              <h1>2</h1>
-              <h3>New Members</h3>
-            </div>
-          </div>
-        </div>
-      </div>
-<!-------------------------------------------WORSHIP ATTENDANCE------------------------------------->
-      <div class="monthly-worship-attendance">
-        <h2>Monthly Worship Attendance</h2>
-        </div>
+    <div class="container">
+        <!-- Include the sidebar -->
+        <?php include '../../includes/sidebar.php'; ?>
         
-<!-------------------------------------------VISITOR WORSHIP ATTENDANCE------------------------------------->
-        <div class="monthly-visitor-attendance">
-            <h2>Monthly Visitor Attendance</h2>
-            <div class="middle">
-              <div class="left">
-              </div>
-        </div>
-    </main>
-  
-  </div>
+        <!-- Include database connection -->
+        <?php include '../../includes/db_connection.php'; ?>
+
+        <main>
+            <h1>Dashboard</h1>
+
+            <!-- Chart for Sex Distribution -->
+            <div class="chart-container">
+                <h3>Number of Members by Sex</h3>
+                <canvas id="sexChart" width="500" height="300"></canvas>
+            </div>
+
+            <!-- Chart for Network Distribution -->
+            <div class="chart-container">
+                <h3>Number of Members by Network</h3>
+                <canvas id="networkChart" width="500" height="300"></canvas>
+            </div>
+
+            <script>
+                // Fetch data from the backend (get_chart_data.php)
+                fetch('./get_chart_data.php')
+                    .then(response => response.json())
+                    .then(data => {
+                        // Chart for Gender (Sex Distribution)
+                        const sexCtx = document.getElementById('sexChart').getContext('2d');
+                        const sexLabels = data.sexData.map(item => item.sex); // Sex labels (Male, Female, etc.)
+                        const sexCounts = data.sexData.map(item => item.count); // Sex counts
+
+                        new Chart(sexCtx, {
+                            type: 'bar',
+                            data: {
+                                labels: sexLabels,
+                                datasets: [{
+                                    label: 'Members by Sex',
+                                    data: sexCounts,
+                                    backgroundColor: ['#3498db', '#e74c3c'], // Customize colors as needed
+                                    borderColor: ['#2980b9', '#c0392b'],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                indexAxis: 'y', // Horizontal bars
+                                responsive: true,
+                                plugins: {
+                                    legend: { position: 'right' },
+                                    title: {
+                                        display: true,
+                                        text: 'Number of Members by Gender'
+                                    }
+                                },
+                                elements: {
+                                    bar: {
+                                        borderWidth: 2
+                                    }
+                                }
+                            }
+                        });
+
+                        // Chart for Network Distribution
+                        const networkCtx = document.getElementById('networkChart').getContext('2d');
+                        const networkLabels = data.networkData.map(item => item.network); // Network labels
+                        const networkCounts = data.networkData.map(item => item.count); // Network counts
+
+                        new Chart(networkCtx, {
+                            type: 'pie',
+                            data: {
+                                labels: networkLabels,
+                                datasets: [{
+                                    label: 'Members by Network',
+                                    data: networkCounts,
+                                    backgroundColor: ['#1abc9c', '#f1c40f', '#9b59b6', '#e67e22'], // Customize colors as needed
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: { position: 'top' },
+                                    title: {
+                                        display: true,
+                                        text: 'Number of Members by Network'
+                                    }
+                                }
+                            }
+                        });
+                    })
+                    .catch(error => console.error('Error fetching chart data:', error));
+            </script>
+
+        </main>
+    </div>
 </body>
 </html>

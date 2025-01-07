@@ -19,15 +19,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
+    $role = "member"; // Default role for signups
 
     if ($password === $confirm_password) {
+        // Hash password
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        $sql = "INSERT INTO admins (username, email, password) VALUES (?, ?, ?)";
+
+        // Insert into members table
+        $sql = "INSERT INTO users_members (fullname, email, password, role) VALUES (?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sss", $fullname, $email, $hashed_password);
+        $stmt->bind_param("ssss", $fullname, $email, $hashed_password, $role);
 
         if ($stmt->execute()) {
-            $success = "Registration successful! You can now log in.";
+            $success = "Registration successful! You can now log in as a member.";
         } else {
             $error = "Error: " . $stmt->error;
         }

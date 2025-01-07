@@ -59,13 +59,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $error = "Invalid username or password.";
     }
+
+     // If not found in `admins`, check the `members` table
+     $sql = "SELECT * FROM users_members WHERE fullname = ?"; // Assuming "fullname" is the username for members
+     $stmt = $conn->prepare($sql);
+     $stmt->bind_param("s", $username);
+     $stmt->execute();
+     $result = $stmt->get_result();
+ 
+     if ($result->num_rows > 0) {
+         $member = $result->fetch_assoc();
+ 
+         // Verify the password
+         if (password_verify($password, $member['password'])) {
+             // Member login successful
+             $_SESSION['username'] = $member['fullname'];
+             $_SESSION['role'] = 'member';
+ 
+             // Redirect to member dashboard
+             header("Location: member_page/dashboard.php");
+             exit;
+         } else {
+             $error = "Invalid username or password.";
+         }
+     } else {
+         $error = "Invalid username or password.";
+     }
     $stmt->close();
 }
 
 $conn->close();
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -88,6 +112,7 @@ $conn->close();
             <a href="#">Forget password?</a>
             <button type="submit">Sign in</button>
             <p style="color: red;"><?php echo $error; ?></p>
+            <a href="signup.php" class="signup-link">Sign up</a>
           </form>
         </div>
         <div class="login-logo">
