@@ -166,7 +166,7 @@ CREATE TABLE `members` (
   `address` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `sex` enum('male','female') NOT NULL,
-  `network` enum('none','youth','singles','couples/women','couples/men','senior folks') NOT NULL,
+  `network` enum('none','youth','singles','women','men','senior') NOT NULL,
   `birthdate` date NOT NULL,
   `contact_number` int(11) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp()

@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $attendeeNames = array();
   $attendeeIds = explode(',', $attendees);
   foreach ($attendeeIds as $attendeeId) {
-    $query = "SELECT full_name FROM members WHERE id = ?";
+    $query = "SELECT full_name FROM visitors WHERE id = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("i", $attendeeId);
     $stmt->execute();
@@ -36,12 +36,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $stmt = $conn->prepare($query);
   $stmt->bind_param("sss", $date, $description, implode(', ', $attendeeNames));
   if ($stmt->execute()) {
-    header("Location: assimilation_history.php?status=success");
+    header("Location: history.php?status=success");
     exit;
   } else {
-    header("Location: assimilation_history.php?status=error");
+    header("Location: history.php?status=error");
     exit;
   }
+}
+
+if (isset($_GET['delete_id'])) {
+  $delete_id = $_GET['delete_id'];
+  $conn = new mysqli('localhost', 'root', '', 'cbc_ims');
+  if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+  // Prepare and execute deletion query
+  $delete_query = "DELETE FROM assimilation_history WHERE id = ?";
+  $stmt = $conn->prepare($delete_query);
+  $stmt->bind_param("i", $delete_id);
+
+  if ($stmt->execute()) {
+      echo "<script>alert('Attendance history deleted successfully'); window.location.href='history.php';</script>";
+  } else {
+      echo "<script>alert('Error deleting attencdance');</script>";
+  }
+  
+  $stmt->close();
+  $conn->close();
 }
 ?>
 
@@ -85,9 +106,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <td>" . date("F j, Y", strtotime($row['date'])) . "</td>
                 <td>{$row['description']}</td>
                 <td>
-                      <a href='assimilation_viewattendance.php?id={$row['id']}'><button>View</button></a>
+                      <a href='viewattendance.php?id={$row['id']}'><button>View</button></a>
                       <button onclick='editAttendance({$row['id']})'>Edit</button>
-                      <button onclick='deleteAttendance({$row['id']})'>Delete</button>
+                      <a href='history.php?delete_id={$row['id']}' onclick='return confirm(\"Are you sure you want to delete this attendance?\")'><button class='delete-btn'>Delete</button></a>
                 </td>
               </tr>";
               }

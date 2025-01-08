@@ -7,6 +7,27 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'finance_admin' && $_SES
 ?>
 
 
+<?php
+if (isset($_GET['delete_id'])) {
+    $id = $_GET['delete_id'];
+    $conn = new mysqli('localhost', 'root', '', 'cbc_ims');
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    $query = "DELETE FROM transactions WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('i', $id);
+    if ($stmt->execute()) {
+        echo "<script>alert('Transaction deleted successfully!'); window.location.href='transactions.php';</script>";
+    } else {
+        echo "<script>alert('Error deleting transaction: " . $stmt->error . "');</script>";
+    }
+    $stmt->close();
+    $conn->close();
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -70,7 +91,6 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'finance_admin' && $_SES
           $conn->close();
           ?>
           
-        
         </tbody>
       </table>
     </main>

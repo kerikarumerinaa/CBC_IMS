@@ -60,7 +60,7 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'assimilation_admin' && 
                 if ($conn->query($query) === TRUE) {
                     echo "<script>
                             alert('Visitor deleted successfully!');
-                            window.location.href = 'assimilation_visitors.php';
+                            window.location.href = 'visitors.php';
                           </script>";
                 } else {
                     echo "<script>alert('Error: " . $conn->error . "');</script>";
@@ -86,6 +86,7 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'assimilation_admin' && 
                         <th>Network</th>
                         <th>Date Of Visit</th>
                         <th>Actions</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -116,8 +117,10 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'assimilation_admin' && 
                                 <td>{$row['date_of_visit']}</td>
                                 <td>
                                     <button class='view-btn'>View</button>
-                                     <a href='assimilation_visitors.php?delete_id={$row['id']}' onclick='return confirm(\"Are you sure you want to delete this visitor?\")'><button class='delete-btn'>Delete</button></a>
+                                     <a href='visitors.php?delete_id={$row['id']}' onclick='return confirm(\"Are you sure you want to delete this visitor?\")'><button class='delete-btn'>Delete</button></a>  
                                     </td>
+                                    <td>
+                                    <button class='status-btn'>Checklist</button>
                             </tr>";
                         }
                     } else {
@@ -199,6 +202,39 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'assimilation_admin' && 
                     <p><strong>Assimilated By:</strong> <span id="view-assimilated-by"></span></p>
                 </div>
             </div>
+
+
+            <!-- Checklist Modal -->
+                <div id="checklist-modal" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <span id="closeChecklistModal" class="close" style="cursor: pointer;">&times;</span>
+                        <h2>Checklist for <span id="checklist-full-name"></span>:</h2>
+                        <form id="checklist-form">
+                            <p><strong>EBS1:</strong> <input type="checkbox" id="ebs1" name="ebs1"></p>
+                            <p><strong>EBS2:</strong> <input type="checkbox" id="ebs2" name="ebs2"></p>
+                            <p><strong>NBC:</strong> <input type="checkbox" id="nbc" name="nbc"></p>
+                            <p><strong>Church Recognition:</strong> <input type="checkbox" id="church-recognition" name="church_recognition"></p>
+                            <p><strong>Baptism:</strong> <input type="checkbox" id="baptism" name="baptism"></p>
+                            <button type="submit" id="save-checklist" class="btn">Save</button>
+                        </form>
+                    </div>
+                </div>
+
+
+            <!-- Checklist Modal
+            <div id="checklist-modal" class="modal">
+                        <div class="modal-content">
+                            <span id="closeChecklistModal" class="close">&times;</span>
+                            <h2>Checklist for <span id="checklist-full-name"></span>:</h2>
+                            <p><strong>EBS1:</strong> <input type="checkbox" id="ebs1" name="ebs1"></p>
+                            <p><strong>EBS2:</strong> <input type="checkbox" id="ebs2" name="ebs2"></p>
+                            <p><strong>NBC:</strong> <input type="checkbox" id="nbc" name="nbc"></p>
+                            <p><strong>Church Recognition:</strong> <input type="checkbox" id="church-recognition" name="church_recognition"></p>
+                            <p><strong>Baptism:</strong> <input type="checkbox" id="baptism" name="baptism"></p>
+                        </div>
+                    </div> -->
+
+
         </main>
     </div>
 
@@ -230,8 +266,83 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'assimilation_admin' && 
             });
         });
 
+        document.querySelectorAll(".status-btn").forEach(button => {
+            button.addEventListener("click", function() {
+                const row = this.closest("tr");
+                document.getElementById("checklist-full-name").textContent = row.dataset.fullname;
+
+                const checklistModal = document.getElementById("checklist-modal");
+                const ebs1 = checklistModal.querySelector("#ebs1");
+                const ebs2 = checklistModal.querySelector("#ebs2");
+                const nbc = checklistModal.querySelector("#nbc");
+                const churchRecognition = checklistModal.querySelector("#church-recognition");
+                const baptism = checklistModal.querySelector("#baptism");
+
+                // retrieve checklist from database
+                const visitorId = row.dataset.id;
+                const xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        const checklist = JSON.parse(this.responseText);
+                        ebs1.checked = checklist.ebs1;
+                        ebs2.checked = checklist.ebs2;
+                        nbc.checked = checklist.nbc;
+                        churchRecognition.checked = checklist.church_recognition;
+                        baptism.checked = checklist.baptism;
+                    }
+                };
+                xhttp.open("GET", `checklist.php?id=${visitorId}`, true);
+                xhttp.send();
+
+                checklistModal.style.display = "block";
+
+                // save checklist to database
+                const checklistForm = checklistModal.querySelector("form");
+                checklistForm.addEventListener("submit", function(event) {
+                    event.preventDefault();
+                    const xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            console.log(this.responseText);
+                        }
+                    };
+                    xhttp.open("POST", "checklist.php", true);
+                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    xhttp.send(`id=${visitorId}&ebs1=${ebs1.checked}&ebs2=${ebs2.checked}&nbc=${nbc.checked}&church_recognition=${churchRecognition.checked}&baptism=${baptism.checked}`);
+                });
+            });
+        });
+
+        document.getElementById("checklist-form").addEventListener("submit", function (event) {
+    event.preventDefault(); // Prevent the form from reloading the page
+
+    const visitorId = document.querySelector(".status-btn.active").closest("tr").dataset.id; // Get visitor ID
+    const ebs1 = document.getElementById("ebs1").checked;
+    const ebs2 = document.getElementById("ebs2").checked;
+    const nbc = document.getElementById("nbc").checked;
+    const churchRecognition = document.getElementById("church-recognition").checked;
+    const baptism = document.getElementById("baptism").checked;
+
+    // Save checklist via AJAX
+    const xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            alert("Checklist saved successfully!");
+            document.getElementById("checklist-modal").style.display = "none"; // Close modal after saving
+        }
+    };
+    xhttp.open("POST", "checklist.php", true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send(`id=${visitorId}&ebs1=${ebs1}&ebs2=${ebs2}&nbc=${nbc}&church_recognition=${churchRecognition}&baptism=${baptism}`);
+        });
+
+
         document.getElementById("closeViewModal").addEventListener("click", function() {
             document.getElementById("view-modal").style.display = "none";
+        });
+
+        document.getElementById("closeChecklistModal").addEventListener("click", function() {
+            document.getElementById("checklist-modal").style.display = "none";
         });
     </script>
 </body>

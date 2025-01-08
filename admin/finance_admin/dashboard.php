@@ -26,48 +26,85 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'finance_admin' && $_SES
 
     <!-- MAIN CONTENT -->
     <main>
-        <h1>Finance Summary</h1>
-        
-        <!-- MONTHLY COLLECTIONS -->
-        <div class="offering">
-            <div class="monthly-offering">
-                <h2>Monthly Collection</h2>
-                <div class="selection-container">
-                    <label for="month">Month:</label>
-                    <select id="month">
-                        <option value="Jan">January</option>
-                        <option value="Feb">February</option>
-                        <option value="Mar">March</option>
-                        <option value="Apr">April</option>
-                        <option value="May">May</option>
-                        <option value="Jun">June</option>
-                        <option value="Jul">July</option>
-                        <option value="Aug">August</option>
-                        <option value="Sep">September</option>
-                        <option value="Oct">October</option>
-                        <option value="Nov">November</option>
-                        <option value="Dec">December</option>
-                    </select>
-
-                    <label for="year">Year:</label>
-                    <input type="number" id="year" min="2023" max="2023">
-                </div>
+            <h1>Finance Dashboard</h1>
+            
+            <!-- Dropdown filter for weekly, monthly, and yearly data -->
+            <div>
+                <label for="timeRange">Select Time Range:</label>
+                <select id="timeRange" onchange="updateChart()">
+                    <option value="weekly" selected>Weekly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="yearly">Yearly</option>
+                </select>
             </div>
-
-            <!-- QUARTERLY COLLECTIONS -->
-            <div class="quarterly-offering">
-                <h2>Monthly Expenses</h2>
-                <div class="middle">
-                    <div class="left">
-                        <!-- Add content or logic here for quarterly offering -->
-                    </div>
-                </div>
+            
+            <!-- Chart for collections and expenses -->
+            <div class="chart-container">
+                <h3>Collection and Expense Chart</h3>
+                <canvas id="financeChart" width="500" height="300"</canvas>
             </div>
-        </div>
+        </main>
+    </div>
 
-    </main>
-  </div>
+    <script>
+     let financeChart;
 
-  <script src="../script.js"></script> <!-- Adjust to correct path -->
+// Fetch chart data and render chart
+    fetch(`../../includes/get_chart_data.php`)
+        .then(response => response.json())
+        .then(data => {
+            
+            const ctx = document.getElementById('financeChart').getContext('2d');
+            financeChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.labels,
+                    datasets: [
+                        {
+                            label: 'Collections',
+                            data: data.collections,
+                            backgroundColor: '#2ecc71', // Green
+                            borderColor: '#27ae60',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Expenses',
+                            data: data.expenses,
+                            backgroundColor: '#e74c3c', // Red
+                            borderColor: '#c0392b',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Collections and Expenses'
+                        },
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => console.error('Error fetching chart data:', error));
+
+// Update chart based on dropdown selection
+function updateChart() {
+    const timeRange = document.getElementById('timeRange').value;
+    fetchChartData(timeRange);
+}
+
+// Initialize chart with default range
+fetchChartData('weekly');
+    </script>
 </body>
 </html>

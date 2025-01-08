@@ -43,7 +43,7 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'assimilation_admin' && 
         </div>
 
         <button id="save-attendance-btn">Save Attendance</button>
-        <form id="attendance-form" action="assimilation_history.php" method="POST" style="display:none;">
+        <form id="attendance-form" action="history.php" method="POST" style="display:none;">
             <input type="hidden" name="date" />
             <input type="hidden" name="description" />
             <input type="hidden" name="attendees" />

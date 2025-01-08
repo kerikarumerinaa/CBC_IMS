@@ -45,9 +45,24 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_
                 <canvas id="networkChart" width="500" height="300"></canvas>
             </div>
 
+            <!-- Filter for Attendance -->
+            <div>
+                <label for="attendanceFilter">Select Attendance Period:</label>
+                <select id="attendanceFilter" onchange="updateAttendanceChart()">
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                </select>
+            </div>
+            
+
+            <div class="chart-container">
+                <h3>Worship Attendance</h3>
+                <canvas id="attendanceChart" width="500" height="300"></canvas>
+            </div>
+
             <script>
                 // Fetch data from the backend (get_chart_data.php)
-                fetch('./get_chart_data.php')
+                fetch('../../includes/get_chart_data.php')
                     .then(response => response.json())
                     .then(data => {
                         // Chart for Gender (Sex Distribution)
@@ -111,8 +126,77 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_
                                 }
                             }
                         });
+                        // Worship Attendance Chart
+                        const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
+                        let attendanceLabels, attendanceData, attendanceLabel;
+
+                        // Default to weekly data
+                        attendanceLabels = data.weeklyData.map(item => `Week ${item.week}`);
+                        attendanceData = data.weeklyData.map(item => item.count);
+                        attendanceLabel = 'Weekly Worship Attendance';
+
+                        new Chart(attendanceCtx, {
+                            type: 'line',
+                            data: {
+                                labels: attendanceLabels,
+                                datasets: [{
+                                    label: attendanceLabel,
+                                    data: attendanceData,
+                                    borderColor: '#3498db',
+                                    backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                                    fill: true,
+                                    tension: 0.1
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: { position: 'top' },
+                                    title: { display: true, text: attendanceLabel }
+                                }
+                            }
+                        });
+
+                        // Update chart when filter changes
+                        window.updateAttendanceChart = function() {
+                            const filter = document.getElementById('attendanceFilter').value;
+                            let attendanceLabels, attendanceData, attendanceLabel;
+
+                            if (filter === 'weekly') {
+                                attendanceLabels = data.weeklyData.map(item => `Week ${item.week}`);
+                                attendanceData = data.weeklyData.map(item => item.count);
+                                attendanceLabel = 'Weekly Worship Attendance';
+                            } else {
+                                attendanceLabels = data.monthlyData.map(item => `Month ${item.month}`);
+                                attendanceData = data.monthlyData.map(item => item.count);
+                                attendanceLabel = 'Monthly Worship Attendance';
+                            }
+
+                            const updatedChart = new Chart(attendanceCtx, {
+                                type: 'line',
+                                data: {
+                                    labels: attendanceLabels,
+                                    datasets: [{
+                                        label: attendanceLabel,
+                                        data: attendanceData,
+                                        borderColor: '#3498db',
+                                        backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                                        fill: true,
+                                        tension: 0.1
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    plugins: {
+                                        legend: { position: 'top' },
+                                        title: { display: true, text: attendanceLabel }
+                                    }
+                                }
+                            });
+                        };
                     })
                     .catch(error => console.error('Error fetching chart data:', error));
+                    
             </script>
 
         </main>

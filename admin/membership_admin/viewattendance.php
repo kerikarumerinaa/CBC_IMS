@@ -31,7 +31,7 @@ if ($result->num_rows > 0) {
 // Fetch attendee details (names and timestamps) from the members table
 $attendeeDetails = [];
 foreach ($attendeeNames as $name) {
-    $query = "SELECT full_name, timestamp FROM members WHERE full_name = ?";
+    $query = "SELECT full_name FROM members WHERE full_name = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("s", $name);
     $stmt->execute();
@@ -58,7 +58,7 @@ $conn->close();
     <?php include '../../includes/sidebar.php'; ?>
 
     <main>
-    <h1>Attendance for <?php echo $date; ?></h1>
+    <h1>Attendance for <?php echo date("F j, Y", strtotime($date)); ?></h1>
     <p><strong>Description:</strong> <?php echo $description; ?></p>
 
     <h2>Attendees</h2>
@@ -66,14 +66,12 @@ $conn->close();
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Timestamp</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($attendeeDetails as $attendee): ?>
                 <tr>
                     <td><?php echo $attendee['full_name']; ?></td>
-                    <td><?php echo $attendee['timestamp']; ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>

@@ -75,20 +75,29 @@ main{
     border-radius: 0.5rem;
     margin-top: 1rem;
     box-shadow: 0 2rem 3rem rgba(132, 139, 200, 0.18); /* Same box shadow */
+    width: 90%;
 }
 
 /* Title for each chart section */
 .chart-container h3 {
-    font-size: 1.4rem;  /* Consistent font size for headings */
-    font-weight: 550;  /* Slightly lighter weight for the chart titles */
-    color: #333;  /* Dark text for good contrast */
+    font-size: 1.4rem;  
+    font-weight: 550;  
+    color: #333;  
     text-align: center;
-    margin-bottom: 1.6rem;  /* Space between title and the chart */
+    margin-bottom: 1.6rem;  
+}
+
+/* Filter dropdown styling */
+#attendanceFilter {
+    padding: 0.5rem;
+    font-size: 1rem;
+    margin-top: 1rem;
+    width: auto;
 }
 
 /* Style for each canvas (chart area) */
 canvas {
-    width: 50% !important; /* Make canvas responsive */
+    width: 30% !important; /* Make canvas responsive */
     height: 100%;
     display: block;  /* Ensures the canvas fills its container */
     margin: 0 auto;  /* Centers the canvas */
