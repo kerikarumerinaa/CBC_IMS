@@ -61,7 +61,7 @@ $conn->close();
     <h1>Attendance for <?php echo date("F j, Y", strtotime($date)); ?></h1>
     <p><strong>Description:</strong> <?php echo $description; ?></p>
 
-    <h2>Attendees</h2>
+    <h2>Attendees (<?php echo count($attendeeDetails); ?>)</h2>
     <table>
         <thead>
             <tr>

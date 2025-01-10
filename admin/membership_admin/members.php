@@ -23,6 +23,10 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_
     <main>
       <div class="members-header">
         <h2>Member List</h2>
+        <form action="members.php" method="get">
+          <input type="text" name="search" placeholder="Search by name" value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>">
+          <button type="submit">Search</button>
+        </form>
         <button id="add-member-btn">Add Member</button>
       </div>
 
@@ -54,7 +58,7 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_
             $stmt->bind_param('sissssssi', $full_name, $age, $address, $email, $sex, $network, $birthdate, $contact_number, $id);
 
             if ($stmt->execute()) {
-                echo "<script>alert('Member updated successfully!'); window.location.href='membership_members.php';</script>";
+                echo "<script>alert('Member updated successfully!'); window.location.href='members.php';</script>";
             } else {
                 echo "<script>alert('Error updating member: " . $conn->error . "');</script>";
             }
@@ -76,7 +80,7 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_
             $stmt->bind_param('sissssss', $full_name, $age, $address, $email, $sex, $network, $birthdate, $contact_number);
 
             if ($stmt->execute()) {
-                echo "<script>alert('Member added successfully!'); window.location.href='membership_members.php';</script>";
+                echo "<script>alert('Member added successfully!'); window.location.href='members.php';</script>";
             } else {
                 echo "<script>alert('Error: " . $conn->error . "');</script>";
             }
@@ -94,11 +98,12 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_
             die("Connection failed: " . $conn->connect_error);
         }
 
+        // Delete from members table
         $delete_query = "DELETE FROM members WHERE id = ?";
         $stmt = $conn->prepare($delete_query);
         $stmt->bind_param('i', $delete_id);
         if ($stmt->execute()) {
-            echo "<script>alert('Member deleted successfully'); window.location.href='membership_members.php';</script>";
+            echo "<script>alert('Member deleted successfully'); window.location.href='members.php';</script>";
         } else {
             echo "<script>alert('Error deleting member');</script>";
         }
@@ -106,7 +111,6 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_
         $stmt->close();
         $conn->close();
     }
-
     ?>
 
     

@@ -10,24 +10,60 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'finance_admin' && $_SES
 
 include '../../includes/db_connection.php'; // Include database connection
 
+// if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+//   $description = $_POST['description'];  // assuming the description is also passed
+//   $totalamount = $_POST['totalCollections'];       // total amount calculated from cash + checks
+//   $date = $_POST['date'];                // make sure the date is passed correctly
+//   $type = 'Collection';                  // Set the type as Collection
+
+
+//   $query = "INSERT INTO transactions (description, amount, date, type) VALUES (?, ?, ?, ?)";
+//   $stmt = $conn->prepare($query);
+//   $stmt->bind_param('sdss', $description, $totalamount, $date, $type);  // 'd' for double (amount), 's' for string (description, date, type)
+
+//   if ($stmt) {
+//     $stmt->bind_param('sdss', $description, $totalamount, $date, $type);
+//     if ($stmt->execute()) {
+//         echo "<script>alert('Collection added successfully!'); window.location.href='transactions.php';</script>";
+//     } else {
+//         echo "<script>alert('Error adding collection: {$conn->error}');</script>";
+//     }
+//     $stmt->close();
+// } else {
+//     echo "<script>alert('Database error: {$conn->error}');</script>";
+// }
+// }
+// $conn->close();
+
+// 
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $description = $_POST['description'];
-    $amount = $_POST['amount'];
-    $date = $_POST['date'];
-    $type = 'Collection'; // Set type as Collection
+  // Retrieve form data
+  $description = $_POST['description'];  // Ensure 'description' field is in the form
+  $totalAmount = $_POST['totalCollections'];  // Ensure 'totalCollections' field is correctly named in the form
+  $date = $_POST['date'];  // Ensure 'date' field is in the form
+  $type = 'Collection';  // Set default type
 
-    $query = "INSERT INTO transactions (description, amount, date, type) VALUES (?, ?, ?, ?)";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param('sdss', $description, $amount, $date, $type);
+  // Insert into database
+  $query = "INSERT INTO transactions (description, amount, date, type) VALUES (?, ?, ?, ?)";
+  $stmt = $conn->prepare($query);
 
-    if ($stmt->execute()) {
-        echo "<script>alert('Collection added successfully!'); window.location.href='transactions.php';</script>";
-    } else {
-        echo "<script>alert('Error adding collection: " . $conn->error . "');</script>";
-    }
-    $stmt->close();
+  if ($stmt) {
+      $stmt->bind_param('sdss', $description, $totalAmount, $date, $type);  // Bind parameters
+      if ($stmt->execute()) {
+          echo "<script>alert('Collection added successfully!'); window.location.href='transactions.php';</script>";
+      } else {
+          echo "<script>alert('Error adding collection: {$conn->error}');</script>";
+      }
+      $stmt->close();
+  } else {
+      echo "<script>alert('Database error: {$conn->error}');</script>";
+  }
+  $conn->close();
 }
 ?>
+
+
 
 
 <!DOCTYPE html>
@@ -69,28 +105,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <tbody>
     <tr>
         <td>1,000</td>
-        <td><input type="number" class="qty" data-value="1000" oninput="updateAmount(this)"></td>
-        <td><input type="number" class="amount" readonly></td>
+        <td><input type="number" class="qty" data-value="1000" oninput="updateAmount(this)" required></td>
+        <td><input type="number" class="amount" readonly required></td>
     </tr>
     <tr>
         <td>500</td>
-        <td><input type="number" class="qty" data-value="500" oninput="updateAmount(this)"></td>
-        <td><input type="number" class="amount" readonly></td>
+        <td><input type="number" class="qty" data-value="500" oninput="updateAmount(this)" required></td>
+        <td><input type="number" class="amount" readonly required></td>
     </tr>
     <tr>
         <td>200</td>
-        <td><input type="number" class="qty" data-value="200" oninput="updateAmount(this)"></td>
-        <td><input type="number" class="amount" readonly></td>
+        <td><input type="number" class="qty" data-value="200" oninput="updateAmount(this)" required></td>
+        <td><input type="number" class="amount" readonly required></td>
     </tr>
     <tr>
         <td>100</td>
-        <td><input type="number" class="qty" data-value="100" oninput="updateAmount(this)"></td>
-        <td><input type="number" class="amount" readonly></td>
+        <td><input type="number" class="qty" data-value="100" oninput="updateAmount(this)" required></td>
+        <td><input type="number" class="amount" readonly required></td>
     </tr>
     <tr>
         <td>20</td>
-        <td><input type="number" class="qty" data-value="20" oninput="updateAmount(this)"></td>
-        <td><input type="number" class="amount" readonly></td>
+        <td><input type="number" class="qty" data-value="20" oninput="updateAmount(this)" required></td>
+        <td><input type="number" class="amount" readonly required></td>
     </tr>
     <tr>
           <td colspan="2"><strong>Total Cash</strong></td>
@@ -111,9 +147,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </thead>
   <tbody>
     <tr>
-      <td><input type="text" placeholder="Bank"></td>
-      <td><input type="text" placeholder="Check #"></td>
-      <td><input type="text" placeholder="Corporate Supporter"></td>
+      <td><input type="text" placeholder="Bank" required></td>
+      <td><input type="text" placeholder="Check #" required></td>
+      <td><input type="text" placeholder="Corporate Supporter" required></td>
       <td>
         <input 
           type="number" 
@@ -149,16 +185,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </tr>
     <tr>
       <td><strong>Total</strong></td>
-      <td><input type="number" id="totalCollections" readonly></td>
+      <td><input type="number" id="totalCollections" name="totalCollections" readonly></td> 
     </tr>
   </tbody>
 </table>
 
     <label for="countedBy">Counted By:</label>
-    <input type="text" id="countedBy" name="countedBy">
-    <input type="text" id="countedBy" name="countedBy">
+    <input type="text" id="countedBy" name="countedBy" required>
     <label for="receivedBy">Received By:</label>
-    <input type="text" id="receivedBy" name="receivedBy"><br>
+    <input type="text" id="receivedBy" name="receivedBy" required><br>
 
 
 
@@ -167,71 +202,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     
   </form>
-    <script>
-    function updateAmount(input) {
-        const qty = parseInt(input.value) || 0; // Get the quantity, default to 0 if empty
-        const denomination = parseInt(input.dataset.value) || 0; // Get the denomination from data-value
-        const amountField = input.parentElement.nextElementSibling.querySelector('.amount'); // Find the corresponding amount field
-        amountField.value = qty * denomination; // Calculate and set the amount
 
-        updateCashTotal(); // Update the total cash after changing the amount
-    }
 
-    function updateCashTotal() {
-    const amountInputs = document.querySelectorAll('.amount');
+<script>
+  function updateAmount(input) {
+    const qty = parseInt(input.value) || 0; // Get the quantity, default to 0 if empty
+    const denomination = parseInt(input.dataset.value) || 0; // Get the denomination from data-value
+    const amountField = input.parentElement.nextElementSibling.querySelector('input.amount'); // Find the corresponding amount field
+    amountField.value = qty * denomination; // Calculate and set the amount
+
+    updateCashTotal(); // Update the total cash after changing the amount
+  }
+
+  function updateCashTotal() {
+    const amountInputs = document.querySelectorAll('.amount'); // Select all amount fields
     let cashTotal = 0;
 
     amountInputs.forEach(amount => {
-        cashTotal += parseInt(amount.value) || 0;
+      cashTotal += parseInt(amount.value) || 0; // Sum up all amount values
     });
 
-    document.getElementById('cashTotal').value = cashTotal;
-    updateTotalCollections();
-}
-
-   
-    function updateCheckAmount(input) {
-  const qty = parseInt(input.value) || 0; // Get the quantity or default to 0 if empty
-  const denomination = parseInt(input.dataset.value) || 0; // Get the denomination from data-value
-  const amountField = input.parentElement.nextElementSibling.querySelector('.Checkamount'); // Find the corresponding amount field
-
-  if (amountField) {
-    amountField.value = qty * denomination; // Calculate and set the amount
+    document.getElementById('cashTotal').value = cashTotal; // Set the total cash value
+    updateTotalCollections(); // Update the total collections
   }
 
-  updateCheckTotal(); // Update the total check amount
-}
-
-function updateCheckTotal() {
-    const checkAmountInputs = document.querySelectorAll('.Checkamount');
+  function updateCheckTotal() {
+    const checkAmountInputs = document.querySelectorAll('.Checkamount'); // Select all check amount fields
     let checkTotal = 0;
 
     checkAmountInputs.forEach(check => {
-        checkTotal += parseFloat(check.value) || 0;
+      checkTotal += parseFloat(check.value) || 0; // Sum up all check amount values
     });
 
-    document.getElementById('checkTotal').value = checkTotal.toFixed(2);
-    updateTotalCollections();
-}
+    document.getElementById('checkTotal').value = checkTotal.toFixed(2); // Set the total check value
+    updateTotalCollections(); // Update the total collections
+  }
 
-function updateTotalCollections() {
+  function updateTotalCollections() {
     const cashTotal = parseInt(document.getElementById('cashTotal').value) || 0;
-    const checkTotal = parseInt(document.getElementById('checkTotal').value) || 0;
+    const checkTotal = parseFloat(document.getElementById('checkTotal').value) || 0;
     const totalCollections = cashTotal + checkTotal;
 
-    document.getElementById('totalCollections').value = totalCollections;
+    document.getElementById('totalCollections').value = totalCollections.toFixed(2);
     document.getElementById('savings').value = (totalCollections * 0.2).toFixed(2);
     document.getElementById('missionFund').value = (totalCollections * 0.1).toFixed(2);
-    document.getElementById('generalFund').value = totalCollections.toFixed(2);
-}
+    document.getElementById('generalFund').value = (totalCollections * 0.7).toFixed(2); // Remaining percentage
+  }
 
-document.querySelectorAll('#cashTotal tbody tr input[type="number"]').forEach(input => {
-    input.addEventListener('input', updateCashTotal);
-});
+  // Attach event listeners for real-time updates
+  document.querySelectorAll('.qty').forEach(input => {
+    input.addEventListener('input', () => updateAmount(input));
+  });
 
-document.querySelectorAll('#checkTotal tbody tr input[type="number"]').forEach(input => {
+  document.querySelectorAll('.Checkamount').forEach(input => {
     input.addEventListener('input', updateCheckTotal);
-});
+  });
 </script>
 </body>
 </html>

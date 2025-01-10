@@ -205,11 +205,12 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'assimilation_admin' && 
 
 
             <!-- Checklist Modal -->
-                <div id="checklist-modal" class="modal" style="display: none;">
+                <div id="checklist-modal" class="modal">
                     <div class="modal-content">
                         <span id="closeChecklistModal" class="close" style="cursor: pointer;">&times;</span>
                         <h2>Checklist for <span id="checklist-full-name"></span>:</h2>
                         <form id="checklist-form">
+                            <input type="hidden" id="visitor-id" name="id" value="">
                             <p><strong>EBS1:</strong> <input type="checkbox" id="ebs1" name="ebs1"></p>
                             <p><strong>EBS2:</strong> <input type="checkbox" id="ebs2" name="ebs2"></p>
                             <p><strong>NBC:</strong> <input type="checkbox" id="nbc" name="nbc"></p>
@@ -312,30 +313,52 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'assimilation_admin' && 
                 });
             });
         });
+        
+        document.getElementById("save-checklist").addEventListener("click", function(event) {
+            event.preventDefault();
 
-        document.getElementById("checklist-form").addEventListener("submit", function (event) {
-    event.preventDefault(); // Prevent the form from reloading the page
+            const visitorId = document.getElementById("visitor-id").value;
+            const ebs1 = document.getElementById("ebs1").checked ? 1 : 0;
+            const ebs2 = document.getElementById("ebs2").checked ? 1 : 0;
+            const nbc = document.getElementById("nbc").checked ? 1 : 0;
+            const churchRecognition = document.getElementById("church-recognition").checked ? 1 : 0;
+            const baptism = document.getElementById("baptism").checked ? 1 : 0;
 
-    const visitorId = document.querySelector(".status-btn.active").closest("tr").dataset.id; // Get visitor ID
-    const ebs1 = document.getElementById("ebs1").checked;
-    const ebs2 = document.getElementById("ebs2").checked;
-    const nbc = document.getElementById("nbc").checked;
-    const churchRecognition = document.getElementById("church-recognition").checked;
-    const baptism = document.getElementById("baptism").checked;
+            // Prepare data
+            const data = new URLSearchParams();
+            data.append("id", visitorId);
+            data.append("ebs1", ebs1);
+            data.append("ebs2", ebs2);
+            data.append("nbc", nbc);
+            data.append("church_recognition", churchRecognition);
+            data.append("baptism", baptism);
 
-    // Save checklist via AJAX
-    const xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState === 4 && this.status === 200) {
-            alert("Checklist saved successfully!");
-            document.getElementById("checklist-modal").style.display = "none"; // Close modal after saving
-        }
-    };
-    xhttp.open("POST", "checklist.php", true);
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send(`id=${visitorId}&ebs1=${ebs1}&ebs2=${ebs2}&nbc=${nbc}&church_recognition=${churchRecognition}&baptism=${baptism}`);
+            // Send data to the server
+            fetch("checklist.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: data.toString(),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    return response.text();
+                })
+                .then(result => {
+                    alert(result); // Show success message
+                    document.getElementById("checklist-modal").style.display = "none"; // Close the modal
+                    window.location.reload(); // Reload the page to reflect changes
+                })
+                .catch(error => {
+                    console.error("There was a problem with the fetch operation:", error);
+                });
         });
 
+
+        
 
         document.getElementById("closeViewModal").addEventListener("click", function() {
             document.getElementById("view-modal").style.display = "none";

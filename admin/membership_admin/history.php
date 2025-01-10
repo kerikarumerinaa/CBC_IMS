@@ -112,7 +112,7 @@ if (isset($_GET['delete_id'])) {
                             <td>{$row['description']}</td>
                             <td>
                                 <a href='viewattendance.php?id={$row['id']}'><button>View</button></a>
-                                <button onclick='editAttendance({$row['id']})'>Edit</button>
+                                
                                 <a href='history.php?delete_id={$row['id']}' onclick='return confirm(\"Are you sure you want to delete this attendance?\")'><button class='delete-btn'>Delete</button></a>
 
                             </td>

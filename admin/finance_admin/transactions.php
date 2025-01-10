@@ -95,5 +95,6 @@ if (isset($_GET['delete_id'])) {
       </table>
     </main>
   </div>
+
 </body>
 </html>

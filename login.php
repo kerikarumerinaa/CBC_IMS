@@ -109,7 +109,7 @@ $conn->close();
           <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
             <input type="text" name="username" placeholder="Username" required/>
             <input type="password" name="password" placeholder="Password" required/>
-            <a href="#">Forget password?</a>
+            <!-- <a href="#">Forget password?</a> -->
             <button type="submit">Sign in</button>
             <p style="color: red;"><?php echo $error; ?></p>
             <a href="signup.php" class="signup-link">Sign up</a>

@@ -33,42 +33,50 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_
         <main>
             <h1>Dashboard</h1>
 
+            <!-- Chart Section for Sex and Network -->
+            <div class="chart-row">
             <!-- Chart for Sex Distribution -->
             <div class="chart-container">
-                <h3>Number of Members by Sex</h3>
+                <h3>Number of Members by Gender</h3>
                 <canvas id="sexChart" width="500" height="300"></canvas>
             </div>
 
             <!-- Chart for Network Distribution -->
-            <div class="chart-container">
+            <!-- <div class="chart-container">
                 <h3>Number of Members by Network</h3>
                 <canvas id="networkChart" width="500" height="300"></canvas>
-            </div>
+            </div> -->
 
-            <!-- Filter for Attendance -->
-            <div>
-                <label for="attendanceFilter">Select Attendance Period:</label>
-                <select id="attendanceFilter" onchange="updateAttendanceChart()">
-                    <option value="weekly">Weekly</option>
-                    <option value="monthly">Monthly</option>
-                </select>
-            </div>
-            
-
+            <!-- Chart for Member Activity Status -->
             <div class="chart-container">
-                <h3>Worship Attendance</h3>
-                <canvas id="attendanceChart" width="500" height="300"></canvas>
+                <h3>Member Activity Status</h3>
+                <canvas id="memberStatusChart" width="500" height="300"></canvas>
             </div>
+        </div>
+
+        <!-- Filter and Worship Attendance Chart -->
+        <div class="filter-row">
+            <label for="attendanceFilter">Select Attendance Period:</label>
+            <select id="attendanceFilter" onchange="updateAttendanceChart()">
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+            </select>
+        </div>
+
+        <div class="chart-full-width">
+            <h3>Worship Attendance</h3>
+            <canvas id="attendanceChart" width="500" height="300"></canvas>
+        </div>
 
             <script>
                 // Fetch data from the backend (get_chart_data.php)
                 fetch('../../includes/get_chart_data.php')
                     .then(response => response.json())
                     .then(data => {
-                        // Chart for Gender (Sex Distribution)
+                        ////////////////// Chart for Gender (Sex Distribution)
                         const sexCtx = document.getElementById('sexChart').getContext('2d');
-                        const sexLabels = data.sexData.map(item => item.sex); // Sex labels (Male, Female, etc.)
-                        const sexCounts = data.sexData.map(item => item.count); // Sex counts
+                        const sexLabels = data.memberSexData.map(item => item.sex); // Sex labels (Male, Female, etc.)
+                        const sexCounts = data.memberSexData.map(item => item.count); // Sex counts
 
                         new Chart(sexCtx, {
                             type: 'bar',
@@ -100,10 +108,12 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_
                             }
                         });
 
-                        // Chart for Network Distribution
+
+
+                        /////////////// Chart for Network Distribution
                         const networkCtx = document.getElementById('networkChart').getContext('2d');
-                        const networkLabels = data.networkData.map(item => item.network); // Network labels
-                        const networkCounts = data.networkData.map(item => item.count); // Network counts
+                        const networkLabels = data.memberNetworkData.map(item => item.network); // Network labels
+                        const networkCounts = data.memberNetworkData.map(item => item.count); // Network counts
 
                         new Chart(networkCtx, {
                             type: 'pie',
@@ -112,7 +122,7 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_
                                 datasets: [{
                                     label: 'Members by Network',
                                     data: networkCounts,
-                                    backgroundColor: ['#1abc9c', '#f1c40f', '#9b59b6', '#e67e22'], // Customize colors as needed
+                                    backgroundColor: ['#1abc9c', '#f1c40f', '#9b59b6', '#e67e22', '#34495e'], // Customize colors as needed
                                 }]
                             },
                             options: {
@@ -126,13 +136,17 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_
                                 }
                             }
                         });
+
+
+
+
                         // Worship Attendance Chart
                         const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
                         let attendanceLabels, attendanceData, attendanceLabel;
 
                         // Default to weekly data
-                        attendanceLabels = data.weeklyData.map(item => `Week ${item.week}`);
-                        attendanceData = data.weeklyData.map(item => item.count);
+                        attendanceLabels = data.memberWeeklyData.map(item => `Week ${item.week}`);
+                        attendanceData = data.memberWeeklyData.map(item => item.count);
                         attendanceLabel = 'Weekly Worship Attendance';
 
                         new Chart(attendanceCtx, {
@@ -163,12 +177,12 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_
                             let attendanceLabels, attendanceData, attendanceLabel;
 
                             if (filter === 'weekly') {
-                                attendanceLabels = data.weeklyData.map(item => `Week ${item.week}`);
-                                attendanceData = data.weeklyData.map(item => item.count);
+                                attendanceLabels = data.memberWeeklyData.map(item => `Week ${item.week}`);
+                                attendanceData = data.memberWeeklyData.map(item => item.count);
                                 attendanceLabel = 'Weekly Worship Attendance';
                             } else {
-                                attendanceLabels = data.monthlyData.map(item => `Month ${item.month}`);
-                                attendanceData = data.monthlyData.map(item => item.count);
+                                attendanceLabels = data.memberMonthlyData.map(item => `Month ${item.month}`);
+                                attendanceData = data.memberMonthlyData.map(item => item.count);
                                 attendanceLabel = 'Monthly Worship Attendance';
                             }
 
@@ -195,6 +209,36 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_
                             });
                         };
                     })
+
+                    fetch('../../includes/get_member_status.php')
+                    .then(response => response.json())
+                    .then(data => {
+                        const memberStatusCtx = document.getElementById('memberStatusChart').getContext('2d');
+
+                        new Chart(memberStatusCtx, {
+                            type: 'doughnut',
+                            data: {
+                                labels: ['Active Members', 'Inactive Members'],
+                                datasets: [{
+                                    data: [data.active, data.inactive],
+                                    backgroundColor: ['#2ecc71', '#e74c3c'], // Active: Green, Inactive: Red
+                                    borderColor: ['#27ae60', '#c0392b'],
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: { position: 'top' },
+                                    title: {
+                                        display: true,
+                                        text: 'Member Activity Status'
+                                    }
+                                }
+                            }
+                        });
+                    })
+
                     .catch(error => console.error('Error fetching chart data:', error));
                     
             </script>

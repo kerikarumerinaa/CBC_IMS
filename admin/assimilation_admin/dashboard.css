@@ -69,65 +69,93 @@ main{
 }
  /* Title for each chart section */
 
- .chart-container {
-    background-color: #15456848;  /* Matches the background of the other elements */
-    padding: 1.8rem;  /* Same padding as other sections */
-    border-radius: 0.5rem;
-    margin-top: 1rem;
-    box-shadow: 0 2rem 3rem rgba(132, 139, 200, 0.18); /* Same box shadow */
-    width: 90%;
+ .chart-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; /* Space between the two columns */
+    margin: 20px 0;
+}
+
+.chart-container {
+    flex: 1; /* Equal width for both containers */
+    max-width: 48%; /* Adjust width to fit two columns neatly */
+    background-color: #f9f9f9; /* Light background for better visibility */
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .chart-container h3 {
-    font-size: 1.4rem;  
-    font-weight: 550;  
-    color: #333;  
     text-align: center;
-    margin-bottom: 1.6rem;  
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: #333;
 }
 
-/* Style for each canvas (chart area) */
 canvas {
-    width: 30% !important; /* Make canvas responsive */
-    height: 100%;
-    display: block;  /* Ensures the canvas fills its container */
-    margin: 0 auto;  /* Centers the canvas */
+    display: block;
+    margin: 0 auto;
 }
 
-/* Filter dropdown styling */
-#attendanceFilter {
-    padding: 0.5rem;
-    font-size: 1rem;
-    margin-top: 1rem;
-    width: auto;
+
+
+.chart-container {
+    flex: 1;
+    max-width: 100%;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 0 auto; /* Center the chart container */
 }
 
-/* Style for Back Button */
-button {
-    background-color: #3498db;
-    color: white;
-    padding: 0.6rem 1.2rem;
-    border: none;
-    border-radius: 0.3rem;
-    cursor: pointer;
+.chart-container h3 {
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: #333;
 }
 
-button:hover {
-    background-color: #2980b9;
+/* Full-width container for Worship Attendance */
+.chart-full-width {
+    flex: 1;
+    max-width: 100%;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
 }
 
-/* Responsive styling */
-@media (max-width: 768px) {
-    .chart-container {
-        padding: 1.5rem;  /* Slightly reduce padding on smaller screens */
-    }
+.chart-full-width h3 {
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: #333;
+}
 
-    .chart-container h3 {
-        font-size: 1.2rem;  /* Adjust font size for smaller screens */
-    }
+canvas {
+    display: block;
+    margin: 0 auto;
+}
 
-    /* Adjust the main content layout for small screens */
-    main {
-        margin-left: 0;
-    }
+/* Styling for the attendance filter */
+.filter-row {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.filter-row label {
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+.filter-row select {
+    padding: 5px 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }

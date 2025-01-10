@@ -8,79 +8,79 @@ $response = [];
 // Fetch data grouped by sex
 ///////////////////////////////////////  MEMBERSHIP DASHBAORD   //////////////////////////////////////////
 
-$sexQuery = "SELECT sex, COUNT(*) AS count FROM members GROUP BY sex";
-$sexResult = mysqli_query($conn, $sexQuery);
-$sexData = [];
-while ($row = mysqli_fetch_assoc($sexResult)) {
-    $sexData[] = $row;
+// Fetch data grouped by sex for members (Membership side)
+$memberSexQuery = "SELECT sex, COUNT(*) AS count FROM members GROUP BY sex";
+$memberSexResult = mysqli_query($conn, $memberSexQuery);
+$memberSexData = [];
+while ($row = mysqli_fetch_assoc($memberSexResult)) {
+    $memberSexData[] = $row;
 }
-    $response['sexData'] = $sexData;
+$response['memberSexData'] = $memberSexData; // Data for members
 
-
-// Fetch data grouped by network
-$networkQuery = "SELECT network, COUNT(*) AS count FROM members GROUP BY network";
-$networkResult = mysqli_query($conn, $networkQuery);
-$networkData = [];
-while ($row = mysqli_fetch_assoc($networkResult)) {
-    $networkData[] = $row;
+// Fetch data grouped by network for members (Membership side)
+$memberNetworkQuery = "SELECT network, COUNT(*) AS count FROM members GROUP BY network";
+$memberNetworkResult = mysqli_query($conn, $memberNetworkQuery);
+$memberNetworkData = [];
+while ($row = mysqli_fetch_assoc($memberNetworkResult)) {
+    $memberNetworkData[] = $row;
 }
-    $response['networkData'] = $networkData;
+$response['memberNetworkData'] = $memberNetworkData; // Data for members
 
 // Fetch weekly attendance data (dummy data for now, update based on actual data)
 
 
-$weeklyAttendanceQuery = "SELECT WEEK(date) AS week, COUNT(DISTINCT attendees) AS count FROM attendance_history GROUP BY week ORDER BY week";
-$weeklyResult = mysqli_query($conn, $weeklyAttendanceQuery);
-$weeklyData = [];
-while ($row = mysqli_fetch_assoc($weeklyResult)) {
-    $weeklyData[] = $row;
+$memberWeeklyAttendanceQuery = "SELECT WEEK(date) AS week, COUNT(DISTINCT attendees) AS count FROM attendance_history GROUP BY week ORDER BY week";
+$memberWeeklyResult = mysqli_query($conn, $memberWeeklyAttendanceQuery);
+$memberWeeklyData = [];
+while ($row = mysqli_fetch_assoc($memberWeeklyResult)) {
+    $memberWeeklyData[] = $row;
 }
-$response['weeklyData'] = $weeklyData;
+$response['memberWeeklyData'] = $memberWeeklyData;
 
-$monthlyAttendanceQuery = "SELECT MONTH(date) AS month, SUM(attendees) AS count FROM attendance_history GROUP BY month ORDER BY month";
-$monthlyResult = mysqli_query($conn, $monthlyAttendanceQuery);
-$monthlyData = [];
-while ($row = mysqli_fetch_assoc($monthlyResult)) {
-    $monthlyData[] = $row;
+$memberMonthlyAttendanceQuery = "SELECT MONTH(date) AS month, SUM(attendees) AS count FROM attendance_history GROUP BY month ORDER BY month";
+$memberMonthlyResult = mysqli_query($conn, $memberMonthlyAttendanceQuery);
+$memberMonthlyData = [];
+while ($row = mysqli_fetch_assoc($memberMonthlyResult)) {
+    $memberMonthlyData[] = $row;
 }
-$response['monthlyData'] = $monthlyData;
+$response['memberMonthlyData'] = $memberMonthlyData;
 
 ///////////////////////////////////////  ASSIMILATION DASHBAORD   //////////////////////////////////////////
 // Fetch data grouped by sex
-$sexQuery = "SELECT sex, COUNT(*) AS count FROM visitors GROUP BY sex";
-$sexResult = mysqli_query($conn, $sexQuery);
-$sexData = [];
-while ($row = mysqli_fetch_assoc($sexResult)) {
-    $sexData[] = $row;
+$visitorSexQuery = "SELECT sex, COUNT(*) AS count FROM visitors GROUP BY sex";
+$visitorSexResult = mysqli_query($conn, $visitorSexQuery);
+$visitorSexData = [];
+while ($row = mysqli_fetch_assoc($visitorSexResult)) {
+    $visitorSexData[] = $row;
 }
-$response['sexData'] = $sexData;
+$response['visitorSexData'] = $visitorSexData; // Data for visitors
 
-// Fetch data grouped by network
-$networkQuery = "SELECT network, COUNT(*) AS count FROM visitors GROUP BY network";
-$networkResult = mysqli_query($conn, $networkQuery);
-$networkData = [];
-while ($row = mysqli_fetch_assoc($networkResult)) {
-    $networkData[] = $row;
+// Fetch data grouped by network for visitors (Assimilation side)
+$visitorNetworkQuery = "SELECT network, COUNT(*) AS count FROM visitors GROUP BY network";
+$visitorNetworkResult = mysqli_query($conn, $visitorNetworkQuery);
+$visitorNetworkData = [];
+while ($row = mysqli_fetch_assoc($visitorNetworkResult)) {
+    $visitorNetworkData[] = $row;
 }
-$response['networkData'] = $networkData;
+$response['visitorNetworkData'] = $visitorNetworkData; // Data for visitors
 
 // Fetch weekly attendance data (dummy data for now, update based on actual data)
 
-// $weeklyAttendanceQuery = "SELECT WEEK(date) AS week, COUNT(*) AS count FROM assimilation_history GROUP BY week ORDER BY week";
-// $weeklyResult = mysqli_query($conn, $weeklyAttendanceQuery);
-// $weeklyData = [];
-// while ($row = mysqli_fetch_assoc($weeklyResult)) {
-//     $weeklyData[] = $row;
-// }
-// $response['weeklyData'] = $weeklyData;
+$visitorWeeklyAttendanceQuery = "SELECT WEEK(date) AS week, COUNT(*) AS count FROM assimilation_history GROUP BY week ORDER BY week";
+$weeklyResult = mysqli_query($conn, $visitorWeeklyAttendanceQuery);
+$visitorWeeklyData = [];
+while ($row = mysqli_fetch_assoc($weeklyResult)) {
+    $visitorWeeklyData[] = $row;
+}
+$response['visitorWeeklyData'] = $visitorWeeklyData;
 
-// $monthlyAttendanceQuery = "SELECT MONTH(date) AS month, COUNT(*) AS count FROM assimilation_history GROUP BY month ORDER BY month";
-// $monthlyResult = mysqli_query($conn, $monthlyAttendanceQuery);
-// $monthlyData = [];
-// while ($row = mysqli_fetch_assoc($monthlyResult)) {
-//     $monthlyData[] = $row;
-// }
-// $response['monthlyData'] = $monthlyData;
+$visitorMonthlyAttendanceQuery = "SELECT MONTH(date) AS month, COUNT(*) AS count FROM assimilation_history GROUP BY month ORDER BY month";
+$monthlyResult = mysqli_query($conn, $visitorMonthlyAttendanceQuery);
+$visitorMonthlyData = [];
+while ($row = mysqli_fetch_assoc($monthlyResult)) {
+    $visitorMonthlyData[] = $row;
+}
+$response['visitorMonthlyData'] = $visitorMonthlyData;
 
 ///////////////////////////////////////  FINANCE DASHBAORD   //////////////////////////////////////////
 

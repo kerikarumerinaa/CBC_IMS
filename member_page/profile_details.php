@@ -15,14 +15,18 @@ if ($conn->connect_error) {
 }
 
 // Fetch member details based on session data (using email stored in session)
+if (isset($_SESSION['email'])) {
 $email = $_SESSION['email']; // Assuming email is stored in session after login
 $sql = "SELECT * FROM users_members WHERE email = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $users_email); // Use the email to fetch user details
+$stmt->bind_param("s", $email); // Use the email to fetch user details
 $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 $stmt->close();
+} else {
+    $user = null;
+}
 ?>
 
 <!DOCTYPE html>
@@ -47,7 +51,6 @@ $stmt->close();
                         <div class="profile-info">
                             <img src="../assets/cbc-logo.png" alt="User Avatar" class="user-avatar">
                             <div class="user-info">
-                                <p><?php echo htmlspecialchars($user['fullname']); ?></p>
                             </div>
                         </div>
                         <button class="edit-btn" data-modal="editProfileModal">Edit Photo</button>
@@ -58,11 +61,13 @@ $stmt->close();
                         <h5>Personal Information</h5>
                         <div class="info-item">
                             <p>Full Name:</p>
-                            <p><?php echo htmlspecialchars($member['fullname']); ?></p>
+                            <p>Kleyr Carmelina</p>
+                            <!-- <p><?php echo htmlspecialchars($user['fullname']) ?? 'N/A'; ?></p> -->
                         </div>
                         <div class="info-item">
                             <p>Email Address:</p>
-                            <p><?php echo htmlspecialchars($member['email']); ?></p>
+                            <p>kleyrcarmelina5@gmail.com</p>
+                            <!-- <p><?php echo htmlspecialchars($user['email']) ?? 'N/A'; ?></p> -->
                         </div>
                         </div>
                         <button class="edit-btn" data-modal="editPersonalInfoModal">Edit</button>
