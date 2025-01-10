@@ -246,7 +246,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     document.getElementById('totalCollections').value = totalCollections.toFixed(2);
     document.getElementById('savings').value = (totalCollections * 0.2).toFixed(2);
     document.getElementById('missionFund').value = (totalCollections * 0.1).toFixed(2);
-    document.getElementById('generalFund').value = (totalCollections * 0.7).toFixed(2); // Remaining percentage
+    document.getElementById('generalFund').value = (totalCollections).toFixed(2); // Remaining percentage
   }
 
   // Attach event listeners for real-time updates

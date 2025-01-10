@@ -86,7 +86,6 @@ $response['visitorMonthlyData'] = $visitorMonthlyData;
 
 // Fetch weekly collections and expenses
 
-// Get the selected time range (default is weekly)
 $timeRange = isset($_GET['range']) ? $_GET['range'] : 'weekly';
 
 // Connect to the database
@@ -95,26 +94,26 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Initialize variables
 $data = [];
 $labels = [];
 $collections = [];
 $expenses = [];
 
-// Query based on selected time range
+// Query based on time range
 switch ($timeRange) {
     case 'monthly':
         $query = "
             SELECT 
-                MONTH(date) AS period, 
+                DATE_FORMAT(date, '%M') AS period, 
                 SUM(CASE WHEN type = 'collection' THEN amount ELSE 0 END) AS total_collections,
                 SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) AS total_expenses
             FROM transactions
             WHERE YEAR(date) = YEAR(CURRENT_DATE)
-            GROUP BY period
-            ORDER BY period;
+            GROUP BY MONTH(date)
+            ORDER BY MONTH(date);
         ";
         break;
+
     case 'yearly':
         $query = "
             SELECT 
@@ -126,49 +125,42 @@ switch ($timeRange) {
             ORDER BY period;
         ";
         break;
+
     case 'weekly':
     default:
         $query = "
             SELECT 
-                WEEK(date) AS period, 
+                CONCAT('Week ', WEEK(date)) AS period, 
                 SUM(CASE WHEN type = 'collection' THEN amount ELSE 0 END) AS total_collections,
                 SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) AS total_expenses
             FROM transactions
             WHERE YEAR(date) = YEAR(CURRENT_DATE)
-            GROUP BY period
-            ORDER BY period;
+            GROUP BY WEEK(date)
+            ORDER BY WEEK(date);
         ";
         break;
 }
 
 $result = $conn->query($query);
 
-if ($result->num_rows > 0) {
+if ($result && $result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        $labels[] = $timeRange === 'monthly' ? "Month {$row['period']}" : ($timeRange === 'yearly' ? "Year {$row['period']}" : "Week {$row['period']}");
+        $labels[] = $row['period'];
         $collections[] = $row['total_collections'];
         $expenses[] = $row['total_expenses'];
     }
+} else {
+    echo json_encode(['error' => $conn->error]);
 }
 
 $conn->close();
 
-// Prepare the response
-$data = [
+// Prepare and return the response
+echo json_encode([
     'labels' => $labels,
     'collections' => $collections,
     'expenses' => $expenses,
-];
+]);
 
-
-
-
-
-
-
-
-// Send JSON response
-header('Content-Type: application/json');
-echo json_encode($response);
 ?>
 

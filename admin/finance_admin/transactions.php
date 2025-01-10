@@ -7,6 +7,8 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'finance_admin' && $_SES
 ?>
 
 
+
+
 <?php
 if (isset($_GET['delete_id'])) {
     $id = $_GET['delete_id'];
@@ -80,10 +82,10 @@ if (isset($_GET['delete_id'])) {
                 <td>{$row['type']}</td>
                 <td>{$row['amount']}</td>
                 <td>
-                  <button class='view-btn'>View</button>
+                  <button class='view-btn' data-id='{$row['id']}'>View</button>
                   <a href='transactions.php?delete_id={$row['id']}' onclick='return confirm(\"Are you sure you want to delete this transaction?\")'><button class='delete-btn'>Delete</button></a>
                 </td>
-              </tr>";
+            </tr>";
               } 
           } else {
               echo "<tr><td colspan='5'>No transactions found</td></tr>";
@@ -93,8 +95,71 @@ if (isset($_GET['delete_id'])) {
           
         </tbody>
       </table>
-    </main>
+    
+
+  <!-- Modal for View Transaction -->
+  <div class="modal" id="view-modal">
+    <div class="modal-content">
+      <h2>View Transaction</h2>
+      <form action="" method="post">
+        <label for="date">Date:</label>
+        <input type="text" id="date" name="date" readonly>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" readonly></textarea>
+
+        <label for="type">Type:</label>
+        <input type="text" id="type" name="type" readonly>
+
+        <label for="amount">Total Amount:</label>
+        <input type="number" id="amount" name="amount" step="0.01" readonly>
+      </form>
+      <button class="close-btn" id="close-view-modal">Close</button>
+    </div>
   </div>
+
+  <script>
+    const viewModal = document.getElementById('view-modal');
+    const closeModal = document.getElementById('close-view-modal');
+    const viewBtns = document.querySelectorAll('.view-btn');
+
+    viewBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        viewModal.style.display = 'block';
+        const id = e.target.getAttribute('data-id');
+        const date = e.target.getAttribute('data-date');
+        const description = e.target.getAttribute('data-description');
+        const type = e.target.getAttribute('data-type');
+        const amount = e.target.getAttribute('data-amount');
+
+        viewModal.querySelector('#date').value = date;
+        viewModal.querySelector('#description').value = description;
+        viewModal.querySelector('#type').value = type;
+        viewModal.querySelector('#amount').value = amount;
+      });
+    });
+
+    closeModal.addEventListener('click', () => {
+      viewModal.style.display = 'none';
+    });
+  </script>
+
+    
+    </form>
+  </div>
+</div>
+
+
+
+
+
+
+<script>
+ 
+
+  
+
+</script>
 
 </body>
 </html>

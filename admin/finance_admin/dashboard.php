@@ -15,7 +15,9 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'finance_admin' && $_SES
   <title>Finance</title>
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-  <link rel="stylesheet" href="dashboard.css"> <!-- Adjust the path to your CSS file -->
+  <link rel="stylesheet" href="dashboard.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 <body>
   <div class="container">
@@ -41,61 +43,76 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'finance_admin' && $_SES
             <!-- Chart for collections and expenses -->
             <div class="chart-container">
                 <h3>Collection and Expense Chart</h3>
-                <canvas id="financeChart" width="500" height="300"</canvas>
+                <canvas id="financeChart" width="900" height="800"</canvas>
             </div>
         </main>
     </div>
 
     <script>
-     let financeChart;
 
 // Fetch chart data and render chart
-    fetch(`../../includes/get_chart_data.php`)
-        .then(response => response.json())
+let financeChart;
+function fetchChartData(timeRange = 'weekly') {
+    fetch(`../../includes/get_chart_data.php?range=${timeRange}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
-            
-            const ctx = document.getElementById('financeChart').getContext('2d');
-            financeChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: data.labels,
-                    datasets: [
-                        {
-                            label: 'Collections',
-                            data: data.collections,
-                            backgroundColor: '#2ecc71', // Green
-                            borderColor: '#27ae60',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Expenses',
-                            data: data.expenses,
-                            backgroundColor: '#e74c3c', // Red
-                            borderColor: '#c0392b',
-                            borderWidth: 1
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'Collections and Expenses'
-                        },
-                        legend: {
-                            position: 'top',
-                        }
+            if (financeChart) {
+                // Update existing chart data
+                financeChart.data.labels = data.labels;
+                financeChart.data.datasets[0].data = data.collections;
+                financeChart.data.datasets[1].data = data.expenses;
+                financeChart.update();
+            } else {
+                // Create a new chart
+                const ctx = document.getElementById('financeChart').getContext('2d');
+                financeChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.labels,
+                        datasets: [
+                            {
+                                label: 'Collections',
+                                data: data.collections,
+                                backgroundColor: '#2ecc71', // Green
+                                borderColor: '#27ae60',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Expenses',
+                                data: data.expenses,
+                                backgroundColor: '#e74c3c', // Red
+                                borderColor: '#c0392b',
+                                borderWidth: 1
+                            }
+                        ]
                     },
-                    scales: {
-                        y: {
-                            beginAtZero: true
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Collections and Expenses'
+                            },
+                            legend: {
+                                position: 'top',
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
         })
         .catch(error => console.error('Error fetching chart data:', error));
+}
 
 // Update chart based on dropdown selection
 function updateChart() {
@@ -104,7 +121,7 @@ function updateChart() {
 }
 
 // Initialize chart with default range
-fetchChartData('weekly');
+fetchChartData('weekly'); // Initialize with default 'weekly'
     </script>
 </body>
 </html>
