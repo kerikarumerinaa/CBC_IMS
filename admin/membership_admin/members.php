@@ -24,11 +24,11 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_
       <div class="members-header">
         <h2>Member List</h2>
         <form action="members.php" method="get">
-          <input type="text" name="search" placeholder="Search by name" value="<?php echo isset($_GET['search']) ? $_GET['search'] : ''; ?>">
-          <button type="submit">Search</button>
+          <input type="text" placeholder="Search" class="search-bar" id="search-member">
         </form>
         <button id="add-member-btn">Add Member</button>
       </div>
+      
 
       <!-- PHP code to handle Add Member form submission -->
       <?php
@@ -317,6 +317,8 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_
             document.getElementById("edit-modal").style.display = "none";
         });
       });
+
+        
       </script>
     </main>
   </div>

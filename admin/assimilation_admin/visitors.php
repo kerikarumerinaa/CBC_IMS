@@ -72,6 +72,7 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'assimilation_admin' && 
         <main>
             <div class="assimilation-header">
                 <h2>Visitors List</h2>
+                <input type="text" placeholder="Search" class="search-bar" id="search-member">
                 <button id="add-visitor-btn">Add Visitor</button>
             </div>
 

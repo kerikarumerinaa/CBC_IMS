@@ -62,7 +62,19 @@ body {
 #add-member-btn:hover {
     background-color: #103a58;
 }
+.search-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
 
+.search-bar {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 300px;
+    margin-left: 10px;
+}
 
 /*--------------------------------- Table Container Styles ---------------------------------*/
 

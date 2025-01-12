@@ -95,28 +95,7 @@ if (isset($_GET['delete_id'])) {
           
         </tbody>
       </table>
-    
 
-  <!-- Modal for View Transaction -->
-  <div class="modal" id="view-modal">
-    <div class="modal-content">
-      <h2>View Transaction</h2>
-      <form action="" method="post">
-        <label for="date">Date:</label>
-        <input type="text" id="date" name="date" readonly>
-
-        <label for="description">Description:</label>
-        <textarea id="description" name="description" readonly></textarea>
-
-        <label for="type">Type:</label>
-        <input type="text" id="type" name="type" readonly>
-
-        <label for="amount">Total Amount:</label>
-        <input type="number" id="amount" name="amount" step="0.01" readonly>
-      </form>
-      <button class="close-btn" id="close-view-modal">Close</button>
-    </div>
-  </div>
 
   <script>
     const viewModal = document.getElementById('view-modal');
