@@ -100,67 +100,69 @@ $collections = [];
 $expenses = [];
 
 // Query based on time range
-switch ($timeRange) {
-    case 'monthly':
-        $query = "
-            SELECT 
-                DATE_FORMAT(date, '%M') AS period, 
-                SUM(CASE WHEN type = 'collection' THEN amount ELSE 0 END) AS total_collections,
-                SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) AS total_expenses
-            FROM transactions
-            WHERE YEAR(date) = YEAR(CURRENT_DATE)
-            GROUP BY MONTH(date)
-            ORDER BY MONTH(date);
-        ";
-        break;
+// switch ($timeRange) {
+//     case 'monthly':
+//         $query = "
+//             SELECT 
+//                 DATE_FORMAT(date, '%M') AS period, 
+//                 SUM(CASE WHEN type = 'collection' THEN amount ELSE 0 END) AS total_collections,
+//                 SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) AS total_expenses
+//             FROM transactions
+//             WHERE YEAR(date) = YEAR(CURRENT_DATE)
+//             GROUP BY MONTH(date)
+//             ORDER BY MONTH(date);
+//         ";
+//         break;
 
-    case 'yearly':
-        $query = "
-            SELECT 
-                YEAR(date) AS period, 
-                SUM(CASE WHEN type = 'collection' THEN amount ELSE 0 END) AS total_collections,
-                SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) AS total_expenses
-            FROM transactions
-            GROUP BY period
-            ORDER BY period;
-        ";
-        break;
+//     case 'yearly':
+//         $query = "
+//             SELECT 
+//                 YEAR(date) AS period, 
+//                 SUM(CASE WHEN type = 'collection' THEN amount ELSE 0 END) AS total_collections,
+//                 SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) AS total_expenses
+//             FROM transactions
+//             GROUP BY period
+//             ORDER BY period;
+//         ";
+//         break;
 
-    case 'weekly':
-    default:
-        $query = "
-            SELECT 
-                CONCAT('Week ', WEEK(date)) AS period, 
-                SUM(CASE WHEN type = 'collection' THEN amount ELSE 0 END) AS total_collections,
-                SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) AS total_expenses
-            FROM transactions
-            WHERE YEAR(date) = YEAR(CURRENT_DATE)
-            GROUP BY WEEK(date)
-            ORDER BY WEEK(date);
-        ";
-        break;
-}
+//     case 'weekly':
+//     default:
+//         $query = "
+//             SELECT 
+//                 CONCAT('Week ', WEEK(date)) AS period, 
+//                 SUM(CASE WHEN type = 'collection' THEN amount ELSE 0 END) AS total_collections,
+//                 SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) AS total_expenses
+//             FROM transactions
+//             WHERE YEAR(date) = YEAR(CURRENT_DATE)
+//             GROUP BY WEEK(date)
+//             ORDER BY WEEK(date);
+//         ";
+//         break;
+// }
 
-$result = $conn->query($query);
+// $result = $conn->query($query);
 
-if ($result && $result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $labels[] = $row['period'];
-        $collections[] = $row['total_collections'];
-        $expenses[] = $row['total_expenses'];
-    }
-} else {
-    echo json_encode(['error' => $conn->error]);
-}
+// if ($result && $result->num_rows > 0) {
+//     while ($row = $result->fetch_assoc()) {
+//         $labels[] = $row['period'];
+//         $collections[] = $row['total_collections'];
+//         $expenses[] = $row['total_expenses'];
+//     }
+// } else {
+//     echo json_encode(['error' => $conn->error]);
+// }
 
-$conn->close();
+// $conn->close();
 
-// Prepare and return the response
-echo json_encode([
-    'labels' => $labels,
-    'collections' => $collections,
-    'expenses' => $expenses,
-]);
+// // Prepare and return the response
+// echo json_encode([
+//     'labels' => $labels,
+//     'collections' => $collections,
+//     'expenses' => $expenses,
+// ]);
 
-?>
+header('Content-Type: application/json');
+echo json_encode($response);
+
 

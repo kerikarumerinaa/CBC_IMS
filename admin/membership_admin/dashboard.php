@@ -111,31 +111,31 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_
 
 
                         /////////////// Chart for Network Distribution
-                        const networkCtx = document.getElementById('networkChart').getContext('2d');
-                        const networkLabels = data.memberNetworkData.map(item => item.network); // Network labels
-                        const networkCounts = data.memberNetworkData.map(item => item.count); // Network counts
+                        // const networkCtx = document.getElementById('networkChart').getContext('2d');
+                        // const networkLabels = data.memberNetworkData.map(item => item.network); // Network labels
+                        // const networkCounts = data.memberNetworkData.map(item => item.count); // Network counts
 
-                        new Chart(networkCtx, {
-                            type: 'pie',
-                            data: {
-                                labels: networkLabels,
-                                datasets: [{
-                                    label: 'Members by Network',
-                                    data: networkCounts,
-                                    backgroundColor: ['#1abc9c', '#f1c40f', '#9b59b6', '#e67e22', '#34495e'], // Customize colors as needed
-                                }]
-                            },
-                            options: {
-                                responsive: true,
-                                plugins: {
-                                    legend: { position: 'top' },
-                                    title: {
-                                        display: true,
-                                        text: 'Number of Members by Network'
-                                    }
-                                }
-                            }
-                        });
+                        // new Chart(networkCtx, {
+                        //     type: 'pie',
+                        //     data: {
+                        //         labels: networkLabels,
+                        //         datasets: [{
+                        //             label: 'Members by Network',
+                        //             data: networkCounts,
+                        //             backgroundColor: ['#1abc9c', '#f1c40f', '#9b59b6', '#e67e22', '#34495e'], // Customize colors as needed
+                        //         }]
+                        //     },
+                        //     options: {
+                        //         responsive: true,
+                        //         plugins: {
+                        //             legend: { position: 'top' },
+                        //             title: {
+                        //                 display: true,
+                        //                 text: 'Number of Members by Network'
+                        //             }
+                        //         }
+                        //     }
+                        // });
 
 
 
@@ -210,34 +210,34 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_
                         };
                     })
 
-                    fetch('../../includes/get_member_status.php')
-                    .then(response => response.json())
-                    .then(data => {
-                        const memberStatusCtx = document.getElementById('memberStatusChart').getContext('2d');
+                    // fetch('../../includes/get_member_status.php')
+                    // .then(response => response.json())
+                    // .then(data => {
+                    //     const memberStatusCtx = document.getElementById('memberStatusChart').getContext('2d');
 
-                        new Chart(memberStatusCtx, {
-                            type: 'doughnut',
-                            data: {
-                                labels: ['Active Members', 'Inactive Members'],
-                                datasets: [{
-                                    data: [data.active, data.inactive],
-                                    backgroundColor: ['#2ecc71', '#e74c3c'], // Active: Green, Inactive: Red
-                                    borderColor: ['#27ae60', '#c0392b'],
-                                    borderWidth: 1
-                                }]
-                            },
-                            options: {
-                                responsive: true,
-                                plugins: {
-                                    legend: { position: 'top' },
-                                    title: {
-                                        display: true,
-                                        text: 'Member Activity Status'
-                                    }
-                                }
-                            }
-                        });
-                    })
+                    //     new Chart(memberStatusCtx, {
+                    //         type: 'doughnut',
+                    //         data: {
+                    //             labels: ['Active Members', 'Inactive Members'],
+                    //             datasets: [{
+                    //                 data: [data.active, data.inactive],
+                    //                 backgroundColor: ['#2ecc71', '#e74c3c'], // Active: Green, Inactive: Red
+                    //                 borderColor: ['#27ae60', '#c0392b'],
+                    //                 borderWidth: 1
+                    //             }]
+                    //         },
+                    //         options: {
+                    //             responsive: true,
+                    //             plugins: {
+                    //                 legend: { position: 'top' },
+                    //                 title: {
+                    //                     display: true,
+                    //                     text: 'Member Activity Status'
+                    //                 }
+                    //             }
+                    //         }
+                    //     });
+                    // })
 
                     .catch(error => console.error('Error fetching chart data:', error));
                     
