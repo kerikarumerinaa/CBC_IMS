@@ -6,6 +6,62 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_
 }
 ?>
 
+<!-- SEARCH FUNCTIONALITY -->
+<?php
+$search_query = isset($_GET['search']) ? $_GET['search'] : '';
+
+// Establish connection
+$conn = new mysqli('localhost', 'root', '', 'cbc_ims');
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Modify query to include search filter
+$query = "SELECT * FROM members";
+if (!empty($search_query)) {
+    $query .= " WHERE full_name LIKE ? OR email LIKE ? OR address LIKE ?";
+}
+
+$stmt = $conn->prepare($query);
+if (!empty($search_query)) {
+    $search_param = "%" . $search_query . "%";
+    $stmt->bind_param('sss', $search_param, $search_param, $search_param);
+}
+
+$stmt->execute();
+$result = $stmt->get_result();
+
+// // Display members
+// if ($result->num_rows > 0) {
+//     while ($row = $result->fetch_assoc()) {
+//         echo "<tr data-id='{$row['id']}' data-fullname='{$row['full_name']}' data-age='{$row['age']}' data-address='{$row['address']}' data-email='{$row['email']}'
+//                 data-sex='{$row['sex']}' data-network='{$row['network']}' data-birthdate='{$row['birthdate']}' data-contact='{$row['contact_number']}'>
+//                 <td>{$row['id']}</td>
+//                 <td>{$row['full_name']}</td>
+//                 <td>{$row['address']}</td>
+//                 <td>{$row['email']}</td>
+//                 <td>{$row['sex']}</td>
+//                 <td>{$row['age']}</td>
+//                 <td>{$row['network']}</td>
+//                 <td>{$row['birthdate']}</td>
+//                 <td>{$row['contact_number']}</td>
+//                 <td>
+//                   <button class='view-btn'>View</button>
+//                   <button class='edit-btn'>Edit</button>
+//                   <a href='membership_members.php?delete_id={$row['id']}' onclick='return confirm(\"Are you sure you want to delete this member?\")'>
+//                       <button class='delete-btn'>Delete</button>
+//                   </a>
+//                 </td>
+//               </tr>";
+//     }
+// } else {
+//     echo "<tr><td colspan='10'>No members found</td></tr>";
+// }
+// $stmt->close();
+// $conn->close();
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,8 +80,9 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_
       <div class="members-header">
         <h2>Member List</h2>
         <form action="members.php" method="get">
-          <input type="text" placeholder="Search" class="search-bar" id="search-member">
-        </form>
+        <input type="text" name="search" placeholder="Search by Name, Email, or Address" class="search-bar" id="search-member" value="<?php echo htmlspecialchars($search_query); ?>">
+      </form>
+
         <button id="add-member-btn">Add Member</button>
       </div>
       
@@ -316,7 +373,17 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_
         document.getElementById("closeEditModal").addEventListener("click", function () {
             document.getElementById("edit-modal").style.display = "none";
         });
+      });   
+
+      document.getElementById('search-member').addEventListener('input', function () {
+        const filter = this.value.toLowerCase();
+        const rows = document.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+          const text = row.innerText.toLowerCase();
+          row.style.display = text.includes(filter) ? '' : 'none';
+        });
       });
+
 
         
       </script>

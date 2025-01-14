@@ -6,22 +6,75 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'assimilation_admin' && 
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visitors</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link rel="stylesheet" href="visitors.css">
-</head>
-<body>
-    <div class="container">
-        <?php 
-        include '../../includes/sidebar.php'; 
-        include '../../includes/db_connection.php'; 
+<!-- SEARCH FUNCTION -->
+<?php
+$search_query = isset($_GET['search']) ? $_GET['search'] : '';
 
-        // Add Visitor PHP logic
+// Establish connection
+$conn = new mysqli('localhost', 'root', '', 'cbc_ims');
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Modify query to include search filter
+$query = "SELECT * FROM visitors";
+if (!empty($search_query)) {
+    $query .= " WHERE full_name LIKE ? OR email LIKE ? OR address LIKE ?";
+}
+
+$stmt = $conn->prepare($query);
+if (!empty($search_query)) {
+    $search_param = "%" . $search_query . "%";
+    $stmt->bind_param('sss', $search_param, $search_param, $search_param);
+}
+
+$stmt->execute();
+$result = $stmt->get_result();
+?>
+
+<!-- EDIT FUNCTION -->
+<?php
+// Edit Visitor PHP logic
+if (isset($_POST['edit_visitor'])) {
+    $visitor_id = $_POST['visitor_id'];
+    $full_name = $_POST['full_name'];
+    $age = $_POST['age'];
+    $address = $_POST['address'];
+    $email = $_POST['email'];
+    $sex = $_POST['sex'];
+    $birthdate = $_POST['birthdate'];
+    $contact_number = $_POST['contact_number'];
+    $network = $_POST['network'];
+    $date_of_visit = $_POST['date'];
+    $invited_by = $_POST['invited_by'];
+    $assimilated_by = $_POST['assimilated_by'];
+
+    $query = "UPDATE visitors SET 
+                full_name='$full_name', 
+                age='$age', 
+                address='$address', 
+                email='$email', 
+                sex='$sex', 
+                birthdate='$birthdate', 
+                contact_number='$contact_number', 
+                network='$network', 
+                date_of_visit='$date_of_visit', 
+                invited_by='$invited_by', 
+                assimilated_by='$assimilated_by' 
+              WHERE id='$visitor_id'";
+
+    if ($conn->query($query) === TRUE) {
+        echo "<script>
+                alert('Visitor updated successfully!');
+                window.location.href = 'visitors.php';
+              </script>";
+    } else {
+        echo "<script>alert('Error: " . $conn->error . "');</script>";
+    }
+}
+?>
+<?php
+// Add Visitor PHP logic
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $full_name = $_POST['full_name'];
             $age = $_POST['age'];
@@ -66,13 +119,31 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'assimilation_admin' && 
                     echo "<script>alert('Error: " . $conn->error . "');</script>";
                 }
             }
-            ?>
-             
+?>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitors</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="visitors.css">
+</head>
+<body>
+    <div class="container">
+        <?php 
+        include '../../includes/sidebar.php'; 
+        include '../../includes/db_connection.php'; 
+        ?>
 
         <main>
             <div class="assimilation-header">
                 <h2>Visitors List</h2>
-                <input type="text" placeholder="Search" class="search-bar" id="search-member">
+                <form method="GET" action="visitors.php">
+                    <input type="text" placeholder="Search by name, age, or network" class="search-bar" id="search-visitor" name="search" value="<?php echo htmlspecialchars($search_query); ?>">
+                </form>
                 <button id="add-visitor-btn">Add Visitor</button>
             </div>
 
@@ -118,6 +189,7 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'assimilation_admin' && 
                                 <td>{$row['date_of_visit']}</td>
                                 <td>
                                     <button class='view-btn'>View</button>
+                                    <button class='edit-btn'>Edit</button>
                                      <a href='visitors.php?delete_id={$row['id']}' onclick='return confirm(\"Are you sure you want to delete this visitor?\")'><button class='delete-btn'>Delete</button></a>  
                                     </td>
                                     <td>
@@ -205,6 +277,63 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'assimilation_admin' && 
             </div>
 
 
+            <!-- Edit Visitor Modal -->
+            <div id="edit-modal" class="modal">
+                <div class="modal-content">
+                    <span id="closeEditModal" class="close">&times;</span>
+                    <h2>Edit Visitor</h2>
+                    <form method="POST">
+                        <input type="hidden" id="visitor-id" name="visitor_id">
+                        
+                        <label for="full_name">Full Name:</label>
+                        <input type="text" id="edit-full-name" name="full_name" required>
+                        
+                        <label for="age">Age:</label>
+                        <input type="number" id="edit-age" name="age" required>
+                        
+                        <label for="address">Address:</label>
+                        <input type="text" id="edit-address" name="address" required>
+                        
+                        <label for="email">Email:</label>
+                        <input type="email" id="edit-email" name="email" required>
+                        
+                        <label for="sex">Sex:</label>
+                        <select id="edit-sex" name="sex">
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                        
+                        <label for="birthdate">Birthdate:</label>
+                        <input type="date" id="edit-birthdate" name="birthdate" required>
+                        
+                        <label for="contact_number">Contact Number:</label>
+                        <input type="tel" id="edit-contact-number" name="contact_number" required>
+                        
+                        <label for="network">Network:</label>
+                        <select id="edit-network" name="network">
+                            <option value="none">None</option>
+                            <option value="youth">Youth</option>
+                            <option value="singles">Singles</option>
+                            <option value="women">Couples/Women</option>
+                            <option value="men">Couples/Men</option>
+                            <option value="senior">Senior Folks</option>
+                        </select>
+                        
+                        <label for="date">Date Of Visit:</label>
+                        <input type="date" id="edit-date" name="date" required>
+                        
+                        <label for="invited_by">Invited By:</label>
+                        <input type="text" id="edit-invited-by" name="invited_by">
+                        
+                        <label for="assimilated_by">Assimilated By:</label>
+                        <input type="text" id="edit-assimilated-by" name="assimilated_by">
+                        
+                        <input type="submit" name="edit_visitor" value="Update Visitor">
+                    </form>
+                </div>
+            </div>
+
+
             <!-- Checklist Modal -->
                 <div id="checklist-modal" class="modal">
                     <div class="modal-content">
@@ -267,6 +396,34 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'assimilation_admin' && 
                 document.getElementById("view-modal").style.display = "block";
             });
         });
+
+        // Handle Edit Button Click
+        document.querySelectorAll(".edit-btn").forEach(button => {
+            button.addEventListener("click", function() {
+                const row = this.closest("tr");
+
+                document.getElementById("visitor-id").value = row.dataset.id;
+                document.getElementById("edit-full-name").value = row.dataset.fullname;
+                document.getElementById("edit-age").value = row.dataset.age;
+                document.getElementById("edit-address").value = row.dataset.address;
+                document.getElementById("edit-email").value = row.dataset.email;
+                document.getElementById("edit-sex").value = row.dataset.sex;
+                document.getElementById("edit-birthdate").value = row.dataset.birthdate;
+                document.getElementById("edit-contact-number").value = row.dataset.contact;
+                document.getElementById("edit-network").value = row.dataset.network;
+                document.getElementById("edit-date").value = row.dataset.date_of_visit;
+                document.getElementById("edit-invited-by").value = row.dataset.invited_by;
+                document.getElementById("edit-assimilated-by").value = row.dataset.assimilated_by;
+
+                document.getElementById("edit-modal").style.display = "block";
+            });
+        });
+
+// Close Edit Modal
+document.getElementById("closeEditModal").addEventListener("click", function() {
+    document.getElementById("edit-modal").style.display = "none";
+});
+
 
         document.querySelectorAll(".status-btn").forEach(button => {
             button.addEventListener("click", function() {
@@ -368,6 +525,19 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'assimilation_admin' && 
         document.getElementById("closeChecklistModal").addEventListener("click", function() {
             document.getElementById("checklist-modal").style.display = "none";
         });
+
+
+        document.getElementById('search-visitor').addEventListener('input', function() {
+           const filter = this.value.toLowerCase();
+              const rows = document.querySelectorAll('table tbody tr');
+              rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(filter) ? '' : 'none';
+              });
+        });
+
+        
+
     </script>
 </body>
 </html>

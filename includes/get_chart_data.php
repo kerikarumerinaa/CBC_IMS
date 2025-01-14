@@ -94,12 +94,9 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$data = [];
-$labels = [];
-$collections = [];
-$expenses = [];
 
-// Query based on time range
+
+// // Query based on time range
 // switch ($timeRange) {
 //     case 'monthly':
 //         $query = "
@@ -155,12 +152,10 @@ $expenses = [];
 
 // $conn->close();
 
-// // Prepare and return the response
-// echo json_encode([
-//     'labels' => $labels,
-//     'collections' => $collections,
-//     'expenses' => $expenses,
-// ]);
+// $data = [];
+// $labels = [];
+// $collections = [];
+// $expenses = [];
 
 header('Content-Type: application/json');
 echo json_encode($response);
