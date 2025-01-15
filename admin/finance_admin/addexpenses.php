@@ -4,30 +4,63 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'finance_admin' && $_SES
     header("Location: ../login.php");
     exit;
 }
-?>
 
-<?php
+include '../../includes/db_connection.php';
 
-include '../../includes/db_connection.php'; // Include database connection
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $description = $_POST['description'];
-    $amount = $_POST['amount'];
-    $date = $_POST['date'];
-    $type = 'Expense'; 
+    // Retrieve form data
+    $voucherNumber = $_POST['voucher_number'] ?? '';
+    $amount = $_POST['amount'] ?? 0;
+    $checkNumber = $_POST['check_number'] ?? '';
+    $date = $_POST['date'] ?? '';
+    $description = $_POST['description'] ?? '';
+    $createdAt = date('Y-m-d H:i:s');
+    $type = 'Expense';
 
-    $query = "INSERT INTO transactions (description, amount, date, type) VALUES (?, ?, ?, ?)";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param('sdss', $description, $amount, $date, $type);
+    // Begin transaction
+    $conn->begin_transaction();
 
-    if ($stmt->execute()) {
-        echo "<script>alert('Expense added successfully!'); window.location.href='transactions.php';</script>";
-    } else {
-        echo "<script>alert('Error adding expense: " . $conn->error . "');</script>";
+    try {
+        // Insert into transactions table
+        $query1 = "INSERT INTO transactions (description, amount, date, type) VALUES (?, ?, ?, ?)";
+        $stmt1 = $conn->prepare($query1);
+        if ($stmt1) {
+            // Corrected the bindings
+            $stmt1->bind_param('sdss', $description, $amount, $date, $type);
+            $stmt1->execute();
+            $transaction_id = $conn->insert_id; // Get the last inserted ID
+            $stmt1->close();
+        } else {
+            throw new Exception("Error preparing query for transactions: {$conn->error}");
+        }
+
+        // Insert into expenses table
+        $query2 = "INSERT INTO expenses (id, voucher_number, amount, check_number, date, description, createdAt) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $stmt2 = $conn->prepare($query2);
+        if ($stmt2) {
+            // Correct binding for parameters
+            $stmt2->bind_param('iisdsss', $transaction_id, $voucherNumber, $amount, $checkNumber, $date, $description, $createdAt);
+            $stmt2->execute();
+            $stmt2->close();
+        } else {
+            throw new Exception("Error preparing query for expenses: {$conn->error}");
+        }
+
+        // Commit transaction
+        $conn->commit();
+        echo "<script>alert('Expense and collection added successfully!'); window.location.href='transactions.php';</script>";
+    } catch (Exception $e) {
+        // Rollback on error
+        $conn->rollback();
+        echo "<script>alert('Error adding data: {$e->getMessage()}');</script>";
     }
-    $stmt->close();
+
+    // Close connection
+    $conn->close();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

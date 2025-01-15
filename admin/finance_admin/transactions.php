@@ -8,7 +8,6 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'finance_admin' && $_SES
 
 
 
-
 <?php
 if (isset($_GET['delete_id'])) {
     $id = $_GET['delete_id'];
@@ -64,35 +63,54 @@ if (isset($_GET['delete_id'])) {
           </tr>
         </thead>
         <tbody>
-          <?php
-          $conn = new mysqli('localhost', 'root', '', 'cbc_ims');
-          if ($conn->connect_error) {
-              die("Connection failed: " . $conn->connect_error);
-          }
 
-          $query = "SELECT * FROM transactions";
-          $result = $conn->query($query);
+        <?php
+$conn = new mysqli('localhost', 'root', '', 'cbc_ims');
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
-          if ($result->num_rows > 0) {
-              while ($row = $result->fetch_assoc()) {
-                echo "<tr data-id='{$row['id']}' data-date='{$row['date']}' data-description='{$row['description']}' data-type='{$row['type']}' data-amount='{$row['amount']}'>
-                <td>{$row['id']}</td>
-                <td>{$row['date']}</td>
-                <td>{$row['description']}</td>
-                <td>{$row['type']}</td>
-                <td>{$row['amount']}</td>
-                <td>
-                  <button class='view-btn' data-id='{$row['id']}'>View</button>
-                  <a href='transactions.php?delete_id={$row['id']}' onclick='return confirm(\"Are you sure you want to delete this transaction?\")'><button class='delete-btn'>Delete</button></a>
-                </td>
-            </tr>";
-              } 
-          } else {
-              echo "<tr><td colspan='5'>No transactions found</td></tr>";
-          }
-          $conn->close();
-          ?>
-          
+$query = "SELECT * FROM transactions";
+$result = $conn->query($query);
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        // Normalize type for comparison
+        $type = strtolower(trim($row['type']));
+
+        // Determine the URL based on the transaction type
+        if ($type === 'collection') {
+            $viewUrl = 'view_collection.php?id=' . $row['id'];
+        } elseif ($type === 'expense') {
+            $viewUrl = 'view_expense.php?id=' . $row['id'];
+        } else {
+            $viewUrl = ''; // Default if no matching type
+        }
+
+        // Debugging: Output the URL to check if it's being generated correctly
+        echo "<script>console.log('Generated URL: $viewUrl');</script>";
+
+        // Render table row
+        echo "<tr data-id='{$row['id']}' data-date='{$row['date']}' data-description='{$row['description']}' data-type='{$row['type']}' data-amount='{$row['amount']}'>
+        <td>{$row['id']}</td>
+        <td>{$row['date']}</td>
+        <td>{$row['description']}</td>
+        <td>{$row['type']}</td>
+        <td>{$row['amount']}</td>
+        <td>
+            <a href='{$viewUrl}'><button class='view-btn' style='cursor: pointer;'>View</button></a>
+            <a href='transactions.php?delete_id={$row['id']}' onclick='return confirm(\"Are you sure you want to delete this transaction?\")'><button class='delete-btn' style='cursor: pointer;'>Delete</button></a>
+        </td>
+    </tr>";
+    }
+} else {
+    echo "<tr><td colspan='6'>No transactions found</td></tr>";
+}
+
+$conn->close();
+?>
+
+
         </tbody>
       </table>
 
@@ -130,17 +148,6 @@ if (isset($_GET['delete_id'])) {
   </div>
 </div>
 
-
-
-
-
-
-<script>
- 
-
-  
-
-</script>
 
 </body>
 </html>

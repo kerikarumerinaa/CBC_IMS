@@ -51,77 +51,77 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'finance_admin' && $_SES
     <script>
 
 // Fetch chart data and render chart
-// let financeChart;
-// function fetchChartData(timeRange = 'weekly') {
-//     fetch(`../../includes/get_chart_data.php?range=${timeRange}`)
-//         .then(response => {
-//             if (!response.ok) {
-//                 throw new Error(`HTTP error! Status: ${response.status}`);
-//             }
-//             return response.json();
-//         })
-//         .then(data => {
-//             if (financeChart) {
-//                 // Update existing chart data
-//                 financeChart.data.labels = data.labels;
-//                 financeChart.data.datasets[0].data = data.collections;
-//                 financeChart.data.datasets[1].data = data.expenses;
-//                 financeChart.update();
-//             } else {
-//                 // Create a new chart
-//                 const ctx = document.getElementById('financeChart').getContext('2d');
-//                 financeChart = new Chart(ctx, {
-//                     type: 'line',
-//                     data: {
-//                         labels: data.labels,
-//                         datasets: [
-//                             {
-//                                 label: 'Collections',
-//                                 data: data.collections,
-//                                 backgroundColor: '#2ecc71', // Green
-//                                 borderColor: '#27ae60',
-//                                 borderWidth: 1
-//                             },
-//                             {
-//                                 label: 'Expenses',
-//                                 data: data.expenses,
-//                                 backgroundColor: '#e74c3c', // Red
-//                                 borderColor: '#c0392b',
-//                                 borderWidth: 1
-//                             }
-//                         ]
-//                     },
-//                     options: {
-//                         responsive: true,
-//                         plugins: {
-//                             title: {
-//                                 display: true,
-//                                 text: 'Collections and Expenses'
-//                             },
-//                             legend: {
-//                                 position: 'top',
-//                             }
-//                         },
-//                         scales: {
-//                             y: {
-//                                 beginAtZero: true
-//                             }
-//                         }
-//                     }
-//                 });
-//             }
-//         })
-//         .catch(error => console.error('Error fetching chart data:', error));
-// }
+let financeChart;
+function fetchChartData(timeRange = 'weekly') {
+    fetch(`../../includes/get_chart_data.php?range=${timeRange}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (financeChart) {
+                // Update existing chart data
+                financeChart.data.labels = data.labels;
+                financeChart.data.datasets[0].data = data.collections;
+                financeChart.data.datasets[1].data = data.expenses;
+                financeChart.update();
+            } else {
+                // Create a new chart
+                const ctx = document.getElementById('financeChart').getContext('2d');
+                financeChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.labels,
+                        datasets: [
+                            {
+                                label: 'Collections',
+                                data: data.collections,
+                                backgroundColor: '#2ecc71', // Green
+                                borderColor: '#27ae60',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Expenses',
+                                data: data.expenses,
+                                backgroundColor: '#e74c3c', // Red
+                                borderColor: '#c0392b',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Collections and Expenses'
+                            },
+                            legend: {
+                                position: 'top',
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+        })
+        .catch(error => console.error('Error fetching chart data:', error));
+}
 
-// // Update chart based on dropdown selection
-// function updateChart() {
-//     const timeRange = document.getElementById('timeRange').value;
-//     fetchChartData(timeRange);
-// }
+// Update chart based on dropdown selection
+function updateChart() {
+    const timeRange = document.getElementById('timeRange').value;
+    fetchChartData(timeRange);
+}
 
-// // Initialize chart with default range
-// fetchChartData('weekly'); // Initialize with default 'weekly'
-//     </script>
+// Initialize chart with default range
+fetchChartData('weekly'); // Initialize with default 'weekly'
+    </script>
 </body>
 </html>

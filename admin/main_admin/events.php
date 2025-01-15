@@ -4,45 +4,67 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'main_admin')) {
     header("Location: ../login.php");
     exit;
 }
-?>
 
-<?php
 include '../../includes/db_connection.php';
 
 // Fetch events for FullCalendar
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['fetchEvents'])) {
+    fetchEvents($conn);
+    exit();
+}
+
+// Add new event
+if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['editEvent']) && !isset($_POST['deleteEvent'])) {
+    addEvent($conn);
+    exit();
+}
+
+// View a specific event
+if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['viewEvent'])) {
+    viewEvent($conn);   
+    exit();
+}
+
+// Edit an event
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editEvent'])) {
+    editEvent($conn);
+    exit();
+}
+
+// Delete an event
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['deleteEvent'])) {
+    deleteEvent($conn);
+    exit();
+}
+
+function fetchEvents($conn) {
     $events = [];
     $sql = "SELECT id, event_name, event_date, start_time, end_time, location, contact_person, other_details FROM events";
     $result = $conn->query($sql);
 
     if ($result) {
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $events[] = [
-                    'id' => $row['id'],
-                    'title' => $row['event_name'],
-                    'start' => $row['event_date'], // Include time for accurate rendering
-                    'end' => $row['event_date'],
-                ];
-            }
+        while ($row = $result->fetch_assoc()) {
+            $events[] = [
+                'id' => $row['id'],
+                'title' => $row['event_name'],
+                'start' => $row['event_date'],
+                'end' => $row['event_date'],
+            ];
         }
         echo json_encode($events);
     } else {
         echo json_encode(['error' => 'Failed to fetch events: ' . $conn->error]);
     }
-    exit();
 }
 
-// Add new event
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $eventName = $_POST['eventName'];
-    $eventDate = $_POST['eventDate'];
-    $startTime = $_POST['startTime'];
-    $endTime = $_POST['endTime'];
+function addEvent($conn) {
+    $eventName = $_POST['event_name'];
+    $eventDate = $_POST['event_date'];
+    $startTime = $_POST['start_time'];
+    $endTime = $_POST['end_time'];
     $location = $_POST['location'];
-    $contactPerson = $_POST['contactPerson'];
-    $otherDetails = $_POST['otherDetails'];
-    
+    $contactPerson = $_POST['contact_person'];
+    $otherDetails = $_POST['other_details'];
 
     $sql = "INSERT INTO events (event_name, event_date, start_time, end_time, location, contact_person, other_details) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
@@ -53,12 +75,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         echo "Error: " . $stmt->error;
     }
-    exit();
 }
 
-
-// View a specific event
-if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['viewEvent'])) {
+function viewEvent($conn) {
     $eventId = $_GET['id'];
     $sql = "SELECT * FROM events WHERE id = ?";
     $stmt = $conn->prepare($sql);
@@ -71,38 +90,32 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['viewEvent'])) {
     } else {
         echo json_encode(['error' => 'Event not found']);
     }
-    exit();
 }
 
-
-
-// Edit an event
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editEvent'])) {
+function editEvent($conn) {
     $id = $_POST['id'];
-    $eventName = $_POST['eventName'];
-    $eventDate = $_POST['eventDate'];
-    $startTime = $_POST['startTime'];
-    $endTime = $_POST['endTime'];
+    $eventName = $_POST['event_name'];
+    $eventDate = $_POST['event_date'];
+    $startTime = $_POST['start_time'];
+    $endTime = $_POST['end_time'];
     $location = $_POST['location'];
-    $contactPerson = $_POST['contactPerson'];
-    $otherDetails = $_POST['otherDetails'];
+    $contactPerson = $_POST['contact_person'];
+    $otherDetails = $_POST['other_details'];
 
     $sql = "UPDATE events SET event_name = ?, event_date = ?, start_time = ?, end_time = ?, 
             location = ?, contact_person = ?, other_details = ? WHERE id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("sssssssi", $eventName, $eventDate, $startTime, $endTime, $location, $contactPerson, $otherDetails, $id);
 
-    if ($stmt->execute()) {
-        echo "success";
-    } else {
+    if (!$stmt->execute()) {
         echo "Error: " . $stmt->error;
+        die();
+    } else {
+        echo "success";
     }
-    exit();
 }
 
-
-// Delete an event
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['deleteEvent'])) {
+function deleteEvent($conn) {
     $id = $_POST['id'];
 
     $sql = "DELETE FROM events WHERE id = ?";
@@ -114,10 +127,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['deleteEvent'])) {
     } else {
         echo "Error: " . $stmt->error;
     }
-    exit();
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -182,7 +192,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['deleteEvent'])) {
                                 <textarea id="otherDetails" name="otherDetails" rows="3" placeholder="Enter additional details"></textarea>
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="btn">Save Changes</button>
+                                <button type="submit" class="btn">Save Event</button>
                             </div>
                         </form>
                     </div>
@@ -224,8 +234,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['deleteEvent'])) {
                         </div>
                     </form>
                     <div class="modal-actions">
-                        <button id="editEvent" class="btn">Edit</button>
-                        <button id="deleteEvent" class="btn delete">Delete</button>
+                        <button id="editButton" class="btn">Edit</button>
+                        <button id="deleteButton" class="btn delete">Delete</button>
                     </div>
                 </div>
             </div>
@@ -268,7 +278,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['deleteEvent'])) {
                                 <label for="editOtherDetails">Other Details</label>
                                 <textarea id="editOtherDetails" name="otherDetails" rows="3"></textarea>
                             </div>
-                            <button type="submit" class="btn">Save Changes</button>
+                            <div class="form-group">
+                                <button type="submit" class="btn">Save Changes</button>
+                            </div>
                         </form>
                         <button class="btn-close" onclick="closeModal('editModal')">Close</button>
                     </div>
@@ -424,7 +436,7 @@ document.addEventListener("DOMContentLoaded", function () {
         eventClick: function (event) {
             // Fetch event details and open the view modal
             console.log(event)
-            fetchEventDetails(Number(event.id));
+            fetchEventDetails(event.id);
         },
     });
 
@@ -432,7 +444,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('eventForm').addEventListener('submit', function (e) {
         e.preventDefault();
         const formData = new FormData(this);
-
+        
         fetch('events.php', {
             method: 'POST',
             body: formData,
@@ -448,6 +460,12 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .catch(error => console.error('Error:', error));
     });
+
+    //for updateing the item in the view modal
+    // document.getElementById('edit-submit').addEventListener('click', function (e) {
+    //     //console.log("e.id");
+    //     updateEventDetails(e.id);
+    // });
 
     // Open modal for adding a new event
     document.getElementById('openModal').addEventListener('click', function () {
@@ -469,18 +487,24 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('editEventForm').addEventListener('submit', function (e) {
         e.preventDefault();
         const formData = new FormData(this);
+        const eventId = document.getElementById('editEventId').value; // Get the event ID
 
-        fetch('events.php', {
+        fetch(`events.php?editEvent=true&id=${eventId}`, {
             method: 'POST',
             body: formData,
         })
             .then(response => response.text())
             .then(data => {
+                if (data.trim() === 'success') {
+                    $('#calendar').fullCalendar('refetchEvents'); // Refresh calendar
+                    closeModal('editModal'); // Close edit modal
+                } else {
+                    alert('Error updating event: ' + data);
+                }
                 //alert(data);
                 console.log(data);
                 
-                $('#calendar').fullCalendar('refetchEvents'); // Refresh calendar
-                closeModal('editModal'); // Close edit modal
+                
             })
             .catch(error => console.error('Error:', error));
     });
@@ -508,6 +532,28 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error('Error fetching event details:', error));
     }
 
+    //FOR UPDATING THE ITEM IN THE VIEW MODAL
+    // function updateEventDetails(eventId) {
+    //     fetch(`events.php?editEvent=true&id=${eventId}`)
+    //     .then(response => response.json())
+    //         .then(event => {
+    //             if (event.error) {
+    //                 alert(event.error);
+    //             } else {
+    //                 console.log("success");
+    //                 //populateViewModal(event);
+    //                 //openModal('viewModal');
+
+    //                 // Attach handlers for edit and delete buttons
+    //                 //document.getElementById('editButton').onclick = function () {
+    //                    // openEditModal(event);
+    //                 //};
+                   
+    //             }
+    //         })
+    //         .catch(error => console.error('Error update event details:', error));
+    // }
+
     // Populate the view modal
     function populateViewModal(event) {
         document.getElementById('viewEventName').value = event.event_name;
@@ -528,7 +574,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById('editEndTime').value = event.end_time;
         document.getElementById('editLocation').value = event.location;
         document.getElementById('editContactPerson').value = event.contact_person;
-        document.getElementById('editOtherDetails').value = event.other_details;
+        document.getElementById('editOtherDetails').innerText = event.other_details;
 
         openModal('editModal');
     }

@@ -4,64 +4,93 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'finance_admin' && $_SES
     header("Location: ../login.php");
     exit;
 }
-?>
 
-<?php
+include '../../includes/db_connection.php';
 
-include '../../includes/db_connection.php'; // Include database connection
-
-// if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-//   $description = $_POST['description'];  // assuming the description is also passed
-//   $totalamount = $_POST['totalCollections'];       // total amount calculated from cash + checks
-//   $date = $_POST['date'];                // make sure the date is passed correctly
-//   $type = 'Collection';                  // Set the type as Collection
-
-
-//   $query = "INSERT INTO transactions (description, amount, date, type) VALUES (?, ?, ?, ?)";
-//   $stmt = $conn->prepare($query);
-//   $stmt->bind_param('sdss', $description, $totalamount, $date, $type);  // 'd' for double (amount), 's' for string (description, date, type)
-
-//   if ($stmt) {
-//     $stmt->bind_param('sdss', $description, $totalamount, $date, $type);
-//     if ($stmt->execute()) {
-//         echo "<script>alert('Collection added successfully!'); window.location.href='transactions.php';</script>";
-//     } else {
-//         echo "<script>alert('Error adding collection: {$conn->error}');</script>";
-//     }
-//     $stmt->close();
-// } else {
-//     echo "<script>alert('Database error: {$conn->error}');</script>";
-// }
-// }
-// $conn->close();
-
-// 
-
+// Check connection
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   // Retrieve form data
-  $description = $_POST['description'];  // Ensure 'description' field is in the form
-  $totalAmount = $_POST['totalCollections'];  // Ensure 'totalCollections' field is correctly named in the form
-  $date = $_POST['date'];  // Ensure 'date' field is in the form
-  $type = 'Collection';  // Set default type
+  $collection_date = $_POST['date'] ?? null;
+  $description = $_POST['description'] ?? null;
+  $qty_1000 = $_POST['qty1000'] ?? 0;
+  $amount_1000 = $_POST['amount1000'] ?? 0.0;
+  $qty_500 = $_POST['qty500'] ?? 0;
+  $amount_500 = $_POST['amount500'] ?? 0.0;
+  $qty_200 = $_POST['qty200'] ?? 0;
+  $amount_200 = $_POST['amount200'] ?? 0.0;
+  $qty_100 = $_POST['qty100'] ?? 0;
+  $amount_100 = $_POST['amount100'] ?? 0.0;
+  $qty_20 = $_POST['qty20'] ?? 0;
+  $amount_20 = $_POST['amount20'] ?? 0.0;
+  $total_cash = $_POST['cashTotal'] ?? 0.0;
+  $check_bank = $_POST['bank'] ?? null;
+  $check_number = $_POST['check_number'] ?? null;
+  $corporate_supporter = $_POST['corporate_supporter'] ?? null;
+  $check_amount = $_POST['check_amount'] ?? 0.0;
+  $total_checks = $_POST['checkTotal'] ?? 0.0;
+  $general_fund = $_POST['generalFund'] ?? 0.0;
+  $savings = $_POST['savings'] ?? 0.0;
+  $mission_fund = $_POST['missionFund'] ?? 0.0;
+  $total_collections = $_POST['totalCollections'] ?? 0.0;
+  $counted_by = $_POST['countedBy'] ?? null;
+  $received_by = $_POST['receivedBy'] ?? null;
+  $createdAt = date('Y-m-d H:i:s'); // Current timestamp
 
-  // Insert into database
-  $query = "INSERT INTO transactions (description, amount, date, type) VALUES (?, ?, ?, ?)";
-  $stmt = $conn->prepare($query);
+  $type = 'Collection'; // Fixed type for transactions
 
-  if ($stmt) {
-      $stmt->bind_param('sdss', $description, $totalAmount, $date, $type);  // Bind parameters
-      if ($stmt->execute()) {
-          echo "<script>alert('Collection added successfully!'); window.location.href='transactions.php';</script>";
+  // Begin a transaction
+  $conn->begin_transaction();
+
+  try {
+      // Insert into transactions table
+      $query1 = "INSERT INTO transactions (description, amount, date, type) VALUES (?, ?, ?, ?)";
+      $stmt1 = $conn->prepare($query1);
+      if ($stmt1) {
+          $stmt1->bind_param('sdss', $description, $total_collections, $collection_date, $type);
+          $stmt1->execute();
+          $transaction_id = $conn->insert_id; // Get the last inserted ID
+          $stmt1->close();
       } else {
-          echo "<script>alert('Error adding collection: {$conn->error}');</script>";
+          throw new Exception("Error preparing query for transactions: {$conn->error}");
       }
-      $stmt->close();
-  } else {
-      echo "<script>alert('Database error: {$conn->error}');</script>";
+
+      // Insert into collections table with the same transaction_id
+      $query2 = "INSERT INTO collections (
+          id, collection_date, description, qty_1000, amount_1000, qty_500, amount_500, qty_200, amount_200, 
+          qty_100, amount_100, qty_20, amount_20, total_cash, check_bank, check_number, corporate_supporter, 
+          check_amount, total_checks, general_fund, savings, mission_fund, total_collections, counted_by, 
+          received_by, createdAt
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      $stmt2 = $conn->prepare($query2);
+      if ($stmt2) {
+          $stmt2->bind_param(
+              'issiiiiiiiiidssssdddddssss', 
+              $transaction_id, $collection_date, $description, $qty_1000, $amount_1000, $qty_500, $amount_500, $qty_200, 
+              $amount_200, $qty_100, $amount_100, $qty_20, $amount_20, $total_cash, $check_bank, $check_number, 
+              $corporate_supporter, $check_amount, $total_checks, $general_fund, $savings, $mission_fund, 
+              $total_collections, $counted_by, $received_by, $createdAt
+          );
+          $stmt2->execute();
+          $stmt2->close();
+      } else {
+          throw new Exception("Error preparing query for collections: {$conn->error}");
+      }
+
+      // Commit transaction
+      $conn->commit();
+      echo "<script>alert('Collection added successfully!'); window.location.href='transactions.php';</script>";
+  } catch (Exception $e) {
+      // Rollback on error
+      $conn->rollback();
+      echo "<script>alert('Error adding collection: " . htmlspecialchars($e->getMessage(), ENT_QUOTES) . "');</script>";
   }
+
+  // Close the connection
   $conn->close();
 }
 ?>
+
+
 
 
 
@@ -89,6 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <label for="description">Description:</label>
     <select id="description" name="description">
       <option value="Sunday Service">Sunday Service</option>
+      <option value="Mid Week Service">Mid Week Service</option>
       <option value="Other">Other</option>
     </select>
 
@@ -105,32 +135,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <tbody>
     <tr>
         <td>1,000</td>
-        <td><input type="number" class="qty" data-value="1000" oninput="updateAmount(this)" required></td>
-        <td><input type="number" class="amount" readonly required></td>
+        <td><input id="qty1000" name="qty1000" type="number" class="qty" data-value="1000" oninput="updateAmount(this)" required></td>
+        <td><input id="amount1000" name="amount1000" type="number" class="amount" readonly required></td>
     </tr>
     <tr>
         <td>500</td>
-        <td><input type="number" class="qty" data-value="500" oninput="updateAmount(this)" required></td>
-        <td><input type="number" class="amount" readonly required></td>
+        <td><input id="qty500" name="qty500" type="number" class="qty" data-value="500" oninput="updateAmount(this)" required></td>
+        <td><input id="amount500" name="amount500" type="number" class="amount" readonly required></td>
     </tr>
     <tr>
         <td>200</td>
-        <td><input type="number" class="qty" data-value="200" oninput="updateAmount(this)" required></td>
-        <td><input type="number" class="amount" readonly required></td>
+        <td><input id="qty200" name="qty200" type="number" class="qty" data-value="200" oninput="updateAmount(this)" required></td>
+        <td><input id="amount200" name="amount200" type="number" class="amount" readonly required></td>
     </tr>
     <tr>
         <td>100</td>
-        <td><input type="number" class="qty" data-value="100" oninput="updateAmount(this)" required></td>
-        <td><input type="number" class="amount" readonly required></td>
+        <td><input id="qty100" name="qty100" type="number" class="qty" data-value="100" oninput="updateAmount(this)" required></td>
+        <td><input id="amount100" name="amount100" type="number" class="amount" readonly required></td>
     </tr>
     <tr>
         <td>20</td>
-        <td><input type="number" class="qty" data-value="20" oninput="updateAmount(this)" required></td>
-        <td><input type="number" class="amount" readonly required></td>
+        <td><input id="qty20" name="qty20" type="number" class="qty" data-value="20" oninput="updateAmount(this)" required></td>
+        <td><input id="amount20" name="amount20" type="number" class="amount" readonly required></td>
     </tr>
     <tr>
           <td colspan="2"><strong>Total Cash</strong></td>
-          <td><input type="number" id="cashTotal" readonly></td>
+          <td><input type="number" id="cashTotal" name="cashTotal" readonly></td>
         </tr>
 </tbody>
     
@@ -147,11 +177,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </thead>
   <tbody>
     <tr>
-      <td><input type="text" placeholder="Bank" required></td>
-      <td><input type="text" placeholder="Check #" required></td>
-      <td><input type="text" placeholder="Corporate Supporter" required></td>
+      <td><input id="bank" name="bank" type="text" placeholder="Bank" required></td>
+      <td><input id="check_number" name="check_number" type="text" placeholder="Check #" required></td>
+      <td><input id="corporate_supporter" name="corporate_supporter" type="text" placeholder="Corporate Supporter" required></td>
       <td>
         <input 
+          id="check_amount"
+          name="check_amount"
           type="number" 
           class="Checkamount" 
           oninput="updateCheckTotal()" 
@@ -162,7 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Add more rows as needed -->
     <tr>
       <td colspan="3"><strong>Total Checks</strong></td>
-      <td><input type="number" id="checkTotal" readonly></td>
+      <td><input type="number" id="checkTotal" name="checkTotal" readonly></td>
     </tr>
   </tbody>
 </table>
@@ -173,15 +205,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <tbody>
     <tr>
       <td>General Fund</td>
-      <td><input type="number" id="generalFund" readonly></td>
+      <td><input type="number" id="generalFund" name="generalFund" readonly></td>
     </tr>
     <tr>
       <td>Savings (20%)</td>
-      <td><input type="number" id="savings" readonly></td>
+      <td><input type="number" id="savings" name="savings" readonly></td>
     </tr>
     <tr>
       <td>Mission Fund (10%)</td>
-      <td><input type="number" id="missionFund" readonly></td>
+      <td><input type="number" id="missionFund" name="missionFund" readonly></td>
     </tr>
     <tr>
       <td><strong>Total</strong></td>
@@ -196,8 +228,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <input type="text" id="receivedBy" name="receivedBy" required><br>
 
 
-
-    
     <button type="submit" class="save-btn">Save Collection</button>
 
     
