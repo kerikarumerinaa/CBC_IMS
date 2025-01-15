@@ -1,3 +1,36 @@
+<?php
+session_start();
+
+// Restrict access if not logged in as a member
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'member') {
+    header("Location: ../login.php");
+    exit;
+}
+
+// Database connection
+$conn = new mysqli("localhost", "root", "", "cbc_ims");
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch member details based on session data (using email stored in session)
+if (isset($_SESSION['email'])) {
+$email = $_SESSION['email']; // Assuming email is stored in session after login
+$sql = "SELECT * FROM users_members WHERE email = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $email); // Use the email to fetch user details
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+$stmt->close();
+} else {
+    $user = null;
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,9 +51,8 @@
                 <!-- Email Section -->
                 <div class="info-item">
                     <label for="email">Email</label>
-                    <input type="email" id="email" value="" readonly>
+                    <input type="email" id="email" value="<?php echo htmlspecialchars($user['email']); ?>" readonly>
                 </div>
-
                 <!-- Password Change Section -->
                 <div class="info-item">
                     <label for="password">Password</label>

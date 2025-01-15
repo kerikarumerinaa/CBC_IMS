@@ -339,7 +339,7 @@ if (isset($_POST['edit_visitor'])) {
                     <div class="modal-content">
                         <span id="closeChecklistModal" class="close" style="cursor: pointer;">&times;</span>
                         <h2>Checklist for <span id="checklist-full-name"></span>:</h2>
-                        <form id="checklist-form">
+                        <form id="checklist-form" method="POST" action="checklist.php">
                             <input type="hidden" id="visitor-id" name="id" value="">
                             <p><strong>EBS1:</strong> <input type="checkbox" id="ebs1" name="ebs1"></p>
                             <p><strong>EBS2:</strong> <input type="checkbox" id="ebs2" name="ebs2"></p>
@@ -425,6 +425,7 @@ document.getElementById("closeEditModal").addEventListener("click", function() {
 });
 
 
+//////////////////////////////////////////////////////////////// CHECKLIST MODAL /////////////////////////////////////////////////////////////////////////
         document.querySelectorAll(".status-btn").forEach(button => {
             button.addEventListener("click", function() {
                 const row = this.closest("tr");

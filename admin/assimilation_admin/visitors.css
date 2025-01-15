@@ -236,4 +236,20 @@ p {
     color: #333;
 }
 
+#save-checklist {
+    background-color: #154668;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+#save-checklist:hover {
+    background-color: #103a58;
+}
+
+
 

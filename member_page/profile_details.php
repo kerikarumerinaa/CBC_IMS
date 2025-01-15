@@ -47,29 +47,56 @@ $stmt->close();
                 <h4>My Profile</h4>
                 <div class="profile-details">
                     <!-- Profile Card -->
-                    <div class="profile-card">
+                    <!-- <div class="profile-card">
                         <div class="profile-info">
                             <img src="../assets/cbc-logo.png" alt="User Avatar" class="user-avatar">
                             <div class="user-info">
                             </div>
                         </div>
                         <button class="edit-btn" data-modal="editProfileModal">Edit Photo</button>
-                    </div>
+                    </div> -->
 
                     <!-- Personal Information Section -->
                     <div class="personal-info">
                         <h5>Personal Information</h5>
                         <div class="info-item">
                             <p>Full Name:</p>
-                            <p>Kleyr Carmelina</p>
-                            <!-- <p><?php echo htmlspecialchars($user['fullname']) ?? 'N/A'; ?></p> -->
+                            <p><?php echo $_SESSION['username']; ?></p>
+                           
                         </div>
+
                         <div class="info-item">
                             <p>Email Address:</p>
-                            <p>kleyrcarmelina5@gmail.com</p>
-                            <!-- <p><?php echo htmlspecialchars($user['email']) ?? 'N/A'; ?></p> -->
+                            <p><?php
+                                $sql = "SELECT email FROM users_members WHERE fullname = ?";
+                                $stmt = $conn->prepare($sql);
+                                $stmt->bind_param("s", $_SESSION['username']);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
+                                $user = $result->fetch_assoc();
+                                echo $user['email'];
+                            ?></p>   
                         </div>
+
+                        <div class="info-item">
+                            <p>Password:</p>
+                            <p><?php
+                                $sql = "SELECT password FROM users_members WHERE fullname = ?";
+                                $stmt = $conn->prepare($sql);
+                                $stmt->bind_param("s", $_SESSION['username']);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
+                                $member = $result->fetch_assoc();
+                                echo "********";
+                            ?></p>
                         </div>
+                        <div class="info-item">
+                            <p>Change Password:</p>
+                            <button class="edit-btn" data-modal="changePasswordModal">Change</button>
+                        </div>
+                            
+                        
+                    </div>
                         <button class="edit-btn" data-modal="editPersonalInfoModal">Edit</button>
                     </div>
                 </div>
@@ -77,33 +104,68 @@ $stmt->close();
         </main>
     </div>
 
-    <!-- Modals (for editing profile details) -->
-    <!-- Modal 1: Edit Profile Avatar -->
-    <div id="editProfileModal" class="modal">
+    <!-- Modal: Change Password -->
+    <div id="changePasswordModal" class="modal">
         <div class="modal-content">
-            <span class="close" data-close="editProfileModal">&times;</span>
-            <h2>Edit Profile Avatar</h2>
-            <form enctype="multipart/form-data" action="update_avatar.php" method="POST">
-                <label for="avatar">Upload New Avatar</label>
-                <input type="file" id="avatar" name="avatar" required>
-                <input type="submit" value="Save">
+            <span class="close" data-close="changePasswordModal">&times;</span>
+            <h2>Change Password</h2>
+            <form action="update_password.php" method="POST">
+                <label for="newPassword">New Password:</label>
+                <input type="password" id="newPassword" name="newPassword" required>
+
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+
+                <button type="submit">Update Password</button>
             </form>
         </div>
     </div>
 
-    <!-- Modal 2: Edit Personal Information -->
+    <!-- Modal: Edit Personal Information -->
     <div id="editPersonalInfoModal" class="modal">
         <div class="modal-content">
             <span class="close" data-close="editPersonalInfoModal">&times;</span>
             <h2>Edit Personal Information</h2>
-            <form action="update_personal_info.php" method="POST">
+            <form method="POST">
                 <label for="fullname">Full Name</label>
-                <input type="text" id="fullname" name="fullname" value="<?php echo htmlspecialchars($user['fullname']); ?>" required>
+                <input type="text" id="fullname" name="fullname" value="<?php echo htmlspecialchars($_SESSION['username']); ?>" required>
                 
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+                <input type="email" id="email" name="email" value="<?php
+                    $sql = "SELECT email FROM users_members WHERE fullname = ?";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param("s", $_SESSION['username']);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    $user = $result->fetch_assoc();
+                    echo htmlspecialchars($user['email']);
+                ?>" required>
                 
-                <input type="submit" value="Save">
+                <input type="hidden" name="old_email" value="<?php echo htmlspecialchars($user['email']); ?>">
+                
+                
+
+                <input type="submit" value="Save" name="save">
+                
+                <!-- BACKEND FOR UPDATE INFO -->
+                <?php
+                if (isset($_POST['save'])) {
+                    $fullname = $_POST['fullname'];
+                    $email = $_POST['email'];
+                    $old_email = $_POST['old_email'];
+
+                    $sql = "UPDATE users_members SET fullname = ?, email = ? WHERE email = ?";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bind_param("sss", $fullname, $email, $old_email);
+
+                    if ($stmt->execute()) {
+                        $_SESSION['username'] = $fullname;
+                        echo "<script>alert('Information Updated');</script>";
+                    } else {
+                        echo "<script>alert('Error updating information');</script>";
+                    }
+                }
+                ?>
             </form>
         </div>
     </div>

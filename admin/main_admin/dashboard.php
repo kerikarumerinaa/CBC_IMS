@@ -62,7 +62,7 @@ try {
                     <div class="middle">
                         <div class="left">
                             <h1>0</h1> <!-- Placeholder for new members -->
-                            <h3>Inactive Members</h3>
+                            <h3>New Members</h3>
                         </div>
                     </div>
                 </div>

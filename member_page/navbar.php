@@ -5,8 +5,17 @@
     <div class="navbar-content">
         <img src="../assets/cbc-logo.png" alt="Member Avatar" class="logo">
         <div class="account">
-            <h2>Kleyr Carmelina</h2>
-            <p>Member</p> 
+            <h2><?php echo $_SESSION['username']; ?></h2>
+            <?php
+                $sql = "SELECT role FROM users_members WHERE fullname = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("s", $_SESSION['username']);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $member = $result->fetch_assoc();
+                $stmt->close();
+            ?>
+            <p><?php echo $member['role']; ?></p> 
         </div>
     </div>
     <div class="menu">
@@ -14,7 +23,7 @@
             <li><a href="dashboard.php">Home</a></li>
             <li><a href="profile_details.php">My Profile</a></li>
             <li><a href="donation.php">My Donations</a></li>
-            <li><a href="security.php">My Security</a></li>
+            <!-- <li><a href="security.php">My Security</a></li> -->
             <li><a href="../logout.php">Logout</a></li>
                 
                 </div>
