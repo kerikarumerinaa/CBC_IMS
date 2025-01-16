@@ -53,7 +53,7 @@
                 </a>
                 <div class="dropdown-content financeDropdown">
                     <a href="../finance_admin/dashboard.php">Dashboard</a>
-                    <!-- <a href="../finance_admin/donations.php">Online Donations</a> -->
+                    <a href="../finance_admin/donations.php">Online Donations</a>
                     <a href="../finance_admin/transactions.php">Collections & Expenses</a>
                 </div>
             </div>

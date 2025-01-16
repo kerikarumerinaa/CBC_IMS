@@ -42,17 +42,17 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_
             </div>
 
             <!-- Chart for Network Distribution -->
-            <!-- <div class="chart-container">
+            <div class="chart-container">
                 <h3>Number of Members by Network</h3>
                 <canvas id="networkChart" width="500" height="300"></canvas>
-            </div> -->
+            </div>
 
-            <!-- Chart for Member Activity Status -->
-            <div class="chart-container">
+             <!-- Chart for Member Activity Status -->
+            <!-- <div class="chart-container">
                 <h3>Member Activity Status</h3>
                 <canvas id="memberStatusChart" width="500" height="300"></canvas>
-            </div>
-        </div>
+            </div> -->
+        </div> 
 
         <!-- Filter and Worship Attendance Chart -->
         <div class="filter-row">
@@ -110,32 +110,32 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_
 
 
 
-                        /////////////// Chart for Network Distribution
-                        // const networkCtx = document.getElementById('networkChart').getContext('2d');
-                        // const networkLabels = data.memberNetworkData.map(item => item.network); // Network labels
-                        // const networkCounts = data.memberNetworkData.map(item => item.count); // Network counts
+                        ///////////// Chart for Network Distribution
+                        const networkCtx = document.getElementById('networkChart').getContext('2d');
+                        const networkLabels = data.memberNetworkData.map(item => item.network); // Network labels
+                        const networkCounts = data.memberNetworkData.map(item => item.count); // Network counts
 
-                        // new Chart(networkCtx, {
-                        //     type: 'pie',
-                        //     data: {
-                        //         labels: networkLabels,
-                        //         datasets: [{
-                        //             label: 'Members by Network',
-                        //             data: networkCounts,
-                        //             backgroundColor: ['#1abc9c', '#f1c40f', '#9b59b6', '#e67e22', '#34495e'], // Customize colors as needed
-                        //         }]
-                        //     },
-                        //     options: {
-                        //         responsive: true,
-                        //         plugins: {
-                        //             legend: { position: 'top' },
-                        //             title: {
-                        //                 display: true,
-                        //                 text: 'Number of Members by Network'
-                        //             }
-                        //         }
-                        //     }
-                        // });
+                        new Chart(networkCtx, {
+                            type: 'pie',
+                            data: {
+                                labels: networkLabels,
+                                datasets: [{
+                                    label: 'Members by Network',
+                                    data: networkCounts,
+                                    backgroundColor: ['#1abc9c', '#f1c40f', '#9b59b6', '#e67e22', '#34495e'], // Customize colors as needed
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: { position: 'top' },
+                                    title: {
+                                        display: true,
+                                        text: 'Number of Members by Network'
+                                    }
+                                }
+                            }
+                        });
 
 
 

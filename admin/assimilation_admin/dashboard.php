@@ -26,17 +26,17 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'assimilation_admin' && 
             <h1>Assimilation Admin Dashboard</h1>
 
             <!-- Chart Section for Sex and Network -->
-            <!-- <div class="chart-row"> -->
+            <div class="chart-row">
                 <div class="chart-container">
                     <h3>Number of Visitors by Gender</h3>
                     <canvas id="sexChart" width="500" height="300"></canvas>
                 </div>
 
-                <!-- <div class="chart-container">
+                <div class="chart-container">
                     <h3>Number of Visitors by Network</h3>
                     <canvas id="networkChart" width="500" height="300"></canvas>
                 </div>
-            </div> -->
+            </div>
 
 
             <!-- Filter for Attendance -->

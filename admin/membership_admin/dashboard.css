@@ -71,9 +71,13 @@ main{
 /* Three-column layout for charts */
 .chart-row {
     display: flex;
-    justify-content: space-between;
-    gap: 20px; /* Space between the columns */
-    margin: 20px 0;
+    justify-content: space-between; /* Space between two columns */
+    gap: 20px; /* Space between the two columns */
+    margin: 20px 0; /* Margin around the row */
+}
+
+.chart-column {
+    flex: 1; /* Ensures both columns have equal width */
 }
 
 .chart-container {
