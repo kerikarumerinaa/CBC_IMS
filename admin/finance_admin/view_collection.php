@@ -162,6 +162,10 @@ $conn->close();
         <input type="text" id="countedBy" value="<?= htmlspecialchars($collection_data['counted_by']) ?>" readonly>
         <label for="receivedBy">Received By:</label>
         <input type="text" id="receivedBy" value="<?= htmlspecialchars($collection_data['received_by']) ?>" readonly><br>
+
+        <div class="back-button">
+        <a href="transactions.php" class="back-btn">Back to Transactions</a>
+        </div>
       </form>
     <?php else: ?>
       <p>No collection data found.</p>

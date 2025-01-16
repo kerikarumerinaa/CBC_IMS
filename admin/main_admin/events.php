@@ -58,13 +58,13 @@ function fetchEvents($conn) {
 }
 
 function addEvent($conn) {
-    $eventName = $_POST['event_name'];
-    $eventDate = $_POST['event_date'];
-    $startTime = $_POST['start_time'];
-    $endTime = $_POST['end_time'];
+    $eventName = $_POST['eventName'];
+    $eventDate = $_POST['eventDate'];
+    $startTime = $_POST['startTime'];
+    $endTime = $_POST['endTime'];
     $location = $_POST['location'];
-    $contactPerson = $_POST['contact_person'];
-    $otherDetails = $_POST['other_details'];
+    $contactPerson = $_POST['contactPerson'];
+    $otherDetails = $_POST['otherDetails'];
 
     $sql = "INSERT INTO events (event_name, event_date, start_time, end_time, location, contact_person, other_details) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
@@ -94,13 +94,13 @@ function viewEvent($conn) {
 
 function editEvent($conn) {
     $id = $_POST['id'];
-    $eventName = $_POST['event_name'];
-    $eventDate = $_POST['event_date'];
-    $startTime = $_POST['start_time'];
-    $endTime = $_POST['end_time'];
+    $eventName = $_POST['eventName'];
+    $eventDate = $_POST['eventDate'];
+    $startTime = $_POST['startTime'];
+    $endTime = $_POST['endTime'];
     $location = $_POST['location'];
-    $contactPerson = $_POST['contact_person'];
-    $otherDetails = $_POST['other_details'];
+    $contactPerson = $_POST['contactPerson'];
+    $otherDetails = $_POST['otherDetails'];
 
     $sql = "UPDATE events SET event_name = ?, event_date = ?, start_time = ?, end_time = ?, 
             location = ?, contact_person = ?, other_details = ? WHERE id = ?";
@@ -152,7 +152,10 @@ function deleteEvent($conn) {
                 <div class="header">
                     <h2>Calendar</h2>
                     <!-- Button to trigger modal -->
+                     <div class="buttons">
+                    <button id="refreshCalendar" class="refresh-btn" onclick="window.location.href = 'events.php'">Refresh</button>
                     <button id="openModal" class="btn">Add New Event</button>
+                    </div>
                 </div>
                 <!-- FullCalendar Container -->
                 <div id="calendar"></div>

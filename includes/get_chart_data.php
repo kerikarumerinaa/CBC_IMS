@@ -84,15 +84,32 @@ $response['visitorMonthlyData'] = $visitorMonthlyData;
 
 ///////////////////////////////////////  FINANCE DASHBAORD   //////////////////////////////////////////
 
+
+// Fetch weekly collections and expenses
+$collectionQuery = "SELECT WEEK(date) AS week, SUM(amount) AS collection FROM collections GROUP BY week ORDER BY week";
+$collectionResult = mysqli_query($conn, $collectionQuery);
+$collectionsData = [];
+while ($row = mysqli_fetch_assoc($collectionResult)) {
+    $collectionsData[] = $row;
+}
+$response['collectionsData'] = $collectionsData;
+
+$expenseQuery = "SELECT WEEK(date) AS week, SUM(amount) AS expense FROM expenses GROUP BY week ORDER BY week";
+$expenseResult = mysqli_query($conn, $expenseQuery);
+$expensesData = [];
+while ($row = mysqli_fetch_assoc($expenseResult)) {
+    $expensesData[] = $row;
+}
+$response['expensesData'] = $expensesData;
 // Fetch weekly collections and expenses
 
-$timeRange = isset($_GET['range']) ? $_GET['range'] : 'weekly';
+// $timeRange = isset($_GET['range']) ? $_GET['range'] : 'weekly';
 
-// Connect to the database
-$conn = new mysqli('localhost', 'root', '', 'cbc_ims');
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+// // Connect to the database
+// $conn = new mysqli('localhost', 'root', '', 'cbc_ims');
+// if ($conn->connect_error) {
+//     die("Connection failed: " . $conn->connect_error);
+// }
 
 
 

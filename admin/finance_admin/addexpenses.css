@@ -81,7 +81,7 @@ form textarea:focus {
     box-shadow: 0 0 5px rgba(21, 70, 104, 0.3);
     outline: none;
 }
-add-expense-btn {
+.save-btn {
     background-color: #154668;
     color: #e4dede;
     font-weight: 600;
@@ -92,6 +92,20 @@ add-expense-btn {
     transition: background-color 0.3s ease;
 }
 
-add-expense-btn:hover {
+.save-btn:hover {
     background-color: #103a58;  
+}
+.back-button {
+    margin-top: 25%;
+}
+.back-btn {
+    background-color: #154668; 
+    color: #e4dede; 
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
+    font-size: 0.88rem; 
+    font-weight: 600; 
 }

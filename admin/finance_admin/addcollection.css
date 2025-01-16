@@ -156,5 +156,17 @@ form .advanced-section {
 
 .save-btn:hover {
     background-color: #103a58;
-}   
+}
+
+.back-btn {
+    background-color: #154668; 
+    color: #e4dede; 
+    padding: 10px 20px; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease; 
+    font-size: 0.88rem; 
+    font-weight: 600; 
+}
 

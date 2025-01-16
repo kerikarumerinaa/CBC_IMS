@@ -22,7 +22,7 @@
         <ul>
             <li><a href="dashboard.php">Home</a></li>
             <li><a href="profile_details.php">My Profile</a></li>
-            <li><a href="donation.php">My Donations</a></li>
+            <li><a href="donation.php">Donate</a></li>
             <!-- <li><a href="security.php">My Security</a></li> -->
             <li><a href="../logout.php">Logout</a></li>
                 

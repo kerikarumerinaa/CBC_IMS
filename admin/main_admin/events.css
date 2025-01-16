@@ -105,6 +105,17 @@ button.btn {
 button.btn:hover {
     background-color: #103a58;
 }
+button.refresh-btn {
+    background-color: #154668;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
 
 /* FullCalendar Styles */
 #calendar {
@@ -220,7 +231,7 @@ textarea {
 }
 
 /* Buttons */
-button.btn {
+/* button.btn {
     background-color: #154668;
     color: white;
     border: none;
@@ -233,7 +244,9 @@ button.btn {
 
 button.btn:hover {
     background-color: #103a58;
-}
+} */
+
+
 .event-list {
     list-style: none;
     padding: 0;

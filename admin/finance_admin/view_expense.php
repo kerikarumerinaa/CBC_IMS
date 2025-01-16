@@ -72,7 +72,10 @@ $conn->close();
                 <label for="description">Description:</label>
                 <input id="description" name="description" value="<?php echo $expense_data['description']; ?>" readonly></input>
 
-                <button type="submit" class="save-btn">Save Expenses</button>
+
+                <div class="back-button">
+                <a href="transactions.php" class="back-btn">Back to Transactions</a>
+                </div>
             </form>
             <?php else: ?>
       <p>No collection data found.</p>
