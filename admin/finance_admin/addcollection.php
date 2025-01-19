@@ -229,9 +229,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
     <button type="submit" class="save-btn">Save Collection</button>
-
-    
+    <a href="transactions.php" class="back-btn">Back</a>
   </form>
+  
 
 
 <script>

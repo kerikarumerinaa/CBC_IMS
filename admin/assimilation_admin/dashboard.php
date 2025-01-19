@@ -59,6 +59,7 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'assimilation_admin' && 
                     .then(response => response.json())
                     .then(data => {
                         // Sex Chart
+                        console.log(data.visitorWeeklyData)
                         const sexCtx = document.getElementById('sexChart').getContext('2d');
                         const sexLabels = data.visitorSexData.map(item => item.sex);
                         const sexCounts = data.visitorSexData.map(item => item.count);
@@ -91,7 +92,7 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'assimilation_admin' && 
                                 }]
                             }
                         });
-                    });
+                    
 
 
 
@@ -100,8 +101,8 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'assimilation_admin' && 
                         let attendanceLabels, attendanceData, attendanceLabel;
 
                         // Default to weekly data
-                        attendanceLabels = data.visitorWeeklyData.map(item => `Week ${item.week}`);
-                        attendanceData = data.visitorWeeklyData.map(item => item.count);
+                        attendanceLabels = data.visitorWeeklyData.map(item => item.date);
+                        attendanceData = data.visitorWeeklyData.map(item => item.attendees.split(",").length);
                         attendanceLabel = 'Weekly Worship Attendance for Visitors';
 
                         new Chart(attendanceCtx, {
@@ -125,6 +126,8 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'assimilation_admin' && 
                                 }
                             }
                         });
+
+                    });// Fetch data from the backend END
 
                         
                         // Update chart when filter changes

@@ -285,7 +285,7 @@ function deleteEvent($conn) {
                                 <button type="submit" class="btn">Save Changes</button>
                             </div>
                         </form>
-                        <button class="btn-close" onclick="closeModal('editModal')">Close</button>
+                        
                     </div>
                 </div>
             </div>
@@ -580,6 +580,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById('editOtherDetails').innerText = event.other_details;
 
         openModal('editModal');
+        closeModal('viewModal'); 
     }
 
     // Delete an event

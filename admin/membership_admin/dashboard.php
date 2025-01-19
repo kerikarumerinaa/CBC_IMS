@@ -143,11 +143,19 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_
                         // Worship Attendance Chart
                         const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
                         let attendanceLabels, attendanceData, attendanceLabel;
+                        const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
                         // Default to weekly data
-                        attendanceLabels = data.memberWeeklyData.map(item => `Week ${item.week}`);
-                        attendanceData = data.memberWeeklyData.map(item => item.count);
+                        //attendanceLabels = data.memberWeeklyData.map(item => `Week ${item.week}`);
+                        //console.log(new Date (data.memberWeeklyData[0].date).getMonth());
+                        attendanceLabels = data.memberWeeklyData.map(item => `${item.date}`);
+                        attendanceData = data.memberWeeklyData.map(item => item.attendees.split(",").length);
                         attendanceLabel = 'Weekly Worship Attendance';
+
+                            // attendanceLabels = months.map((month, index) => `${month.slice(0,3)}`);
+                            // attendanceData = data.memberMonthlyData.map( (item, index) => (new Date(item.date).getMonth() == months[index]) );
+                            // console.log(attendanceData)
+                            // attendanceLabel = 'Monthly Worship Attendance';
 
                         new Chart(attendanceCtx, {
                             type: 'line',
@@ -172,19 +180,36 @@ if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'membership_admin' && $_
                         });
 
                         // Update chart when filter changes
+
                         window.updateAttendanceChart = function() {
                             const filter = document.getElementById('attendanceFilter').value;
-                            let attendanceLabels, attendanceData, attendanceLabel;
+                            //let attendanceLabels, attendanceData, attendanceLabel;
 
-                            if (filter === 'weekly') {
-                                attendanceLabels = data.memberWeeklyData.map(item => `Week ${item.week}`);
-                                attendanceData = data.memberWeeklyData.map(item => item.count);
-                                attendanceLabel = 'Weekly Worship Attendance';
-                            } else {
-                                attendanceLabels = data.memberMonthlyData.map(item => `Month ${item.month}`);
-                                attendanceData = data.memberMonthlyData.map(item => item.count);
-                                attendanceLabel = 'Monthly Worship Attendance';
+                            // if (filter === 'weekly') {
+                            //     attendanceLabels = data.memberWeeklyData.map(item => `${item.date}`);
+                            //     attendanceData = data.memberWeeklyData.map(item => item.attendees.split(",").length);
+                            //     attendanceLabel = 'Weekly Worship Attendance';
+                                
+                            // }else{
+                            //     attendanceLabels = data.memberWeeklyData.map(item => `${item.date}`);
+                            //     //attendanceLabels = data.memberMonthlyData.map(item => `Month ${item.month}`);
+                            //    
+                            // }
+
+                            if(filter === 'monthly'){
+                                if(attendanceCtx){
+                                    attendanceCtx.destroy();
+                                }
+                             
                             }
+                            let attendanceLabels, attendanceData, attendanceLabel;
+                            // attendanceLabels = months.map((month, index) => `${index + 1}. ${month}`);
+                            // attendanceData = data.memberMonthlyData.map( (item, index) => {
+                            //     if(new Date (data.memberWeeklyData[index].date).getMonth() === months[index]){
+                            //         return item.attendees.split(",").length
+                            //     }
+                            // });
+                            // attendanceLabel = 'Monthly Worship Attendance';
 
                             const updatedChart = new Chart(attendanceCtx, {
                                 type: 'line',

@@ -142,15 +142,22 @@ tbody tr:hover td {
 
 .modal-content {
     background-color: white;
-    margin: 15% auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     padding: 20px;
     border-radius: 10px;
     width: 80%;
     max-width: 500px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    min-height: 110px;
 }
+.modal-content h3 {
+    text-align: center;
 
-.close {
+
+.close-btn {
     color: #aaa;
     float: right;
     font-size: 28px;
@@ -164,8 +171,12 @@ tbody tr:hover td {
     cursor: pointer;
 }
 
-.modal-content h2 {
+.modal-content h3 {
     margin-top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 .modal-content label {
@@ -289,4 +300,5 @@ tbody tr:hover td {
 
 .edit-modal-footer button:hover {
     background-color: #103a58;
+}
 }

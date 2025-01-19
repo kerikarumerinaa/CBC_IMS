@@ -165,11 +165,14 @@ $conn->close();
 
         <div class="back-button">
         <a href="transactions.php" class="back-btn">Back to Transactions</a>
+        <button class="print-btn" onclick="printSection('collectionsForm')">Print Report</button>
         </div>
       </form>
     <?php else: ?>
       <p>No collection data found.</p>
     <?php endif; ?>
+
+
   </main>
   </div>
 </body>
@@ -229,6 +232,36 @@ $conn->close();
   document.querySelectorAll('.Checkamount').forEach(input => {
     input.addEventListener('input', updateCheckTotal);
   });
+
+
+ 
+  // Function to print a specific section of the page
+  function printSection(sectionId) {
+    const sectionToPrint = document.getElementById(sectionId).innerHTML; // Get the content of the section
+    const originalContent = document.body.innerHTML; // Save the original content of the page
+
+    document.body.innerHTML = `
+      <html>
+        <head>
+          <title>Print Report</title>
+          <link rel="stylesheet" href="addcollection.css">
+        </head>
+        <body>
+          ${sectionToPrint}
+        </body>
+      </html>
+    `; // Replace body with section content
+
+    window.print(); // Trigger print
+
+    document.body.innerHTML = originalContent; // Restore the original content after printing
+    window.location.reload(); // Reload the page to restore JavaScript functionality
+  }
+
+
+
+
+  
 </script>
 </body>
 </html>

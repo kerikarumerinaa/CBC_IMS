@@ -56,7 +56,7 @@ $conn->close();
         <main>
             <h2>View Expense</h2>
             <?php if ($expense_data): ?>
-            <form method="POST" action="">
+            <form id="expenseForm">
                 <label for="voucher_number">Voucher Number:</label>
                 <input type="text" id="voucher_number" name="voucher_number" value="<?php echo $expense_data['voucher_number']; ?>" readonly>
 
@@ -75,6 +75,7 @@ $conn->close();
 
                 <div class="back-button">
                 <a href="transactions.php" class="back-btn">Back to Transactions</a>
+                <button class="print-btn" onclick="printSection('expenseForm')">Print Report</button>
                 </div>
             </form>
             <?php else: ?>
@@ -84,3 +85,28 @@ $conn->close();
     </div>
 </body>
 </html>
+<script>
+// Function to print a specific section of the page
+        function printSection(sectionId) {
+            const sectionToPrint = document.getElementById(sectionId).innerHTML; // Get the content of the section
+            const originalContent = document.body.innerHTML; // Save the original content of the page
+
+            document.body.innerHTML = `
+                <html>
+                    <head>
+                        <title>Print Report</title>
+                        <link rel="stylesheet" href="addexpenses.css">
+                    </head>
+                    <body>
+                        ${sectionToPrint}
+                    </body>
+                </html>
+            `; // Replace body with section content
+
+            window.print(); // Trigger print
+
+            document.body.innerHTML = originalContent; // Restore the original content after printing
+            window.location.reload(); // Reload the page to restore JavaScript functionality
+        }
+
+</script>

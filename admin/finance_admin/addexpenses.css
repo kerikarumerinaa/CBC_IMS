@@ -109,3 +109,135 @@ form textarea:focus {
     font-size: 0.88rem; 
     font-weight: 600; 
 }
+
+.print-btn {
+    background-color: #154668;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+.print-btn:hover {
+    background-color: #154668;
+}
+
+@media print {
+    /* Basic body setup for printing */
+    body {
+      margin: 0;
+      padding: 0;
+      color: #000;
+      background: #fff;
+      font-family: Arial, sans-serif;
+      font-size: 12px; /* Ensures consistent font size for print */
+      line-height: 1.6; /* Improves readability */
+    }
+
+    /* Hide unnecessary elements for print */
+    .back-button, 
+    .sidebar, 
+    .btn, 
+    .print-btn {
+      display: none !important;
+    }
+
+    /* Ensure the container is well structured */
+    .container {
+      width: 100%;
+      margin: 0;
+      padding: 20px;
+    }
+
+    /* Focus on the expense form */
+    #expenseForm {
+      width: 100%;
+      max-width: 600px; /* Ensure it fits neatly on the page */
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #000;
+      box-shadow: none;
+    }
+
+    /* Ensure the labels and inputs look clean */
+    #expenseForm label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+
+    #expenseForm input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      background: #fff;
+      font-size: 14px;
+      color: #000;
+    }
+
+    /* Centering the headers */
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    /* Remove borders from inputs for a cleaner print style */
+    input[readonly] {
+      border: none;
+      background-color: #f0f0f0;
+    }
+
+    /* Table styles for a clean look (if any) */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    table th, 
+    table td {
+      border: 1px solid #000;
+      padding: 8px;
+      text-align: left;
+    }
+
+    /* Prevent page breaks within the form */
+    #expenseForm {
+      page-break-inside: avoid;
+    }
+
+    /* Style for the print button, hide it during printing */
+    .print-btn {
+      display: none;
+    }
+
+    /* Optional: Adding a page break if the form is too long */
+    #expenseForm {
+      page-break-after: always;
+    }
+}
+
+
+.back-btn {
+  background-color: #6f838a;
+  color: #e4dede;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-top: 2px;
+  text-align: center; /* Center the text */
+}
+
+.back-btn:hover {
+  background-color: #4e6271;
+}

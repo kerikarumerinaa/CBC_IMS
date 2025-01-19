@@ -29,7 +29,9 @@ $response['memberNetworkData'] = $memberNetworkData; // Data for members
 // Fetch weekly attendance data (dummy data for now, update based on actual data)
 
 
-$memberWeeklyAttendanceQuery = "SELECT WEEK(date) AS week, COUNT(DISTINCT attendees) AS count FROM attendance_history GROUP BY week ORDER BY week";
+//$memberWeeklyAttendanceQuery = "SELECT WEEK(date) AS week, COUNT(DISTINCT attendees) AS count FROM attendance_history GROUP BY week ORDER BY week";
+$memberWeeklyAttendanceQuery = "SELECT * FROM attendance_history";
+
 $memberWeeklyResult = mysqli_query($conn, $memberWeeklyAttendanceQuery);
 $memberWeeklyData = [];
 while ($row = mysqli_fetch_assoc($memberWeeklyResult)) {
@@ -66,7 +68,10 @@ $response['visitorNetworkData'] = $visitorNetworkData; // Data for visitors
 
 // Fetch weekly attendance data (dummy data for now, update based on actual data)
 
-$visitorWeeklyAttendanceQuery = "SELECT WEEK(date) AS week, COUNT(*) AS count FROM assimilation_history GROUP BY week ORDER BY week";
+//ASSIMILATION - WORSHIP ATTENDANCE CHART(WEEKLY)
+//visitorWeeklyAttendanceQuery = "SELECT WEEK(date) AS week, COUNT(*) AS count FROM assimilation_history GROUP BY week ORDER BY week";
+$visitorWeeklyAttendanceQuery = "SELECT * FROM assimilation_history";
+
 $weeklyResult = mysqli_query($conn, $visitorWeeklyAttendanceQuery);
 $visitorWeeklyData = [];
 while ($row = mysqli_fetch_assoc($weeklyResult)) {
@@ -74,6 +79,7 @@ while ($row = mysqli_fetch_assoc($weeklyResult)) {
 }
 $response['visitorWeeklyData'] = $visitorWeeklyData;
 
+//ASSIMILATION - WORSHIP ATTENDANCE CHART(MONTHLY)
 $visitorMonthlyAttendanceQuery = "SELECT MONTH(date) AS month, COUNT(*) AS count FROM assimilation_history GROUP BY month ORDER BY month";
 $monthlyResult = mysqli_query($conn, $visitorMonthlyAttendanceQuery);
 $visitorMonthlyData = [];
@@ -86,21 +92,21 @@ $response['visitorMonthlyData'] = $visitorMonthlyData;
 
 
 // Fetch weekly collections and expenses
-$collectionQuery = "SELECT WEEK(date) AS week, SUM(amount) AS collection FROM collections GROUP BY week ORDER BY week";
-$collectionResult = mysqli_query($conn, $collectionQuery);
-$collectionsData = [];
-while ($row = mysqli_fetch_assoc($collectionResult)) {
-    $collectionsData[] = $row;
-}
-$response['collectionsData'] = $collectionsData;
+// $collectionQuery = "SELECT WEEK(date) AS week, SUM(amount) AS collection FROM collections GROUP BY week ORDER BY week";
+// $collectionResult = mysqli_query($conn, $collectionQuery);
+// $collectionsData = [];
+// while ($row = mysqli_fetch_assoc($collectionResult)) {
+//     $collectionsData[] = $row;
+// }
+// $response['collectionsData'] = $collectionsData;
 
-$expenseQuery = "SELECT WEEK(date) AS week, SUM(amount) AS expense FROM expenses GROUP BY week ORDER BY week";
-$expenseResult = mysqli_query($conn, $expenseQuery);
-$expensesData = [];
-while ($row = mysqli_fetch_assoc($expenseResult)) {
-    $expensesData[] = $row;
-}
-$response['expensesData'] = $expensesData;
+// $expenseQuery = "SELECT WEEK(date) AS week, SUM(amount) AS expense FROM expenses GROUP BY week ORDER BY week";
+// $expenseResult = mysqli_query($conn, $expenseQuery);
+// $expensesData = [];
+// while ($row = mysqli_fetch_assoc($expenseResult)) {
+//     $expensesData[] = $row;
+// }
+// $response['expensesData'] = $expensesData;
 // Fetch weekly collections and expenses
 
 // $timeRange = isset($_GET['range']) ? $_GET['range'] : 'weekly';

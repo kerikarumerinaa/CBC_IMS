@@ -30,6 +30,7 @@ body {
 
 .profile-header h3 {
     margin: 0;
+    font-size: 1.5rem;
 }
 
 .profile-section {
@@ -179,5 +180,69 @@ body {
     background-color: #103a58;
 }
 
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
 
+    .profile-card {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
 
+    .user-avatar {
+        width: 60px;
+        height: 60px;
+    }
+
+    .user-info h2 {
+        font-size: 16px;
+    }
+
+    .user-info p {
+        font-size: 14px;
+    }
+
+    .profile-content {
+        padding: 20px;
+    }
+
+    .info-item {
+        flex-direction: column;
+        gap: 5px;
+        text-align: left;
+    }
+
+    .edit-btn {
+        padding: 8px 10px;
+        font-size: 14px;
+    }
+
+    .modal-content {
+        width: 90%;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-content {
+        padding: 15px;
+    }
+
+    .user-avatar {
+        width: 50px;
+        height: 50px;
+    }
+
+    .profile-section {
+        padding: 15px;
+    }
+
+    .edit-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+}

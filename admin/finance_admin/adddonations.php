@@ -78,6 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <button type="submit" class="save-btn">Save Donation</button>
             </form>
+            <a href="donations.php"><button class="back-btn">Back</button></a>
         </main>
     </div>
 </body>

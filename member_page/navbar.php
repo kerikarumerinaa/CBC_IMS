@@ -18,19 +18,23 @@
             <p><?php echo $member['role']; ?></p> 
         </div>
     </div>
+    <div class="hamburger" onclick="toggleMenu()">☰</div>
     <div class="menu">
         <ul>
             <li><a href="dashboard.php">Home</a></li>
             <li><a href="profile_details.php">My Profile</a></li>
             <li><a href="donation.php">Donate</a></li>
-            <!-- <li><a href="security.php">My Security</a></li> -->
             <li><a href="../logout.php">Logout</a></li>
-                
-                </div>
-            </li>
         </ul>
     </div>
 </nav>
 
+
+<script>
+    function toggleMenu() {
+        const menu = document.querySelector('.menu');
+        menu.classList.toggle('active');
+    }
+</script>
 
 

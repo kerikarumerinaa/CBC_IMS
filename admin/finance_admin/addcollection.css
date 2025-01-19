@@ -170,3 +170,104 @@ form .advanced-section {
     font-weight: 600; 
 }
 
+.print-btn {
+    background-color: #154668;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+.print-btn:hover {
+    background-color: #154668;
+}
+
+/* Print-specific styles */
+@media print {
+    body {
+      margin: 0;
+      padding: 0;
+      color: #000;
+      background: #fff;
+      font-family: Arial, sans-serif;
+      font-size: 12px; /* Ensures consistent font size for print */
+      line-height: 1.6; /* Improves readability */
+    }
+  
+    /* Hide elements unnecessary for printing */
+    .back-button, 
+    .sidebar, 
+    .btn {
+      display: none !important;
+    }
+  
+    /* Ensure the container fits on the printed page */
+    .container {
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  
+    /* Make tables clean and professional */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px; /* Adds spacing between tables for better readability */
+    }
+  
+    table th, 
+    table td {
+      border: 1px solid #000;
+      padding: 8px;
+      text-align: left;
+    }
+  
+    /* Ensure headings are styled consistently */
+    h2, h3, h4 {
+      margin: 10px 0;
+      text-align: center; /* Centers headers for better layout */
+    }
+  
+    /* Remove specific input field borders for a cleaner look */
+    input {
+      border: none;
+      background: none;
+      color: #000;
+      font-size: inherit;
+    }
+  
+    /* Prevent page breaks within tables */
+    table {
+      page-break-inside: avoid;
+    }
+  
+    /* Style for specific labels or forms */
+    label {
+      font-weight: bold;
+    }
+  }
+
+  .back-btn {
+    background-color: #6f838a;
+    color: #e4dede;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 0.88rem;
+    font-weight: 600;
+    margin-top: 2px;
+    text-align: center; /* Center the text */
+  }
+
+  .back-btn:hover {
+    background-color: #4e6271;
+  }
+  
+  
+

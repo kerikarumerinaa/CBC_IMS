@@ -91,9 +91,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="date" id="date" name="date" required>
 
                 <label for="description">Description:</label>
-                <textarea id="description" name="description" required></textarea>
+                <select id="description" name="description" required>
+                    <option value="">Select a description</option>
+                    <option value="Electricity">Electricity</option>
+                    <option value="Water bill">Water bill</option>
+                    <option value="Rent">Rent</option>
+                    <option value="Internet">Internet</option>
+                </select>
 
                 <button type="submit" class="save-btn">Save Expenses</button>
+                <a href="transactions.php" class="back-btn">Back</a>
             </form>
         </main>
     </div>

@@ -211,7 +211,7 @@ $result = $stmt->get_result();
                           <td>
                           <button class='view-btn'>View</button>
                           <button class='edit-btn'>Edit</button>
-                          <a href='membership_members.php?delete_id={$row['id']}' onclick='return confirm(\"Are you sure you want to delete this member?\")'><button class='delete-btn'>Delete</button></a>
+                          <a href='members.php?delete_id={$row['id']}' onclick='return confirm(\"Are you sure you want to delete this member?\")'><button class='delete-btn'>Delete</button></a>
                           </td>
                         </tr>";
               }
@@ -281,7 +281,7 @@ $result = $stmt->get_result();
         <div class="modal-content">
           <span id="closeEditModal" class="close">&times;</span>
           <h2>Edit Member</h2>
-          <form method="POST" action="membership_members.php">
+          <form method="POST" action="members.php">
             <input type="hidden" id="edit-id" name="edit_id">
             <label for="edit-full-name">Full Name:</label>
             <input type="text" id="edit-full-name" name="edit_full_name" required>
@@ -368,6 +368,8 @@ $result = $stmt->get_result();
                 document.getElementById("edit-modal").style.display = "block";
             });
         });
+
+        
 
         // Close Edit Modal
         document.getElementById("closeEditModal").addEventListener("click", function () {

@@ -23,6 +23,8 @@ body {
     align-items: center;
     padding: 20px;
     background: #154668;
+    flex-wrap: wrap;
+    text-align: center;
 }
 
 .header .logo {
@@ -32,12 +34,14 @@ body {
 .header h1 {
     margin: 0;
     color: #ffffff;
+    font-size: 1.5rem;
 }
 
 .content {
     display: flex;
     flex-wrap: wrap;
     padding: 20px;
+    gap: 10px;
 }
 
 .qr-section {
@@ -50,6 +54,7 @@ body {
     width: 150px;
     height: 150px;
     margin-bottom: 10px;
+    max-width: 100%;
 }
 
 .qr-section p {
@@ -78,20 +83,6 @@ body {
     color: #555;
 }
 
-.progress-bar {
-    width: 100%;
-    height: 10px;
-    background: #e0e0e0;
-    border-radius: 5px;
-    margin: 10px 0;
-    position: relative;
-    overflow: hidden;
-}
-
-.progress-bar .progress {
-    height: 100%;
-    background: #2b9e4d;
-}
 
 .donations {
     list-style: none;
@@ -99,3 +90,60 @@ body {
     margin: 10px 0;
 }
 
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .content {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .qr-section {
+        padding: 10px;
+    }
+
+    .qr-section .qr-code img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .info-section {
+        text-align: center;
+    }
+
+    .info-section h2 {
+        font-size: 1.2rem;
+    }
+
+    .info-section h3 {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .donate-container {
+        margin: 20px auto;
+        padding: 10px;
+    }
+
+    .header h1 {
+        font-size: 1.2rem;
+    }
+
+    .qr-section .qr-code img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .info-section {
+        padding: 5px;
+    }
+
+    .progress-bar {
+        height: 8px;
+    }
+}
